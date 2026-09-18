@@ -6,1585 +6,1090 @@
 <title>OPA — Operating Agent</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%233846E8'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
 <style>
-  /* OPA DESIGN SYSTEM — "Midnight Glass / Electric Mint" */
-  :root{
-    --bg:#080a0d;
-    --bg-2:#0c1014;
-    --surface:#10151a;
-    --surface-2:#151b21;
-    --surface-3:#1b232b;
-    --surface-glass:rgba(16,21,26,.78);
+/* =========================================================
+   OPA DESIGN SYSTEM — "Paper & Ultramarine"
+   Light workspace: cool paper, ink text, one ultramarine
+   accent, and a category colour per kind of work.
+   ========================================================= */
+:root{
+  --bg:#F3F4F8;
+  --panel:#FFFFFF;
+  --ink:#12141C;
+  --ink2:#4B5262;
+  --ink3:#8990A2;
+  --line:#E5E8EF;
+  --line2:#D2D7E2;
 
-    --ink:#f4f7f5;
-    --ink-soft:#9ba7a1;
-    --ink-faint:#5f6b65;
+  --brand:#3846E8;
+  --brand-d:#2A36C4;
+  --brand-soft:#ECEEFE;
 
-    --line:#232d2a;
-    --line-strong:#33413c;
+  --sun:#B87A0A;   --sun-soft:#FFF3D6;
+  --leaf:#12885C;  --leaf-soft:#E0F4EA;
+  --rose:#D23D4E;  --rose-soft:#FCE8EA;
 
-    --accent:#b8f35a;
-    --accent-hover:#c9ff78;
-    --accent-ink:#243c0c;
-    --accent-soft:rgba(184,243,90,.10);
+  --c-app:#3846E8;
+  --c-prof:#E0771F;
+  --c-proj:#12885C;
+  --c-acad:#7C4DDB;
+  --c-req:#0C8DA6;
+  --c-opp:#7A8699;
 
-    --cyan:#55e6d0;
-    --cyan-soft:rgba(85,230,208,.09);
+  --r-lg:20px; --r-md:14px; --r-sm:10px;
+  --shadow:0 1px 2px rgba(18,20,28,.04),0 10px 30px -18px rgba(18,20,28,.18);
+  --shadow-pop:0 30px 80px -20px rgba(18,20,28,.35);
+  --display:'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --body:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+::selection{background:var(--brand-soft)}
+.ic{flex-shrink:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
-    --success:#65e6a2;
-    --success-soft:rgba(101,230,162,.09);
-    --warn:#f4c95d;
-    --warn-soft:rgba(244,201,93,.10);
-    --danger:#ff758f;
-    --danger-soft:rgba(255,117,143,.09);
+/* ---------- Shell ---------- */
+.app{display:grid;grid-template-columns:264px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:22px 14px 16px;overflow-y:auto;z-index:40}
+.brand{display:flex;align-items:center;gap:11px;padding:2px 10px 20px}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:var(--brand);display:grid;place-items:center;box-shadow:0 6px 16px -6px rgba(56,70,232,.7)}
+.brand-mark i{width:14px;height:14px;border-radius:50%;border:3px solid #fff}
+.brand b{font-family:var(--display);font-size:22px;font-weight:700;letter-spacing:-.03em;display:block;line-height:1}
+.brand span{font-size:12px;color:var(--ink3)}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav-group{font-size:12px;font-weight:600;color:var(--ink3);padding:16px 12px 6px}
+.nav button{display:flex;align-items:center;gap:11px;width:100%;padding:9px 12px;border:0;background:none;border-radius:10px;color:var(--ink2);font-weight:500;text-align:left;transition:background .15s,color .15s}
+.nav button:hover{background:var(--bg);color:var(--ink)}
+.nav button.on{background:var(--brand-soft);color:var(--brand-d);font-weight:650}
+.nav .count{margin-left:auto;font-size:12px;font-weight:650;min-width:22px;text-align:center;padding:1px 7px;border-radius:999px;background:var(--bg);color:var(--ink2)}
+.nav button.on .count{background:#fff;color:var(--brand-d)}
+.nav .count.alert{background:var(--sun-soft);color:var(--sun)}
+.side-foot{margin-top:auto;padding:16px 10px 0}
+.conn{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:12.5px;color:var(--ink2);line-height:1.4}
+.conn i{width:8px;height:8px;border-radius:50%;background:var(--sun);margin-top:5px;flex-shrink:0}
+.conn b{display:block;color:var(--ink);font-weight:650}
+.kbd{display:inline-block;border:1px solid var(--line2);border-bottom-width:2px;border-radius:6px;padding:0 6px;font-size:11px;background:#fff;color:var(--ink2)}
+.topbar{display:none}
+.scrim{display:none}
+main{padding:42px 52px 100px;min-width:0;max-width:1260px;width:100%}
 
-    --radius:14px;
-    --radius-sm:9px;
-    --shadow-sm:0 1px 2px rgba(0,0,0,.25);
-    --shadow-md:0 16px 40px rgba(0,0,0,.25);
-    --shadow-lg:0 30px 90px rgba(0,0,0,.55);
-  }
+@media(max-width:920px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;left:0;top:0;bottom:0;width:284px;transform:translateX(-102%);transition:transform .25s ease;box-shadow:var(--shadow-pop)}
+  body.nav-open .side{transform:none}
+  body.nav-open .scrim{display:block;position:fixed;inset:0;background:rgba(18,20,28,.35);z-index:35}
+  .topbar{display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:30;padding:10px 16px;background:rgba(243,244,248,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar b{font-family:var(--display);font-size:19px;letter-spacing:-.02em}
+  main{padding:26px 18px 90px}
+}
 
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{
-    margin:0;
-    background:
-      radial-gradient(700px 420px at 85% -10%,rgba(184,243,90,.055),transparent 65%),
-      radial-gradient(650px 400px at 10% 5%,rgba(85,230,208,.045),transparent 65%),
-      var(--bg);
-    color:var(--ink);
-    font-family:'Manrope',sans-serif;
-    font-size:14px;
-    line-height:1.55;
-    -webkit-font-smoothing:antialiased;
-  }
-  body:before{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    opacity:.16;
-    background-image:radial-gradient(rgba(255,255,255,.10) .6px,transparent .6px);
-    background-size:20px 20px;
-    mask-image:linear-gradient(to bottom,black,transparent 85%);
-  }
-  h1,h2,h3{
-    font-family:'Instrument Serif',serif;
-    font-weight:400;
-    line-height:1.06;
-    margin:0;
-    letter-spacing:-.025em;
-  }
-  button,input,select,textarea{font-family:inherit;font-size:13px;color:var(--ink)}
-  :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-  ::selection{background:rgba(184,243,90,.25);color:#fff}
+/* ---------- Page header ---------- */
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+.head h1{font-family:var(--display);font-size:38px;font-weight:700;letter-spacing:-.035em;line-height:1.05}
+.head p{color:var(--ink2);margin-top:8px;max-width:64ch}
+@media(max-width:600px){.head h1{font-size:30px}}
 
-  /* FRAME */
-  .shell{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
-  .sidebar{
-    background:rgba(10,13,16,.86);
-    border-right:1px solid var(--line);
-    padding:22px 14px 16px;
-    display:flex;
-    flex-direction:column;
-    gap:21px;
-    position:sticky;
-    top:0;
-    height:100vh;
-    overflow-y:auto;
-    backdrop-filter:blur(20px);
-    z-index:20;
-  }
-  @media(max-width:860px){
-    .shell{grid-template-columns:1fr}
-    .sidebar{
-      position:sticky;height:auto;flex-direction:row;align-items:center;
-      padding:11px 12px;border-right:none;border-bottom:1px solid var(--line);
-      top:0;z-index:50;overflow-x:auto;background:rgba(10,13,16,.94)
-    }
-    .sidebar .brand-block,.sidebar .stat-block{display:none}
-  }
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:11px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:650;font-size:14px;transition:background .15s,transform .1s,box-shadow .15s;white-space:nowrap}
+.btn:hover{background:var(--brand-d);border-color:var(--brand-d);box-shadow:0 8px 20px -10px rgba(56,70,232,.8)}
+.btn:active{transform:translateY(1px)}
+.btn.soft{background:var(--brand-soft);color:var(--brand-d);border-color:transparent}
+.btn.soft:hover{background:#DFE3FD;box-shadow:none}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line2)}
+.btn.ghost:hover{background:var(--bg);box-shadow:none}
+.btn.danger{background:var(--rose);border-color:var(--rose)}
+.btn.danger:hover{background:#b8303f;border-color:#b8303f;box-shadow:none}
+.btn.sm{padding:6px 12px;font-size:13px;border-radius:9px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.icon-btn{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;border:0;background:transparent;color:var(--ink3);transition:.15s}
+.icon-btn:hover{background:var(--bg);color:var(--ink)}
+.icon-btn.del:hover{background:var(--rose-soft);color:var(--rose)}
 
-  .brand{display:flex;flex-direction:column;gap:3px;padding:4px 9px}
-  .brand .wordmark{
-    font-family:'Instrument Serif',serif;
-    font-style:italic;
-    font-size:35px;
-    letter-spacing:-.045em;
-    color:var(--ink)
-  }
-  .brand .wordmark:after{
-    content:"";
-    display:inline-block;
-    width:6px;height:6px;border-radius:50%;
-    background:var(--accent);
-    margin:0 0 5px 5px;
-    box-shadow:0 0 12px rgba(184,243,90,.7)
-  }
-  .brand .tagline{font-size:10px;color:var(--ink-soft)}
-  .conn-row{
-    display:flex;align-items:center;gap:7px;
-    font-size:9.5px;color:var(--ink-soft);
-    margin:10px 8px 0;padding:7px 9px;
-    border:1px solid var(--line);border-radius:999px;
-    background:rgba(255,255,255,.018)
-  }
-  .conn-dot{width:6px;height:6px;border-radius:50%;background:var(--ink-faint);flex-shrink:0}
-  .conn-dot.ok{background:var(--success);box-shadow:0 0 10px rgba(101,230,162,.7)}
-  .conn-dot.err{background:var(--danger);box-shadow:0 0 10px rgba(255,117,143,.6)}
+/* ---------- Surfaces ---------- */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow)}
+.panel-h{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.panel-h h3{font-family:var(--display);font-size:18px;font-weight:650;letter-spacing:-.02em}
+.panel-h span{font-size:13px;color:var(--ink3)}
+.rows>.row{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:15px 20px;border-bottom:1px solid var(--line)}
+.rows>.row:last-child{border-bottom:0}
+.rows>.row.noicon{grid-template-columns:1fr auto}
+.row-t{font-weight:650}
+.row-s{font-size:13.5px;color:var(--ink2);margin-top:2px}
+.row-m{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.row-a{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:700px){.rows>.row,.rows>.row.noicon{grid-template-columns:1fr}.row-a{justify-content:flex-start}}
 
-  nav.sidenav{display:flex;flex-direction:column;gap:3px}
-  @media(max-width:860px){nav.sidenav{flex-direction:row}}
-  nav.sidenav button{
-    display:flex;align-items:center;gap:11px;width:100%;
-    background:transparent;border:1px solid transparent;
-    text-align:left;cursor:pointer;padding:10px 11px;
-    border-radius:9px;color:var(--ink-soft);font-size:12px;
-    white-space:nowrap;transition:.18s ease
-  }
-  nav.sidenav button svg{width:16px;height:16px;flex-shrink:0;opacity:.7}
-  nav.sidenav button:hover{
-    color:var(--ink);
-    background:rgba(255,255,255,.035);
-    border-color:var(--line)
-  }
-  nav.sidenav button.active{
-    color:var(--ink);
-    background:linear-gradient(90deg,rgba(184,243,90,.11),rgba(184,243,90,.025));
-    border-color:rgba(184,243,90,.18);
-    box-shadow:inset 2px 0 0 var(--accent);
-    font-weight:600
-  }
-  nav.sidenav button.active svg{color:var(--accent);opacity:1}
-  nav.sidenav button .dot{
-    margin-left:auto;width:6px;height:6px;border-radius:50%;
-    background:var(--warn);box-shadow:0 0 9px rgba(244,201,93,.6)
-  }
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;padding:2px 9px;border-radius:999px;background:var(--bg);color:var(--ink2);font-weight:500}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;padding:2px 10px;border-radius:999px;font-weight:650;background:var(--bg);color:var(--ink2)}
+.pill:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.brand{background:var(--brand-soft);color:var(--brand-d)}
+.pill.good{background:var(--leaf-soft);color:var(--leaf)}
+.pill.warn{background:var(--sun-soft);color:var(--sun)}
+.pill.bad{background:var(--rose-soft);color:var(--rose)}
+.chip.warn{background:var(--sun-soft);color:var(--sun);font-weight:650}
+.chip.bad{background:var(--rose-soft);color:var(--rose);font-weight:650}
 
-  .stat-block{margin-top:auto;border-top:1px solid var(--line);padding:14px 8px 0}
-  .stat-block .row{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-soft);padding:5px 0}
-  .stat-block .row b{color:var(--ink);font-weight:600}
-  .link-btn{margin-top:10px;font-size:10px;color:var(--ink-faint);background:none;border:none;cursor:pointer;padding:5px 0}
-  .link-btn:hover{color:var(--danger)}
+.meter{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink2)}
+.meter div{width:84px;height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.meter i{display:block;height:100%;border-radius:99px;background:var(--brand)}
+.meter.hi i{background:var(--leaf)}
 
-  /* MAIN */
-  main{padding:38px 46px 90px;min-width:0;max-width:1500px;width:100%}
-  @media(max-width:1100px){main{padding:30px 28px 80px}}
-  @media(max-width:640px){main{padding:22px 15px 70px}}
-  .view{display:none}.view.active{display:block}
-  .view-head{
-    display:flex;justify-content:space-between;align-items:flex-end;
-    gap:18px;flex-wrap:wrap;margin-bottom:24px
-  }
-  .view-head h2{font-size:36px}
-  .view-head .sub{color:var(--ink-soft);font-size:12px;margin-top:8px;max-width:72ch}
+.empty{padding:54px 24px;text-align:center;color:var(--ink2)}
+.empty h3{font-family:var(--display);font-size:20px;color:var(--ink);margin-bottom:6px;font-weight:650}
+.empty p{max-width:44ch;margin:0 auto 18px}
+.empty.plain{border:1px dashed var(--line2);border-radius:var(--r-lg);background:transparent}
 
-  /* BUTTONS */
-  .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:7px;
-    background:var(--accent);color:#0b1007;
-    padding:9px 15px;border-radius:8px;border:1px solid var(--accent);
-    cursor:pointer;font-size:11.5px;font-weight:700;
-    box-shadow:0 4px 18px rgba(184,243,90,.10);
-    text-decoration:none;transition:.18s ease
-  }
-  .btn:hover{background:var(--accent-hover);border-color:var(--accent-hover);transform:translateY(-1px);box-shadow:0 8px 25px rgba(184,243,90,.17)}
-  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
-  .btn.ghost{background:rgba(255,255,255,.02);color:var(--ink);border:1px solid var(--line-strong);box-shadow:none}
-  .btn.ghost:hover{background:rgba(255,255,255,.055);border-color:#48574f;transform:none}
-  .btn.small{padding:6px 10px;font-size:10px;border-radius:7px;box-shadow:none}
-  .btn.danger{background:var(--danger-soft);color:var(--danger);border:1px solid rgba(255,117,143,.25);box-shadow:none}
-  .btn.danger:hover{background:rgba(255,117,143,.15);border-color:rgba(255,117,143,.45)}
+/* custom checkbox */
+input[type=checkbox].ck{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--line2);background:#fff;display:grid;place-items:center;cursor:pointer;transition:.15s;margin:0;flex-shrink:0}
+input[type=checkbox].ck:hover{border-color:var(--brand)}
+input[type=checkbox].ck:checked{background:var(--brand) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12 4.5 4.5L19 7'/%3E%3C/svg%3E") center/13px no-repeat;border-color:var(--brand)}
 
-  /* STATUS */
-  .badge{
-    display:inline-flex;align-items:center;gap:5px;padding:3px 8px;
-    border-radius:999px;font-size:9px;font-weight:600;
-    border:1px solid var(--line);color:var(--ink-soft);background:rgba(255,255,255,.025)
-  }
-  .badge.status-Applied,.badge.status-Drafted,.badge.status-Offer,.badge.status-Sent,
-  .badge.status-Replied,.badge.status-Scoped,.badge.status-Converted,.badge.status-Won,.badge.status-approved{
-    border-color:rgba(101,230,162,.25);color:var(--success);background:var(--success-soft)
-  }
-  .badge.status-Rejected,.badge.status-Declined,.badge.status-Dismissed,.badge.status-failed,.badge.status-rejected{
-    border-color:rgba(255,117,143,.25);color:var(--danger);background:var(--danger-soft)
-  }
-  .badge.urgent{border-color:rgba(244,201,93,.25);color:var(--warn);background:var(--warn-soft)}
+/* ---------- Today ---------- */
+.hero{padding:30px 32px 26px;margin-bottom:22px;background:var(--panel);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow)}
+.hero h1{font-family:var(--display);font-size:clamp(32px,4.6vw,52px);font-weight:700;letter-spacing:-.04em;line-height:1.02}
+.hero .lead{margin-top:10px;color:var(--ink2);font-size:16px;max-width:60ch}
+.load{margin-top:26px}
+.load-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px;font-size:13.5px;color:var(--ink2)}
+.load-top b{font-family:var(--display);font-size:22px;color:var(--ink);font-weight:650;letter-spacing:-.02em}
+.bar{display:flex;gap:4px;height:18px}
+.seg{border-radius:7px;background:var(--c);min-width:8px;transform-origin:left}
+.seg.free{background:repeating-linear-gradient(135deg,var(--line) 0 5px,#fff 5px 10px);border:1px solid var(--line)}
+.bar.anim .seg{animation:grow .8s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*70ms)}
+@keyframes grow{from{transform:scaleX(0);opacity:0}to{transform:scaleX(1);opacity:1}}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:12.5px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:9px;height:9px;border-radius:3px;background:var(--c)}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:24px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.quick button{background:#fff;border:0;padding:14px 16px;text-align:left;transition:background .15s}
+.quick button:hover{background:var(--brand-soft)}
+.quick b{display:block;font-family:var(--display);font-size:26px;font-weight:650;letter-spacing:-.03em;line-height:1.1}
+.quick span{font-size:13px;color:var(--ink2)}
+@media(max-width:700px){.quick{grid-template-columns:1fr 1fr}.hero{padding:22px 20px}}
+.two{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:20px;align-items:start}
+@media(max-width:1020px){.two{grid-template-columns:1fr}}
+.plan-row{display:grid;grid-template-columns:auto auto 1fr auto;gap:14px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line)}
+.plan-row:last-child{border-bottom:0}
+.plan-ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 12%,#fff);color:var(--c)}
+.plan-name{font-weight:650}
+.plan-sub{font-size:13.5px;color:var(--ink2)}
+.plan-dur{font-size:13px;color:var(--ink3);white-space:nowrap}
+.plan-row.done .plan-name{text-decoration:line-through;color:var(--ink3)}
+.plan-row.done .plan-ic{background:var(--bg);color:var(--ink3)}
+.week-row{display:flex;gap:14px;padding:13px 20px;border-bottom:1px solid var(--line);align-items:center}
+.week-row:last-child{border-bottom:0}
+.week-d{width:46px;text-align:center;flex-shrink:0;line-height:1.1}
+.week-d b{display:block;font-family:var(--display);font-size:22px;font-weight:650}
+.week-d span{font-size:12px;color:var(--ink3)}
+.week-t{font-size:14px}
 
-  /* CARDS */
-  .card{
-    border:1px solid var(--line);
-    background:linear-gradient(145deg,rgba(255,255,255,.028),rgba(255,255,255,.008));
-    padding:17px 18px;border-radius:var(--radius);margin-bottom:10px;
-    box-shadow:var(--shadow-sm);transition:.2s ease
-  }
-  .card:hover{border-color:#34413c;box-shadow:var(--shadow-md);transform:translateY(-1px)}
-  .card-row{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
-  @media(max-width:560px){.card-row{grid-template-columns:1fr}.card .actions{justify-content:flex-start}}
-  .card h3{font-family:'Manrope',sans-serif;font-weight:650;font-size:14px}
-  .card .meta{font-size:10.5px;color:var(--ink-soft);margin-top:7px;display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-  .card .actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-  .match-track{display:flex;gap:3px;margin-top:12px;width:170px}
-  .match-track i{flex:1;height:4px;background:var(--surface-3);border-radius:999px}
-  .match-track i.on{background:linear-gradient(90deg,var(--accent),var(--cyan));box-shadow:0 0 8px rgba(184,243,90,.25)}
-  .empty-state{border:1px dashed var(--line-strong);background:rgba(255,255,255,.012);padding:48px 20px;text-align:center;color:var(--ink-soft);font-size:11.5px;border-radius:var(--radius)}
-  .err-banner{border:1px solid rgba(255,117,143,.25);background:var(--danger-soft);color:var(--danger);padding:10px 13px;border-radius:9px;font-size:11px;margin-bottom:14px}
+/* ---------- Board ---------- */
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(258px,1fr);gap:14px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x proximity}
+.col{background:#E9EBF2;border-radius:18px;padding:10px;scroll-snap-align:start;min-height:220px}
+.col-h{display:flex;align-items:center;justify-content:space-between;padding:6px 8px 12px;font-weight:650;font-size:14px}
+.col-h span{font-weight:600;font-size:12.5px;color:var(--ink2);background:#fff;border-radius:99px;padding:1px 9px}
+.kcard{background:#fff;border-radius:13px;padding:14px;margin-bottom:9px;box-shadow:0 1px 2px rgba(18,20,28,.06)}
+.kcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.k-title{font-weight:650}
+.k-sub{font-size:13.5px;color:var(--ink2);margin-top:1px}
+.k-note{font-size:12.5px;color:var(--ink3);margin-top:8px}
+.kcard .row-m{margin-bottom:0}
+.kcard .btn{margin-top:12px;width:100%}
+.col-empty{font-size:13px;color:var(--ink3);text-align:center;padding:22px 8px}
 
-  /* STATS */
-  .stat-strip{
-    display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
-    background:var(--line);border:1px solid var(--line);border-radius:var(--radius);
-    overflow:hidden;margin-bottom:22px;box-shadow:var(--shadow-sm)
-  }
-  @media(max-width:640px){.stat-strip{grid-template-columns:1fr 1fr}}
-  .stat-tile{background:var(--surface);padding:17px 18px;border-right:1px solid var(--line)}
-  .stat-tile:last-child{border-right:none}
-  .stat-tile .num{font-family:'Instrument Serif',serif;font-size:32px;color:var(--ink)}
-  .stat-tile .lbl{font-size:9.5px;color:var(--ink-soft);margin-top:3px;text-transform:uppercase;letter-spacing:.06em}
-  .plan-list{border:1px solid var(--line);background:var(--surface);border-radius:var(--radius);max-width:760px;box-shadow:var(--shadow-sm)}
-  .plan-item{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
-  .plan-item:last-child{border-bottom:none}.plan-item:hover{background:rgba(184,243,90,.025)}
-  .plan-check{margin-top:3px;width:17px;height:17px;flex-shrink:0;accent-color:var(--accent);cursor:pointer}
-  .plan-name{font-size:13px;font-weight:600}.plan-sub{font-size:10.5px;color:var(--ink-soft);margin-top:3px}
-  .plan-dur{font-size:10px;color:var(--ink-soft);white-space:nowrap;margin-left:auto;padding-top:2px}
-  .plan-empty{padding:42px 20px;text-align:center;color:var(--ink-soft);font-size:11.5px}
-  .cat-icon{width:15px;height:15px;color:var(--ink-faint);flex-shrink:0;margin-top:1px}
-  .task-row{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:11.5px}
-  .task-row input{accent-color:var(--accent)}.task-row.done label{text-decoration:line-through;color:var(--ink-soft)}
-  .task-add{display:flex;gap:8px;margin-top:10px}.task-add input{flex:1;padding:8px 10px;border:1px solid var(--line);background:var(--surface);border-radius:8px}
-  .hist-day{border-left:2px solid var(--line);padding:3px 0 22px 18px;position:relative}
-  .hist-day:before{content:"";position:absolute;left:-5px;top:5px;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
-  .hist-date{font-family:'Instrument Serif',serif;font-size:19px;margin-bottom:8px}.hist-entry{font-size:11px;color:var(--ink-soft);padding:3px 0}
-  .hist-entry .t{color:var(--ink);font-size:9.5px;margin-right:8px}
+/* ---------- Projects ---------- */
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
+.proj{padding:20px}
+.proj-h{display:flex;justify-content:space-between;gap:10px}
+.proj h3{font-family:var(--display);font-size:20px;font-weight:650;letter-spacing:-.02em}
+.proj .desc{font-size:14px;color:var(--ink2);margin-top:3px}
+.prog{height:6px;border-radius:99px;background:var(--line);margin:16px 0 4px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--c-proj);border-radius:99px;transition:width .4s}
+.prog-l{font-size:12.5px;color:var(--ink3);margin-bottom:10px}
+.task{display:flex;align-items:center;gap:11px;padding:7px 0}
+.task label{flex:1;font-size:14.5px}
+.task.done label{text-decoration:line-through;color:var(--ink3)}
+.task .icon-btn{opacity:0;width:28px;height:28px}
+.task:hover .icon-btn,.task .icon-btn:focus-visible{opacity:1}
+@media(hover:none){.task .icon-btn{opacity:1}}
+.addtask{display:flex;gap:8px;margin-top:10px}
+.addtask input{flex:1}
 
-  /* FORMS */
-  .field{margin-bottom:14px}.field label{display:block;font-size:10px;font-weight:600;color:var(--ink-soft);margin-bottom:6px}
-  .field input,.field select,.field textarea{
-    width:100%;padding:10px 11px;border:1px solid var(--line-strong);
-    background:#0b0f13;color:var(--ink);border-radius:8px;transition:.18s
-  }
-  .field input:hover,.field select:hover,.field textarea:hover{border-color:#4a5952}
-  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(184,243,90,.08);outline:none}
-  .field textarea{resize:vertical;min-height:76px;font-family:'Manrope',sans-serif}
-  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  @media(max-width:520px){.field-row{grid-template-columns:1fr}}
-  .resume-box{width:100%;min-height:160px;padding:12px;border:1px solid var(--line-strong);background:#0b0f13;color:var(--ink);border-radius:8px;font-family:'Manrope',sans-serif;font-size:12px;resize:vertical}
+/* ---------- Forms ---------- */
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{grid-column:1/-1}
+.field.half{grid-column:auto}
+@media(max-width:560px){.field.half{grid-column:1/-1}}
+.field label{display:block;font-size:13.5px;font-weight:650;margin-bottom:6px}
+.field .hint{font-size:12.5px;color:var(--ink3);margin-top:5px}
+input[type=text],input[type=email],input[type=date],select,textarea,.addtask input{width:100%;padding:10px 12px;border:1px solid var(--line2);border-radius:11px;background:#fff;transition:border-color .15s,box-shadow .15s}
+textarea{resize:vertical;min-height:84px;line-height:1.5}
+input:hover,select:hover,textarea:hover{border-color:#B7BECE}
+input:focus,select:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(56,70,232,.12);outline:none}
+.field.bad input,.field.bad textarea{border-color:var(--rose);box-shadow:0 0 0 4px rgba(210,61,78,.10)}
+.form-panel{padding:24px;max-width:640px}
 
-  /* MODAL */
-  .overlay{position:fixed;inset:0;background:rgba(2,4,5,.76);display:none;align-items:flex-start;justify-content:center;z-index:100;padding:48px 16px;overflow-y:auto;backdrop-filter:blur(10px)}
-  .overlay.active{display:flex}
-  .modal{background:#10151a;border:1px solid var(--line-strong);max-width:560px;width:100%;padding:26px;border-radius:17px;box-shadow:var(--shadow-lg);margin-top:12px}
-  .modal h3{font-size:25px;margin-bottom:19px}
-  .modal .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px;flex-wrap:wrap}
-  .email-preview{background:#0a0e12;border:1px solid var(--line);padding:15px;font-size:11.5px;white-space:pre-wrap;max-height:280px;overflow-y:auto;margin-bottom:14px;border-radius:9px}
-  .note{font-size:10px;color:var(--ink-soft);margin-top:10px;line-height:1.65}
-  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:#f5f7f5;color:#0a0e0c;
-    padding:10px 16px;border-radius:9px;font-size:11px;opacity:0;pointer-events:none;transition:.2s;z-index:200;max-width:80vw;box-shadow:var(--shadow-lg)}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast.err{background:var(--danger);color:#fff}
+/* ---------- Modal ---------- */
+.overlay{position:fixed;inset:0;background:rgba(18,20,28,.42);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding:6vh 16px;overflow-y:auto;z-index:100}
+.overlay.on{display:flex}
+.dialog{background:#fff;border-radius:22px;width:100%;max-width:560px;padding:26px;box-shadow:var(--shadow-pop);animation:pop .22s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{transform:translateY(10px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+.dialog h3{font-family:var(--display);font-size:24px;font-weight:700;letter-spacing:-.03em;margin-bottom:18px}
+.dialog .foot{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;flex-wrap:wrap}
+.mail{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px;font-size:14px;white-space:pre-wrap;max-height:300px;overflow-y:auto;margin:6px 0}
+.mail-meta{font-size:13.5px;color:var(--ink2);margin-bottom:4px}
+.note{font-size:13px;color:var(--ink2);background:var(--sun-soft);border-radius:12px;padding:10px 14px;margin-top:12px}
 
-  .skill-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.02);border:1px solid var(--line);
-    padding:5px 10px;border-radius:999px;font-size:10px;margin:3px 5px 3px 0;cursor:pointer;transition:.18s}
-  .skill-chip:hover{border-color:rgba(184,243,90,.45);background:var(--accent-soft)}
-  .skill-chip.added{background:var(--accent-soft);border-color:rgba(184,243,90,.35);color:var(--accent);cursor:default}
-  .skill-chip .plus{color:var(--accent);font-weight:700}
-  .week-panel{border:1px solid var(--line);border-radius:var(--radius);margin-top:18px;max-width:760px;background:var(--surface);box-shadow:var(--shadow-sm)}
-  .week-panel .wp-head{padding:12px 18px;border-bottom:1px solid var(--line);font-size:9.5px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em}
-  .week-row{display:flex;gap:14px;padding:11px 18px;border-bottom:1px solid var(--line);font-size:11px;align-items:baseline}
-  .week-row:last-child{border-bottom:none}.week-row .wd{width:70px;flex-shrink:0;color:var(--accent);font-size:10px;font-weight:600}
-  .week-empty{padding:22px 18px;color:var(--ink-soft);font-size:11px}
+/* ---------- Toast ---------- */
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,16px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:.22s;z-index:200;max-width:88vw;box-shadow:var(--shadow-pop)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast.err{background:var(--rose)}
 
-  /* LOGIN */
-  .login-shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
-    background:radial-gradient(circle at 50% -10%,rgba(184,243,90,.08),transparent 40%),var(--bg)}
-  .login-card{max-width:420px;width:100%;border:1px solid var(--line-strong);background:rgba(16,21,26,.9);padding:34px 30px;
-    border-radius:20px;box-shadow:var(--shadow-lg);backdrop-filter:blur(20px)}
-  .login-card .wordmark{font-family:'Instrument Serif',serif;font-style:italic;font-size:42px;margin-bottom:3px}
-  .login-card .tagline{font-size:11px;color:var(--ink-soft);margin-bottom:25px}
-  .spinner{display:inline-block;width:13px;height:13px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .loading-row{display:flex;align-items:center;gap:8px;color:var(--ink-soft);font-size:11px;padding:20px}
-  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:var(--surface-2);padding:2px 4px;border-radius:4px}
+/* ---------- Resume ---------- */
+.resume-box{min-height:220px}
+.skill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;border:1px solid var(--line2);background:#fff;font-size:13.5px;margin:0 6px 8px 0;transition:.15s}
+button.skill:hover{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-d)}
+.skill.added{background:var(--leaf-soft);border-color:transparent;color:var(--leaf);font-weight:600}
+.notes{margin:8px 0 0;padding-left:20px;color:var(--ink2)}
+.notes li{margin-bottom:6px}
 
-  /* JARVIS — conversational command center */
-  .jarvis-shell{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:12px;min-height:calc(100vh - 175px)}
-  @media(max-width:1050px){.jarvis-shell{grid-template-columns:1fr}.jarvis-context{display:none}}
-  .jarvis-main{
-    border:1px solid var(--line);border-radius:18px;
-    background:linear-gradient(145deg,rgba(184,243,90,.035),rgba(85,230,208,.018) 42%,rgba(255,255,255,.012));
-    min-height:680px;display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow-md)
-  }
-  .jarvis-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;
-    border-bottom:1px solid var(--line);background:rgba(9,12,15,.68);backdrop-filter:blur(14px)}
-  .jarvis-brand{display:flex;align-items:center;gap:11px}
-  .jarvis-orb{
-    width:34px;height:34px;border-radius:10px;display:grid;place-items:center;position:relative;
-    background:radial-gradient(circle at 38% 32%,#fff 0 7%,var(--accent) 18%,#4c701e 45%,#11180b 72%);
-    box-shadow:0 0 22px rgba(184,243,90,.18)
-  }
-  .jarvis-orb:after{content:"";width:10px;height:10px;border:1px solid rgba(255,255,255,.85);border-radius:50%;box-shadow:0 0 9px #fff}
-  .jarvis-title{font-weight:700;font-size:12.5px;letter-spacing:.02em}.jarvis-state{font-size:9px;color:var(--success);margin-top:1px}
-  .jarvis-actions{display:flex;gap:6px}.jarvis-actions button{background:rgba(255,255,255,.025);border:1px solid var(--line);color:var(--ink-soft);border-radius:8px;padding:6px 9px;cursor:pointer}
-  .jarvis-actions button:hover{color:#fff;border-color:var(--line-strong)}
-  .jarvis-messages{flex:1;overflow-y:auto;padding:24px 22px 18px;scroll-behavior:smooth}
-  .jarvis-welcome{max-width:700px;margin:35px auto 0;text-align:center}
-  .jarvis-welcome .eyebrow{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:9px}
-  .jarvis-welcome h3{font-size:40px;margin-bottom:9px}
-  .jarvis-welcome p{font-size:11.5px;color:var(--ink-soft);max-width:560px;margin:0 auto 22px}
-  .jarvis-prompts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-width:620px;margin:auto}
-  @media(max-width:620px){.jarvis-prompts{grid-template-columns:1fr}}
-  .jarvis-prompt{padding:11px 12px;text-align:left;background:rgba(255,255,255,.02);border:1px solid var(--line);
-    border-radius:10px;color:var(--ink-soft);cursor:pointer;font-size:10.5px;transition:.18s}
-  .jarvis-prompt:hover{border-color:rgba(184,243,90,.35);color:#fff;background:var(--accent-soft)}
-  .jarvis-message{display:flex;gap:10px;margin:0 auto 18px;max-width:780px}
-  .jarvis-message.user{justify-content:flex-end}
-  .jarvis-avatar{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;flex-shrink:0;background:var(--surface-3);color:var(--accent);font-size:9px;font-weight:700}
-  .jarvis-message.user .jarvis-avatar{order:2;background:var(--accent-soft);color:var(--accent)}
-  .jarvis-bubble{max-width:min(78%,680px);padding:11px 13px;border-radius:13px;border:1px solid var(--line);
-    background:rgba(255,255,255,.022);font-size:11.5px;color:#dfe7e2;white-space:pre-wrap}
-  .jarvis-message.user .jarvis-bubble{background:rgba(184,243,90,.09);border-color:rgba(184,243,90,.22);color:#fff}
-  .jarvis-meta{font-size:8.5px;color:var(--ink-faint);margin-top:5px}.jarvis-message.user .jarvis-meta{text-align:right}
-  .jarvis-composer{padding:12px 14px;border-top:1px solid var(--line);background:rgba(7,10,12,.76)}
-  .jarvis-compose-box{display:flex;align-items:flex-end;gap:8px;padding:8px;background:#0b0f13;border:1px solid var(--line-strong);border-radius:13px}
-  .jarvis-compose-box:focus-within{border-color:rgba(184,243,90,.45);box-shadow:0 0 0 3px rgba(184,243,90,.055)}
-  #jarvis-input{flex:1;resize:none;min-height:22px;max-height:130px;border:none;outline:none;background:transparent;padding:5px;color:#fff;font-size:11.5px}
-  #jarvis-input::placeholder{color:#5d6863}
-  #jarvis-send{width:34px;height:34px;border-radius:9px;border:1px solid rgba(184,243,90,.35);background:var(--accent);color:#0a0f06;cursor:pointer;font-weight:800}
-  #jarvis-send:hover{background:var(--accent-hover)}
-  .jarvis-footer{font-size:8.5px;color:var(--ink-faint);padding:7px 3px 0;text-align:center}
-  .jarvis-context{border:1px solid var(--line);border-radius:18px;background:rgba(16,21,26,.78);padding:15px;box-shadow:var(--shadow-sm);height:max-content}
-  .jarvis-context-title{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);font-weight:700;margin-bottom:12px}
-  .jctx-card{padding:11px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.018);margin-bottom:8px}
-  .jctx-label{font-size:9px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em}.jctx-value{font-size:12px;font-weight:600;margin-top:4px}
-  .jctx-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:10px;color:var(--ink-soft)}
-  .jctx-row:last-child{border-bottom:0}.jctx-row b{color:#fff}
-  .typing{display:inline-flex;gap:4px;align-items:center}.typing i{width:4px;height:4px;border-radius:50%;background:var(--accent);animation:blink 1s infinite}
-  .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
-  @keyframes blink{0%,60%,100%{opacity:.2}30%{opacity:1}}
+/* ---------- History ---------- */
+.tl{position:relative;padding-left:26px;max-width:720px}
+.tl:before{content:"";position:absolute;left:5px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.tl-day{position:relative;margin-bottom:26px}
+.tl-day:before{content:"";position:absolute;left:-26px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--brand);border:3px solid var(--bg)}
+.tl-day h3{font-family:var(--display);font-size:19px;font-weight:650;margin-bottom:8px}
+.tl-e{display:flex;gap:14px;padding:6px 0;color:var(--ink2);font-size:14.5px}
+.tl-e time{width:62px;flex-shrink:0;color:var(--ink3);font-size:13px;padding-top:1px}
 
-  .conn-row,.stat-tile .lbl,.jarvis-state,.jarvis-context-title,.jctx-label,.jctx-row,
-  .badge,.week-panel .wp-head,.week-row .wd,.jarvis-footer,.note{
-    font-family:'DM Mono',monospace;
-  }
+/* ---------- JARVIS ---------- */
+.jv{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:20px;align-items:start}
+@media(max-width:1050px){.jv{grid-template-columns:1fr}.jv-ctx{display:none}}
+.jv-main{display:flex;flex-direction:column;height:calc(100vh - 170px);min-height:560px;overflow:hidden}
+.jv-top{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.orb{width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff 0 8%,#9AA4FF 22%,var(--brand) 60%,#1E2790);box-shadow:0 6px 18px -6px rgba(56,70,232,.8)}
+.jv-top b{font-family:var(--display);font-size:17px;display:block;line-height:1.1}
+.jv-top span{font-size:12.5px;color:var(--ink3)}
+.jv-top .btn{margin-left:auto}
+.msgs{flex:1;overflow-y:auto;padding:24px 22px;display:flex;flex-direction:column;gap:14px}
+.welcome{margin:auto;text-align:center;max-width:560px}
+.welcome h2{font-family:var(--display);font-size:38px;font-weight:700;letter-spacing:-.04em;line-height:1.05}
+.welcome p{color:var(--ink2);margin:10px 0 24px}
+.prompts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:560px){.prompts{grid-template-columns:1fr}}
+.prompts button{padding:13px 15px;text-align:left;background:#fff;border:1px solid var(--line2);border-radius:14px;font-weight:550;font-size:14px;transition:.15s}
+.prompts button:hover{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-d)}
+.m{display:flex;max-width:100%}
+.m.you{justify-content:flex-end}
+.bubble{max-width:min(82%,640px);padding:11px 15px;border-radius:18px;font-size:14.5px;line-height:1.55;background:var(--bg);border-bottom-left-radius:6px}
+.m.you .bubble{background:var(--brand);color:#fff;border-bottom-left-radius:18px;border-bottom-right-radius:6px}
+.bubble strong{font-weight:700}
+.typing{display:inline-flex;gap:4px;padding:4px 0}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--ink3);animation:blink 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,60%,100%{opacity:.25}30%{opacity:1}}
+.composer{padding:14px 16px;border-top:1px solid var(--line)}
+.cbox{display:flex;align-items:flex-end;gap:8px;padding:8px 8px 8px 14px;border:1px solid var(--line2);border-radius:16px;background:#fff}
+.cbox:focus-within{border-color:var(--brand);box-shadow:0 0 0 4px rgba(56,70,232,.12)}
+.cbox textarea{flex:1;border:0;outline:0;resize:none;min-height:24px;max-height:130px;padding:5px 0;box-shadow:none;background:transparent}
+.cbox textarea:focus{box-shadow:none}
+.send{width:38px;height:38px;border-radius:11px;border:0;background:var(--brand);color:#fff;display:grid;place-items:center}
+.send:hover{background:var(--brand-d)}
+.jv-ctx{padding:18px}
+.jv-ctx h3{font-family:var(--display);font-size:16px;font-weight:650;margin-bottom:10px}
+.ctx-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--ink2)}
+.ctx-row:last-of-type{border-bottom:0}
+.ctx-row b{color:var(--ink)}
+.ctx-note{font-size:12.5px;color:var(--ink3);margin-top:12px}
 
-</style>
-<style>
-/* DEV AUTH BYPASS SAFETY NET */
-body.opa-dev-no-auth .auth-screen,
-body.opa-dev-no-auth #login-screen,
-body.opa-dev-no-auth #auth-screen,
-body.opa-dev-no-auth .login-screen {
-  display: none !important;
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
 </style>
 </head>
-<body class="opa-dev-no-auth">
+<body>
 
-<div id="login-screen" class="login-shell">
-  <div class="login-card">
-    <div class="wordmark">OPA</div>
-    <div class="tagline">Operating Agent — sign in to your instance</div>
-    <div class="err-banner" id="login-err" style="display:none;"></div>
-    <div class="field">
-      <label>Backend URL</label>
-      <input id="login-base" value="http://localhost:8000">
+<div class="app">
+  <aside class="side" id="side" aria-label="Main navigation">
+    <div class="brand">
+      <div class="brand-mark"><i></i></div>
+      <div><b>OPA</b><span>Operating Agent</span></div>
     </div>
-    <div class="field">
-      <label>Email (dev sign-in — no password, matches your local backend's dev-login)</label>
-      <input id="login-email" placeholder="you@example.com">
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot">
+      <div class="conn"><i></i><div><b>Demo data on this device</b>Backend is switched off for now. Press <span class="kbd">Ctrl</span> <span class="kbd">K</span> for JARVIS.</div></div>
     </div>
-    <button class="btn" id="login-btn" style="width:100%;justify-content:center;">Sign in</button>
-    <div class="note">This talks to a FastAPI backend running on your own machine. If it's not running yet, see the README — <code>uvicorn app.main:app --reload</code> — then reload this page.</div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <div>
+    <div class="topbar">
+      <button class="icon-btn" id="menu-btn" aria-label="Open menu"></button>
+      <b>OPA</b>
+    </div>
+    <main id="view" tabindex="-1"></main>
   </div>
 </div>
 
-<div class="shell" id="app-shell" style="display:none;">
-  <aside class="sidebar">
-    <div class="brand-block">
-      <div class="brand"><span class="wordmark">OPA</span><span class="tagline">Operating Agent — your context layer</span></div>
-      <div class="conn-row"><span class="conn-dot" id="conn-dot"></span><span id="conn-label">Connecting…</span></div>
-    </div>
-    <nav class="sidenav" id="tabs">
-      <button data-tab="jarvis">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
-        JARVIS
-      </button>
-      <button data-tab="today" class="active">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
-        Today
-      </button>
-      <button data-tab="applications">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="13" rx="1.5"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/></svg>
-        Applications
-      </button>
-      <button data-tab="opportunities">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/></svg>
-        Opportunities
-      </button>
-      <button data-tab="outreach">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="m4 6.5 8 6 8-6"/></svg>
-        Outreach
-      </button>
-      <button data-tab="projects">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 3 9 4.9-9 4.9-9-4.9L12 3Z"/><path d="m3 12.9 9 4.9 9-4.9"/></svg>
-        Projects
-      </button>
-      <button data-tab="academics">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5c0-.8.7-1.5 1.5-1.5H14v15H5.5A1.5 1.5 0 0 1 4 17.5v-12Z"/><path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v12a1.5 1.5 0 0 1-1.5 1.5H14"/></svg>
-        Academics
-      </button>
-      <button data-tab="requests">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v11H8l-4 4V4Z"/></svg>
-        Requests
-      </button>
-      <button data-tab="outbox">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h5l1.5 3h5L16 12h5"/><path d="M5.5 6h13l2 6v7a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1v-7l2-6Z"/></svg>
-        Outbox <span class="dot" id="outbox-dot" style="display:none;"></span>
-      </button>
-      <button data-tab="resume">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"/><path d="M9 12h6M9 15.5h6M9 8.5h3"/></svg>
-        Resume
-      </button>
-      <button data-tab="history">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-        History
-      </button>
-      <button data-tab="profile">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8.5" r="3.3"/><path d="M4.5 20c1.4-3.8 4.2-5.6 7.5-5.6s6.1 1.8 7.5 5.6"/></svg>
-        Profile
-      </button>
-    </nav>
-    <div class="stat-block">
-      <div class="row"><span>Open applications</span><b id="stat-apps">–</b></div>
-      <div class="row"><span>Pending outreach</span><b id="stat-outreach">–</b></div>
-      <div class="row"><span>Open requests</span><b id="stat-requests">–</b></div>
-      <div class="row"><span>Today's load</span><b id="stat-load">–</b></div>
-      <button class="link-btn" onclick="logout()">Sign out</button>
-    </div>
-  </aside>
-
-  <main>
-    <div id="global-err" class="err-banner" style="display:none;max-width:680px;"></div>
-
-    <section class="view" id="view-jarvis">
-      <div class="view-head">
-        <div>
-          <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-2);margin-bottom:7px;">AI command center</div>
-          <h2>JARVIS</h2>
-          <div class="sub">Your operating copilot. Ask about today's work, applications, projects, outreach, academics, or what to do next.</div>
-        </div>
-      </div>
-
-      <div class="jarvis-shell">
-        <div class="jarvis-main">
-          <div class="jarvis-top">
-            <div class="jarvis-brand">
-              <div class="jarvis-orb"></div>
-              <div><div class="jarvis-title">JARVIS</div><div class="jarvis-state">● Ready</div></div>
-            </div>
-            <div class="jarvis-actions">
-              <button onclick="jarvisNewChat()" title="Clear conversation">New chat</button>
-            </div>
-          </div>
-
-          <div class="jarvis-messages" id="jarvis-messages">
-            <div class="jarvis-welcome" id="jarvis-welcome">
-              <div class="eyebrow">Operating intelligence</div>
-              <h3>What are we building?</h3>
-              <p>Use JARVIS as the conversational layer on top of your OPA workspace. Start with one of these or type anything below.</p>
-              <div class="jarvis-prompts">
-                <button class="jarvis-prompt" onclick="jarvisPrompt('What should I focus on today?')">What should I focus on today?</button>
-                <button class="jarvis-prompt" onclick="jarvisPrompt('Summarize my active applications and deadlines.')">Summarize my applications</button>
-                <button class="jarvis-prompt" onclick="jarvisPrompt('Which projects need attention right now?')">Which projects need attention?</button>
-                <button class="jarvis-prompt" onclick="jarvisPrompt('Help me plan the next 3 hours.')">Plan my next 3 hours</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="jarvis-composer">
-            <div class="jarvis-compose-box">
-              <textarea id="jarvis-input" rows="1" placeholder="Ask JARVIS anything about your workspace…" aria-label="Message JARVIS"></textarea>
-              <button id="jarvis-send" onclick="sendJarvisMessage()" aria-label="Send message">↑</button>
-            </div>
-            <div class="jarvis-footer">JARVIS can use your OPA context. Connect a model endpoint later to enable real AI responses.</div>
-          </div>
-        </div>
-
-        <aside class="jarvis-context">
-          <div class="jarvis-context-title">Live workspace context</div>
-          <div class="jctx-card"><div class="jctx-label">Connection</div><div class="jctx-value" id="jctx-connection">Checking…</div></div>
-          <div class="jctx-card"><div class="jctx-label">Today's load</div><div class="jctx-value" id="jctx-load">—</div></div>
-          <div class="jctx-row"><span>Applications</span><b id="jctx-apps">—</b></div>
-          <div class="jctx-row"><span>Outreach</span><b id="jctx-outreach">—</b></div>
-          <div class="jctx-row"><span>Requests</span><b id="jctx-requests">—</b></div>
-          <div class="jctx-row"><span>Outbox</span><b id="jctx-outbox">—</b></div>
-          <div class="note">The UI is ready for a real LLM endpoint. The current fallback keeps the interface usable without pretending that an AI backend is connected.</div>
-        </aside>
-      </div>
-    </section>
-
-    <section class="view active" id="view-today">
-      <div class="view-head">
-        <div><div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:7px;">Workspace</div><h2>Today's plan</h2><div class="sub" id="today-date"></div></div>
-        <button class="btn ghost" onclick="loadToday()">Refresh</button>
-      </div>
-      <div class="stat-strip">
-        <div class="stat-tile"><div class="num" id="tile-apps">–</div><div class="lbl">open applications</div></div>
-        <div class="stat-tile"><div class="num" id="tile-outreach">–</div><div class="lbl">pending outreach</div></div>
-        <div class="stat-tile"><div class="num" id="tile-outbox">–</div><div class="lbl">awaiting approval</div></div>
-        <div class="stat-tile"><div class="num" id="tile-load">–</div><div class="lbl">queued today</div></div>
-      </div>
-      <div class="plan-list" id="today-list"><div class="loading-row"><span class="spinner"></span>Loading plan…</div></div>
-      <div class="week-panel" id="week-panel">
-        <div class="wp-head">This week ahead</div>
-        <div id="week-list"></div>
-      </div>
-    </section>
-
-    <section class="view" id="view-applications">
-      <div class="view-head">
-        <div><h2>Applications</h2><div class="sub">Internships, research labs, hackathons — one pipeline.</div></div>
-        <button class="btn" onclick="openAppModal()">Add application</button>
-      </div>
-      <div id="app-list"></div>
-    </section>
-
-    <section class="view" id="view-opportunities">
-      <div class="view-head">
-        <div><h2>Opportunity discovery</h2><div class="sub">Roles and labs you're weighing, scored server-side against your profile skills. Convert the good ones into applications.</div></div>
-        <button class="btn" onclick="openOppModal()">Add opportunity</button>
-      </div>
-      <div id="opp-list"></div>
-    </section>
-
-    <section class="view" id="view-outreach">
-      <div class="view-head">
-        <div><h2>Outreach</h2><div class="sub">Matched against your profile skills. Drafting creates an outbox item — nothing sends until you approve it.</div></div>
-        <button class="btn" onclick="openProfModal()">Add contact</button>
-      </div>
-      <div id="prof-list"></div>
-    </section>
-
-    <section class="view" id="view-projects">
-      <div class="view-head">
-        <div><h2>Projects</h2><div class="sub">Break technical work into tasks the planner can schedule.</div></div>
-        <button class="btn" onclick="openProjModal()">Add project</button>
-      </div>
-      <div id="proj-list"></div>
-    </section>
-
-    <section class="view" id="view-academics">
-      <div class="view-head">
-        <div><h2>Academics</h2><div class="sub">Exam prep and coursework, sized so the planner can slot it in around everything else.</div></div>
-        <button class="btn" onclick="openAcadModal()">Add study task</button>
-      </div>
-      <div id="acad-list"></div>
-    </section>
-
-    <section class="view" id="view-requests">
-      <div class="view-head">
-        <div><h2>Incoming requests</h2><div class="sub">Turn "can you build me a website?" into a scoped proposal you can send.</div></div>
-        <button class="btn" onclick="openReqModal()">Add request</button>
-      </div>
-      <div id="req-list"></div>
-    </section>
-
-    <section class="view" id="view-outbox">
-      <div class="view-head">
-        <div><h2>Outbox</h2><div class="sub">Every send — Gmail, WhatsApp — passes through here. Nothing reaches a real inbox without your approval, and until Gmail/WhatsApp/Odoo credentials are wired in, approved sends will honestly fail here rather than pretend to succeed.</div></div>
-        <button class="btn ghost" onclick="loadOutbox()">Refresh</button>
-      </div>
-      <div id="outbox-list"></div>
-    </section>
-
-    <section class="view" id="view-resume">
-      <div class="view-head">
-        <div><h2>Resume &amp; project analysis</h2><div class="sub">Paste your resume or a project summary — OPA pulls out skills it recognizes and adds them to your matching profile.</div></div>
-      </div>
-      <div class="field" style="max-width:680px;">
-        <label>Resume / project text</label>
-        <textarea class="resume-box" id="resume-text" placeholder="Paste resume text, a GitHub README, or a project summary…"></textarea>
-      </div>
-      <button class="btn" onclick="analyzeResume()">Analyze</button>
-      <button class="btn ghost" onclick="clearResume()">Clear</button>
-      <div id="resume-results" style="margin-top:16px;max-width:680px;"></div>
-    </section>
-
-    <section class="view" id="view-history">
-      <div class="view-head">
-        <div><h2>History</h2><div class="sub">Logged server-side as you complete items and as sends succeed or fail.</div></div>
-      </div>
-      <div id="history-list"></div>
-    </section>
-
-    <section class="view" id="view-profile">
-      <div class="view-head">
-        <div><h2>Profile</h2><div class="sub">Used to personalize matching and outreach drafts.</div></div>
-      </div>
-      <div style="max-width:480px;">
-        <div class="field"><label>Name</label><input id="p-name"></div>
-        <div class="field"><label>Track / year</label><input id="p-track"></div>
-        <div class="field"><label>GitHub</label><input id="p-github"></div>
-        <div class="field"><label>Email</label><input id="p-email"></div>
-        <div class="field"><label>Skills (comma-separated — used for match scoring)</label><input id="p-skills"></div>
-        <div class="field"><label>Resume highlight (one line, used in outreach drafts)</label><textarea id="p-highlight"></textarea></div>
-        <button class="btn" onclick="saveProfile()">Save profile</button>
-      </div>
-
-      <h3 style="margin-top:40px;font-size:19px;">What's real vs. stubbed on this backend</h3>
-      <div class="note" style="font-size:12px;line-height:1.7;max-width:520px;">
-        Every list above is a real Postgres/SQLite-backed resource, and the plan on Today is computed server-side. Drafting an email or proposal really creates an Outbox row. Approving it really tries to send — but Gmail, WhatsApp, and Odoo are wired to raise a clear error until you add real credentials (see the backend README). That failure shows up honestly in Outbox and History rather than being hidden.
-      </div>
-    </section>
-  </main>
-</div>
-
-<div class="overlay" id="overlay"><div class="modal" id="modal-body"></div></div>
-<div class="toast" id="toast"></div>
+<div class="overlay" id="overlay"><div class="dialog" id="dialog" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* ===== 0. API CLIENT ===== */
-const LS_BASE = 'opa_api_base';
-function getBase(){ return localStorage.getItem(LS_BASE) || 'http://localhost:8000'; }
-function setBase(v){ localStorage.setItem(LS_BASE, v); }
+/* =====================================================================
+   BACKEND — DISABLED FOR NOW (kept here so the full MVP can switch it on)
+   ---------------------------------------------------------------------
+   The app currently runs on local demo data (localStorage) through the
+   `S` state object and the helper functions further down. When the
+   FastAPI backend is ready, uncomment this client, then replace the
+   local helpers (upsert / del / buildPlan / draft* / jarvisReply) with
+   the matching endpoint calls listed below.
 
-let CONNECTED = false;
+   const LS_BASE = 'opa_api_base';
+   const getBase = () => localStorage.getItem(LS_BASE) || 'http://localhost:8000';
 
-async function api(path, opts={}){
-  const base = getBase();
-  const res = await fetch(base + path, {
-    credentials: 'include',
-    headers: opts.body ? {'Content-Type':'application/json'} : {},
-    ...opts,
-  });
-  if(res.status === 401){
-    showLogin('Session expired or not signed in — sign in again.');
-    throw new Error('unauthenticated');
-  }
-  if(!res.ok){
-    let detail = '';
-    try{ detail = (await res.json()).detail || ''; }catch(e){}
-    throw new Error(`${res.status} ${res.statusText}${detail ? ' — ' + detail : ''}`);
-  }
-  if(res.status === 204) return null;
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
-}
-const GET = (p) => api(p);
-const POST = (p, body) => api(p, {method:'POST', body: body!==undefined ? JSON.stringify(body) : undefined});
-const PATCH = (p, body) => api(p, {method:'PATCH', body: JSON.stringify(body)});
-const DEL = (p) => api(p, {method:'DELETE'});
+   async function api(path, opts = {}) {
+     const res = await fetch(getBase() + path, {
+       credentials: 'include',
+       headers: opts.body ? { 'Content-Type': 'application/json' } : {},
+       ...opts,
+     });
+     if (res.status === 401) throw new Error('unauthenticated');
+     if (!res.ok) {
+       let detail = '';
+       try { detail = (await res.json()).detail || ''; } catch (e) {}
+       throw new Error(res.status + ' ' + res.statusText + (detail ? ' - ' + detail : ''));
+     }
+     if (res.status === 204) return null;
+     const text = await res.text();
+     return text ? JSON.parse(text) : null;
+   }
+   const GET   = (p)    => api(p);
+   const POST  = (p, b) => api(p, { method: 'POST',  body: b !== undefined ? JSON.stringify(b) : undefined });
+   const PATCH = (p, b) => api(p, { method: 'PATCH', body: JSON.stringify(b) });
+   const DEL   = (p)    => api(p, { method: 'DELETE' });
 
-/* ===== 1. UTIL ===== */
-function uidLocal(){ return Math.random().toString(36).slice(2,9); }
-function fmtDate(d){ if(!d) return ''; const dt=new Date(d+'T00:00:00'); return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
-function daysUntil(d){ if(!d) return 999; const dt=new Date(d+'T00:00:00'); const now=new Date(); now.setHours(0,0,0,0); return Math.round((dt-now)/86400000); }
-function esc2(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function escAttr(s){ return esc2(s).replace(/"/g,'&quot;'); }
-function fmtHrs(mins){ if(mins==null) return '0h'; return (Math.round(mins/60*10)/10) + 'h'; }
-function val(id){ const el=document.getElementById(id); return el ? el.value.trim() : ''; }
+   Endpoints the UI expects:
+     POST /v1/auth/dev-login?email=...      POST /v1/auth/logout
+     GET|PATCH /v1/profile                  GET /v1/plan/today
+     GET|POST /v1/applications              PATCH|DELETE /v1/applications/:id
+     GET|POST /v1/opportunities             POST /v1/opportunities/:id/convert | /dismiss
+     GET|POST /v1/contacts                  POST /v1/drafts/outreach {contact_id}
+     GET|POST /v1/projects                  POST /v1/projects/:id/tasks   PATCH|DELETE /v1/tasks/:id
+     GET|POST /v1/academics                 GET|POST /v1/requests         POST /v1/drafts/proposal {request_id}
+     GET /v1/outbox                         POST /v1/outbox/:id/approve | /reject
+     POST /v1/resume/analyze {text}         GET /v1/history
+     POST /v1/jarvis/chat {messages} -> {reply}
+   ===================================================================== */
+
+/* ================= 1. UTILITIES ================= */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => (s == null ? '' : String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const escA = (s) => esc(s).replace(/"/g,'&quot;');
+const uid = () => 'x' + Math.random().toString(36).slice(2, 9);
+const pad = (n) => String(n).padStart(2, '0');
+const iso = (off = 0) => { const d = new Date(); d.setDate(d.getDate() + off); return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); };
+const fmtDate = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+const daysUntil = (d) => { if (!d) return 999; const t = new Date(d + 'T00:00:00'); const n = new Date(); n.setHours(0,0,0,0); return Math.round((t - n) / 86400000); };
+const fmtMins = (m) => { m = Math.round(m || 0); if (m < 60) return m + 'm'; const h = Math.floor(m/60), r = m % 60; return r ? h + 'h ' + r + 'm' : h + 'h'; };
+const fmtDue = (d) => { const n = daysUntil(d); if (n < 0) return 'Overdue by ' + (-n) + 'd'; if (n === 0) return 'Due today'; if (n === 1) return 'Due tomorrow'; if (n <= 6) return 'Due in ' + n + ' days'; return 'Due ' + fmtDate(d); };
+const dueTone = (d, status) => { if (!d || ['Offer','Rejected','Applied'].includes(status)) return ''; const n = daysUntil(d); return n < 0 ? 'bad' : n <= 2 ? 'warn' : ''; };
+const splitList = (s) => (s || '').split(',').map(x => x.trim()).filter(Boolean);
+
+const IC = {
+  spark:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 16l.7 1.8 1.8.7-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7L19 16z"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
+  layers:'<path d="m12 3 9 5-9 5-9-5 9-5z"/><path d="m3 13 9 5 9-5"/>',
+  book:'<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H14v15H5.5A1.5 1.5 0 0 1 4 17.5v-12z"/><path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v12a1.5 1.5 0 0 1-1.5 1.5H14"/>',
+  chat:'<path d="M4 5h16v11H9l-5 4V5z"/>',
+  send:'<path d="M3 11 21 3l-8 18-2.5-7.5L3 11z"/>',
+  file:'<path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M9 12h6M9 16h6M9 8h3"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  user:'<circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.3-3.6 4-5 7-5s5.7 1.4 7 5"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  check:'<path d="m5 12 4.5 4.5L19 7"/>',
+  edit:'<path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/>',
+  trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+  menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+  up:'<path d="M12 19V5M5 12l7-7 7 7"/>',
+  x:'<path d="M6 6l12 12M18 6 6 18"/>'
+};
+const icon = (n, s = 18) => '<svg class="ic" viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[n] + '</svg>';
 
 let toastTimer;
-function toast(msg, isErr){
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.classList.toggle('err', !!isErr); el.classList.add('show');
+function toast(msg, isErr) {
+  const el = $('toast');
+  el.textContent = msg; el.classList.toggle('err', !!isErr); el.classList.add('on');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>el.classList.remove('show'), isErr ? 3200 : 1800);
-}
-function showModal(html){ document.getElementById('modal-body').innerHTML = html; document.getElementById('overlay').classList.add('active'); }
-function closeModal(){ document.getElementById('overlay').classList.remove('active'); }
-document.getElementById('overlay').addEventListener('click', e=>{ if(e.target.id==='overlay') closeModal(); });
-document.addEventListener('keydown', e=>{
-      if(e.key==='Escape') closeModal();
-      if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){
-        e.preventDefault();
-        switchTab('jarvis');
-        setTimeout(()=>document.getElementById('jarvis-input')?.focus(),50);
-      }
-    });
-
-function showGlobalErr(msg){
-  const el = document.getElementById('global-err');
-  if(!msg){ el.style.display='none'; return; }
-  el.textContent = msg; el.style.display='block';
-}
-async function safe(fn){
-  try{ await fn(); showGlobalErr(null); }
-  catch(e){
-    console.error(e);
-    showGlobalErr(`Couldn't reach the backend at ${getBase()}: ${e.message}. Is it running (uvicorn app.main:app --reload)?`);
-    toast('Request failed', true);
-  }
+  toastTimer = setTimeout(() => el.classList.remove('on'), isErr ? 3400 : 2200);
 }
 
-/* ===== 2. LOGIN / SESSION ===== */
-function showLogin(err){
-  document.getElementById('app-shell').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('login-base').value = getBase();
-  const e = document.getElementById('login-err');
-  if(err){ e.textContent = err; e.style.display = 'block'; } else { e.style.display = 'none'; }
-}
-document.getElementById('login-btn').addEventListener('click', doLogin);
-document.getElementById('login-email').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+/* ================= 2. LOCAL DATA (stands in for the backend) ================= */
+const LS_KEY = 'opa_demo_v2';
+const MASTER_SKILLS = ['React','Node.js','Next.js','Vue','Angular','Python','JavaScript','TypeScript','Java','C++','RAG','LLM agents','Gemini','Google ADK','LangChain','Prompt engineering','Machine learning','Deep learning','TensorFlow','PyTorch','Computer vision','NLP','SQL','MongoDB','PostgreSQL','Firebase','AWS','Docker','Kubernetes','Git','GitHub Actions','REST APIs','GraphQL','Access control','RBAC','Security','Full-stack web','Mobile development','Flutter','React Native','UI/UX design','Data structures','Algorithms','System design','WhatsApp API','Odoo'];
 
-async function doLogin(){
-  const base = val('login-base') || 'http://localhost:8000';
-  const email = val('login-email');
-  if(!email){ document.getElementById('login-err').textContent = 'Enter an email.'; document.getElementById('login-err').style.display='block'; return; }
-  setBase(base.replace(/\/$/, ''));
-  const btn = document.getElementById('login-btn');
-  btn.disabled = true; btn.textContent = 'Signing in…';
-  try{
-    await POST(`/v1/auth/dev-login?email=${encodeURIComponent(email)}`);
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app-shell').style.display = 'grid';
-    CONNECTED = true;
-    setConn(true);
-    await boot();
-  }catch(e){
-    setConn(false);
-    document.getElementById('login-err').textContent = `Couldn't reach ${getBase()}: ${e.message}`;
-    document.getElementById('login-err').style.display = 'block';
-  }
-  btn.disabled = false; btn.textContent = 'Sign in';
-}
-
-async function logout(){
-  try{ await POST('/v1/auth/logout'); }catch(e){}
-  showLogin();
-}
-
-function setConn(ok){
-  document.getElementById('conn-dot').className = 'conn-dot ' + (ok ? 'ok' : 'err');
-  document.getElementById('conn-label').textContent = ok ? getBase() : 'Not connected';
-}
-
-async function tryResume(){
-  try{
-    await GET('/v1/profile');
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app-shell').style.display = 'grid';
-    CONNECTED = true;
-    setConn(true);
-    await boot();
-  }catch(e){
-    showLogin();
-  }
-}
-
-/* ===== 3. RESOURCE ENDPOINTS ===== */
-const RES = {
-  applications: '/v1/applications',
-  opportunities: '/v1/opportunities',
-  contacts: '/v1/contacts',
-  projects: '/v1/projects',
-  academics: '/v1/academics',
-  requests: '/v1/requests',
-};
-const list = (r) => GET(RES[r]);
-const create = (r, body) => POST(RES[r], body);
-const update = (r, id, body) => PATCH(`${RES[r]}/${id}`, body);
-const remove = (r, id) => DEL(`${RES[r]}/${id}`);
-
-const MASTER_SKILLS = ['React','Node.js','Next.js','Vue','Angular','Python','JavaScript','TypeScript','Java','C++','RAG','LLM agents',
-  'Gemini','Google ADK','LangChain','Prompt engineering','Machine learning','Deep learning','TensorFlow','PyTorch','Computer vision',
-  'NLP','SQL','MongoDB','PostgreSQL','Firebase','AWS','Docker','Kubernetes','Git','GitHub Actions','REST APIs','GraphQL',
-  'Access control','RBAC','Security','Full-stack web','Mobile development','Flutter','React Native','UI/UX design',
-  'Data structures','Algorithms','System design','WhatsApp API','Odoo'];
-
-const ICONS = {
-  briefcase:'<svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="13" rx="1.5"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/></svg>',
-  mail:'<svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="m4 6.5 8 6 8-6"/></svg>',
-  layers:'<svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 3 9 4.9-9 4.9-9-4.9L12 3Z"/><path d="m3 12.9 9 4.9 9-4.9"/></svg>',
-  book:'<svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5c0-.8.7-1.5 1.5-1.5H14v15H5.5A1.5 1.5 0 0 1 4 17.5v-12Z"/><path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v12a1.5 1.5 0 0 1-1.5 1.5H14"/></svg>',
-  inbox:'<svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v11H8l-4 4V4Z"/></svg>',
-  target:'<svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.2"/></svg>'
-};
-function ticksFor(score){ return Array.from({length:10},(_,i)=> i<Math.round(score/10)?'<i class="on"></i>':'<i></i>').join(''); }
-
-/* ===== 4. TODAY ===== */
-async function loadToday(){
-  const plan = await GET('/v1/plan/today');
-  const outbox = await GET('/v1/outbox').catch(()=>[]);
-  const pendingOutbox = outbox.filter(o=>o.status==='pending_approval'||o.status==='approved').length;
-
-  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'});
-  const items = plan.items || [];
-  const apps = items.filter(i=>i.kind==='app').length;
-  const outreachItems = items.filter(i=>i.kind==='prof').length;
-
-  document.getElementById('tile-apps').textContent = apps;
-  document.getElementById('tile-outreach').textContent = outreachItems;
-  document.getElementById('tile-outbox').textContent = pendingOutbox;
-  document.getElementById('tile-load').textContent = fmtHrs(plan.load_min);
-  document.getElementById('stat-apps').textContent = apps;
-  document.getElementById('stat-outreach').textContent = outreachItems;
-  document.getElementById('stat-load').textContent = fmtHrs(plan.load_min);
-
-  const outboxDot = document.getElementById('outbox-dot');
-  const reqsForBadge = await GET('/v1/requests').catch(()=>[]);
-  document.getElementById('stat-requests').textContent = reqsForBadge.filter(r=>r.status==='New'||r.status==='Scoped').length;
-  outboxDot.style.display = outbox.some(o=>o.status==='pending_approval') ? 'block' : 'none';
-
-  const listEl = document.getElementById('today-list');
-  listEl.innerHTML = items.length===0
-    ? '<div class="plan-empty">Nothing queued. Add an application, contact, or project to build today\'s plan.</div>'
-    : items.map(it=>`
-    <div class="plan-item">
-      <input type="checkbox" class="plan-check" onchange="completeToday('${it.kind}','${it.id}','${it.task_id||''}', this)">
-      ${ICONS[it.icon]||''}
-      <div style="flex:1;min-width:0;">
-        <div class="plan-name">${esc2(it.name)}</div>
-        <div class="plan-sub">${esc2(it.sub)}</div>
-      </div>
-      <div class="plan-dur">~${it.effort_min<60?it.effort_min+'m':fmtHrs(it.effort_min)}</div>
-    </div>`).join('');
-
-  const week = plan.week_ahead || [];
-  document.getElementById('week-list').innerHTML = week.length===0
-    ? '<div class="week-empty">Nothing dated in the next 7 days.</div>'
-    : week.map(r=>`<div class="week-row"><span class="wd">${fmtDate(r.date)}</span><span>${esc2(r.text)}</span></div>`).join('');
-}
-
-async function completeToday(kind, id, taskId, checkbox){
-  checkbox.disabled = true;
-  try{
-    if(kind==='app'){
-      const apps = await list('applications');
-      const a = apps.find(x=>x.id===id);
-      if(a){ const next = a.status==='Not started' ? 'Applied' : (a.status==='Applied' ? 'Interview' : a.status); await update('applications', id, {...a, status: next}); }
-    } else if(kind==='prof'){
-      const contact = (await list('contacts')).find(x=>x.id===id);
-      if(contact){
-        if(contact.status==='Not started'){ checkbox.checked=false; checkbox.disabled=false; return draftFor(id); }
-        if(contact.status==='Drafted'){ checkbox.checked=false; checkbox.disabled=false; toast('Approve the pending draft in Outbox to send it'); switchTab('outbox'); return; }
-      }
-    } else if(kind==='proj'){
-      const t = (await list('projects')).flatMap(p=>p.tasks.map(t=>({...t, projectId:p.id}))).find(x=>x.id===taskId);
-      if(t) await PATCH(`/v1/tasks/${taskId}`, {name:t.name, done:true});
-    } else if(kind==='acad'){
-      const t = (await list('academics')).find(x=>x.id===id);
-      if(t) await update('academics', id, {...t, done:true});
-    } else if(kind==='req'){
-      const r = (await list('requests')).find(x=>x.id===id);
-      if(r){
-        if(r.status==='New') await update('requests', id, {...r, status:'Scoped'});
-        else if(r.status==='Scoped'){ checkbox.checked=false; checkbox.disabled=false; toast('Draft the proposal from Requests to send it'); switchTab('requests'); return; }
-      }
-    } else if(kind==='opp'){
-      // Purely informational item — nothing to mutate, just acknowledge.
-    }
-    await renderAll();
-  }catch(e){
-    toast('Failed: ' + e.message, true);
-    checkbox.checked = false; checkbox.disabled = false;
-  }
-}
-
-/* ===== 5. APPLICATIONS ===== */
-async function renderApps(){
-  const el = document.getElementById('app-list');
-  el.innerHTML = '<div class="loading-row"><span class="spinner"></span>Loading…</div>';
-  const apps = await list('applications');
-  if(!apps.length){ el.innerHTML = '<div class="empty-state">No applications yet. Add your first one.</div>'; return; }
-  el.innerHTML = apps.map(a=>{
-    const urgent = a.deadline && daysUntil(a.deadline)<=2 && !['Offer','Rejected'].includes(a.status);
-    return `<div class="card card-row">
-      <div>
-        <h3>${esc2(a.company)}</h3>
-        <div class="meta">
-          <span class="badge status-${a.status.replace(/ /g,'')}">${a.status}</span>
-          ${urgent?`<span class="badge urgent">due in ${daysUntil(a.deadline)}d</span>`:''}
-          <span>${esc2(a.type)}</span><span>${esc2(a.role)}</span>
-          ${a.deadline && !urgent?`<span>due ${fmtDate(a.deadline)}</span>`:''}
-        </div>
-        ${a.notes?`<div class="meta">${esc2(a.notes)}</div>`:''}
-      </div>
-      <div class="actions">
-        <button class="btn ghost small" onclick="openAppModal('${a.id}')">Edit</button>
-        <button class="btn danger small" onclick="deleteRes('applications','${a.id}', renderApps)">Delete</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-function openAppModal(id){
-  safe(async ()=>{
-    const apps = id ? await list('applications') : [];
-    const a = id ? apps.find(x=>x.id===id) : {company:'',role:'',type:'Internship',deadline:'',status:'Not started',effort_min:60,notes:''};
-    showModal(`
-      <h3>${id?'Edit':'Add'} application</h3>
-      <div class="field"><label>Company / lab</label><input id="m-company" value="${escAttr(a.company)}"></div>
-      <div class="field"><label>Role</label><input id="m-role" value="${escAttr(a.role)}"></div>
-      <div class="field-row">
-        <div class="field"><label>Type</label><select id="m-type">${['Internship','Research','Hackathon'].map(t=>`<option ${a.type===t?'selected':''}>${t}</option>`).join('')}</select></div>
-        <div class="field"><label>Status</label><select id="m-status">${['Not started','Applied','Interview','Offer','Rejected'].map(t=>`<option ${a.status===t?'selected':''}>${t}</option>`).join('')}</select></div>
-      </div>
-      <div class="field-row">
-        <div class="field"><label>Deadline</label><input type="date" id="m-deadline" value="${a.deadline||''}"></div>
-        <div class="field"><label>Effort estimate</label><select id="m-effort">${[15,30,60,90,120,180].map(m=>`<option value="${m}" ${a.effort_min===m?'selected':''}>${m<60?m+' min':(m/60)+' hr'}</option>`).join('')}</select></div>
-      </div>
-      <div class="field"><label>Notes</label><textarea id="m-notes">${esc2(a.notes||'')}</textarea></div>
-      <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" id="save-btn" onclick="saveApp('${id||''}')">Save</button></div>
-    `);
-  });
-}
-async function saveApp(id){
-  const body = {company:val('m-company')||'Untitled', role:val('m-role'), type:val('m-type'), status:val('m-status'),
-    deadline: val('m-deadline')||null, effort_min:parseInt(val('m-effort'),10), notes:val('m-notes')};
-  await safe(async ()=>{
-    if(id) await update('applications', id, body); else await create('applications', body);
-    closeModal(); await renderAll(); toast('Saved');
-  });
-}
-async function deleteRes(resource, id, refreshFn){
-  if(!confirm('Delete this?')) return;
-  await safe(async ()=>{ await remove(resource, id); await renderAll(); toast('Deleted'); });
-}
-
-/* ===== 6. OPPORTUNITIES ===== */
-async function renderOpps(){
-  const el = document.getElementById('opp-list');
-  el.innerHTML = '<div class="loading-row"><span class="spinner"></span>Loading…</div>';
-  const opps = await list('opportunities');
-  if(!opps.length){ el.innerHTML = '<div class="empty-state">No opportunities yet. Add roles or labs you\'re considering.</div>'; return; }
-  el.innerHTML = opps.map(o=>{
-    const score = o.match_score || 0;
-    const urgent = o.deadline && daysUntil(o.deadline)<=3 && o.status==='New';
-    return `<div class="card">
-      <div class="card-row">
-        <div>
-          <h3>${esc2(o.title)}</h3>
-          <div class="meta">
-            <span class="badge status-${o.status}">${o.status}</span>
-            ${urgent?`<span class="badge urgent">closes in ${daysUntil(o.deadline)}d</span>`:''}
-            <span>${esc2(o.org)}</span><span>${esc2(o.type)}</span>
-            ${o.deadline&&!urgent?`<span>closes ${fmtDate(o.deadline)}</span>`:''}
-          </div>
-        </div>
-        <div class="actions">
-          ${o.status==='New'?`<button class="btn small" onclick="convertOpp('${o.id}')">Track as application</button>
-          <button class="btn ghost small" onclick="dismissOpp('${o.id}')">Dismiss</button>`:''}
-          <button class="btn ghost small" onclick="openOppModal('${o.id}')">Edit</button>
-          <button class="btn danger small" onclick="deleteRes('opportunities','${o.id}')">Delete</button>
-        </div>
-      </div>
-      <div class="match-track" title="${score}% skill match">${ticksFor(score)}</div>
-      <div class="meta">${score}% match · ${esc2(o.tags)}</div>
-    </div>`;
-  }).join('');
-}
-function openOppModal(id){
-  safe(async ()=>{
-    const o = id ? (await list('opportunities')).find(x=>x.id===id) : {title:'',org:'',type:'Internship',tags:'',deadline:'',status:'New'};
-    showModal(`
-      <h3>${id?'Edit':'Add'} opportunity</h3>
-      <div class="field"><label>Title</label><input id="m-o-title" value="${escAttr(o.title)}"></div>
-      <div class="field"><label>Organization / lab</label><input id="m-o-org" value="${escAttr(o.org)}"></div>
-      <div class="field-row">
-        <div class="field"><label>Type</label><select id="m-o-type">${['Internship','Research','Fellowship','Hackathon','Freelance'].map(t=>`<option ${o.type===t?'selected':''}>${t}</option>`).join('')}</select></div>
-        <div class="field"><label>Status</label><select id="m-o-status">${['New','Converted','Dismissed'].map(t=>`<option ${o.status===t?'selected':''}>${t}</option>`).join('')}</select></div>
-      </div>
-      <div class="field"><label>Tags (comma-separated, matched against your profile skills)</label><input id="m-o-tags" value="${escAttr(o.tags)}"></div>
-      <div class="field"><label>Closes</label><input type="date" id="m-o-deadline" value="${o.deadline||''}"></div>
-      <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="saveOpp('${id||''}')">Save</button></div>
-    `);
-  });
-}
-async function saveOpp(id){
-  const body = {title:val('m-o-title')||'Untitled', org:val('m-o-org'), type:val('m-o-type'), tags:val('m-o-tags'), deadline:val('m-o-deadline')||null, status:val('m-o-status')};
-  await safe(async ()=>{ if(id) await update('opportunities', id, body); else await create('opportunities', body); closeModal(); await renderAll(); toast('Saved'); });
-}
-async function convertOpp(id){ await safe(async ()=>{ await POST(`/v1/opportunities/${id}/convert`); await renderAll(); toast('Added to applications'); }); }
-async function dismissOpp(id){ await safe(async ()=>{ await POST(`/v1/opportunities/${id}/dismiss`); await renderAll(); toast('Dismissed'); }); }
-
-/* ===== 7. OUTREACH (contacts) ===== */
-async function renderProfs(){
-  const el = document.getElementById('prof-list');
-  el.innerHTML = '<div class="loading-row"><span class="spinner"></span>Loading…</div>';
-  const profs = await list('contacts');
-  if(!profs.length){ el.innerHTML = '<div class="empty-state">No contacts yet. Add one to start matching.</div>'; return; }
-  const profile = await GET('/v1/profile').catch(()=>({skills:''}));
-  el.innerHTML = profs.map(p=>{
-    const score = matchScoreClient(p.tags, profile.skills);
-    return `<div class="card">
-      <div class="card-row">
-        <div>
-          <h3>${esc2(p.name)}</h3>
-          <div class="meta">
-            <span class="badge status-${p.status.replace(/ /g,'')}">${p.status}</span>
-            <span>${esc2(p.institute)}</span><span>${esc2(p.area)}</span>
-            ${p.sent_on?`<span>sent ${fmtDate(p.sent_on)}</span>`:''}
-          </div>
-        </div>
-        <div class="actions">
-          ${p.status==='Not started'?`<button class="btn small" onclick="draftFor('${p.id}')">Draft email</button>`:''}
-          ${p.status==='Drafted'?`<button class="btn ghost small" onclick="switchTab('outbox')">View draft in Outbox</button>`:''}
-          ${p.status==='Sent'?`<button class="btn small" onclick="draftFor('${p.id}')">Draft follow-up</button>`:''}
-          <button class="btn ghost small" onclick="openProfModal('${p.id}')">Edit</button>
-          <button class="btn danger small" onclick="deleteRes('contacts','${p.id}')">Delete</button>
-        </div>
-      </div>
-      <div class="match-track" title="${score}% skill match">${ticksFor(score)}</div>
-    </div>`;
-  }).join('');
-}
-function matchScoreClient(tags, skills){
-  const list = (skills||'').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
-  const t = (tags||'').toLowerCase();
-  if(!list.length) return 0;
-  const hits = list.filter(s=>s && t.includes(s)).length;
-  if(!hits) return 0;
-  return Math.min(100, Math.round((hits/list.length)*100) + 20);
-}
-function openProfModal(id){
-  safe(async ()=>{
-    const p = id ? (await list('contacts')).find(x=>x.id===id) : {name:'',institute:'',area:'',tags:'',email:'',status:'Not started'};
-    showModal(`
-      <h3>${id?'Edit':'Add'} contact</h3>
-      <div class="field"><label>Name</label><input id="m-p-name" value="${escAttr(p.name)}"></div>
-      <div class="field"><label>Institute</label><input id="m-p-inst" value="${escAttr(p.institute)}"></div>
-      <div class="field"><label>Research area</label><input id="m-p-area" value="${escAttr(p.area)}"></div>
-      <div class="field"><label>Tags (comma-separated, matched against your profile skills)</label><input id="m-p-tags" value="${escAttr(p.tags)}"></div>
-      <div class="field"><label>Email</label><input id="m-p-email" value="${escAttr(p.email)}"></div>
-      <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="saveProf('${id||''}')">Save</button></div>
-    `);
-  });
-}
-async function saveProf(id){
-  const prev = id ? (await list('contacts')).find(x=>x.id===id) : {};
-  const body = {name:val('m-p-name')||'Untitled', institute:val('m-p-inst'), area:val('m-p-area'), tags:val('m-p-tags'),
-    email:val('m-p-email'), status: prev.status || 'Not started', sent_on: prev.sent_on || null};
-  await safe(async ()=>{ if(id) await update('contacts', id, body); else await create('contacts', body); closeModal(); await renderAll(); toast('Saved'); });
-}
-async function draftFor(id){
-  await safe(async ()=>{
-    const draft = await POST('/v1/drafts/outreach', {contact_id: id});
-    showModal(`
-      <h3>Draft created</h3>
-      <div class="field"><label>To</label><input value="${escAttr(draft.to)}" disabled></div>
-      <div class="field"><label>Subject</label><input value="${escAttr(draft.subject)}" disabled></div>
-      <div class="email-preview">${esc2(draft.body)}</div>
-      <div class="modal-actions" style="justify-content:space-between;">
-        <button class="btn ghost" onclick="closeModal()">Close — review in Outbox later</button>
-        <button class="btn small" onclick="approveFromModal('${draft.outbox_id}')">Approve &amp; send now</button>
-      </div>
-      <div class="note">This is now a real Outbox row with status "pending_approval". Approving will actually attempt to send via Gmail — which will fail with a clear reason until real Google OAuth credentials are configured on the backend.</div>
-    `);
-    await renderAll();
-  });
-}
-async function approveFromModal(outboxId){
-  await safe(async ()=>{
-    const result = await POST(`/v1/outbox/${outboxId}/approve`);
-    closeModal();
-    await renderAll();
-    if(result.status === 'sent') toast('Sent');
-    else if(result.status === 'failed') toast('Send failed — see Outbox for the reason', true);
-    else toast('Approved — status: ' + result.status);
-  });
-}
-
-/* ===== 8. PROJECTS ===== */
-async function renderProjs(){
-  const el = document.getElementById('proj-list');
-  el.innerHTML = '<div class="loading-row"><span class="spinner"></span>Loading…</div>';
-  const projs = await list('projects');
-  if(!projs.length){ el.innerHTML = '<div class="empty-state">No projects yet.</div>'; return; }
-  el.innerHTML = projs.map(pr=>{
-    const done = (pr.tasks||[]).filter(t=>t.done).length, total = (pr.tasks||[]).length;
-    return `<div class="card">
-      <div class="card-row">
-        <div><h3>${esc2(pr.name)}</h3><div class="meta"><span>${esc2(pr.description||'')}</span></div></div>
-        <div class="actions">
-          <button class="btn ghost small" onclick="openProjModal('${pr.id}')">Edit</button>
-          <button class="btn danger small" onclick="deleteRes('projects','${pr.id}')">Delete</button>
-        </div>
-      </div>
-      <div style="margin-top:12px;">
-        ${(pr.tasks||[]).map(t=>`
-          <div class="task-row ${t.done?'done':''}">
-            <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask('${t.id}', ${!t.done}, '${escAttr(t.name)}')">
-            <label style="flex:1;">${esc2(t.name)}</label>
-            <button class="btn danger small" onclick="deleteTask('${t.id}')">×</button>
-          </div>`).join('') || '<div class="hist-entry">No tasks yet.</div>'}
-        <div class="task-add">
-          <input placeholder="Add a task…" id="new-task-${pr.id}" onkeydown="if(event.key==='Enter')addTask('${pr.id}')">
-          <button class="btn ghost small" onclick="addTask('${pr.id}')">Add</button>
-        </div>
-        <div class="meta" style="margin-top:8px;">${done}/${total} tasks done</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-function openProjModal(id){
-  safe(async ()=>{
-    const pr = id ? (await list('projects')).find(x=>x.id===id) : {name:'',description:''};
-    showModal(`
-      <h3>${id?'Edit':'Add'} project</h3>
-      <div class="field"><label>Name</label><input id="m-pr-name" value="${escAttr(pr.name)}"></div>
-      <div class="field"><label>Description</label><input id="m-pr-desc" value="${escAttr(pr.description||'')}"></div>
-      <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="saveProj('${id||''}')">Save</button></div>
-    `);
-  });
-}
-async function saveProj(id){
-  const body = {name:val('m-pr-name')||'Untitled', description:val('m-pr-desc')};
-  await safe(async ()=>{ if(id) await update('projects', id, body); else await create('projects', body); closeModal(); await renderAll(); toast('Saved'); });
-}
-async function toggleTask(taskId, done, name){
-  await safe(async ()=>{ await PATCH(`/v1/tasks/${taskId}`, {name, done}); await renderAll(); });
-}
-async function deleteTask(taskId){
-  await safe(async ()=>{ await DEL(`/v1/tasks/${taskId}`); await renderAll(); });
-}
-async function addTask(projId){
-  const input = document.getElementById('new-task-'+projId);
-  const name = input.value.trim(); if(!name) return;
-  await safe(async ()=>{ await POST(`/v1/projects/${projId}/tasks`, {name, done:false}); await renderAll(); });
-}
-
-/* ===== 9. ACADEMICS ===== */
-async function renderAcads(){
-  const el = document.getElementById('acad-list');
-  el.innerHTML = '<div class="loading-row"><span class="spinner"></span>Loading…</div>';
-  const acads = await list('academics');
-  if(!acads.length){ el.innerHTML = '<div class="empty-state">No study tasks yet.</div>'; return; }
-  el.innerHTML = acads.slice().sort((a,b)=>(a.exam_date?daysUntil(a.exam_date):999)-(b.exam_date?daysUntil(b.exam_date):999)).map(t=>{
-    const urgent = t.exam_date && daysUntil(t.exam_date)<=3 && !t.done;
-    return `<div class="card card-row">
-      <div>
-        <h3 style="${t.done?'text-decoration:line-through;opacity:.6;':''}">${esc2(t.subject)} — ${esc2(t.task)}</h3>
-        <div class="meta">
-          ${t.done?'<span class="badge status-Sent">Done</span>':''}
-          ${urgent?`<span class="badge urgent">exam in ${daysUntil(t.exam_date)}d</span>`:(t.exam_date?`<span>exam ${fmtDate(t.exam_date)}</span>`:'<span>no exam date</span>')}
-          <span>~${t.effort_min<60?t.effort_min+' min':fmtHrs(t.effort_min)}</span>
-        </div>
-      </div>
-      <div class="actions">
-        <button class="btn ghost small" onclick="toggleAcad('${t.id}', ${!t.done})">${t.done?'Reopen':'Mark done'}</button>
-        <button class="btn ghost small" onclick="openAcadModal('${t.id}')">Edit</button>
-        <button class="btn danger small" onclick="deleteRes('academics','${t.id}')">Delete</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-function openAcadModal(id){
-  safe(async ()=>{
-    const t = id ? (await list('academics')).find(x=>x.id===id) : {subject:'',task:'',exam_date:'',effort_min:60,done:false};
-    showModal(`
-      <h3>${id?'Edit':'Add'} study task</h3>
-      <div class="field"><label>Subject</label><input id="m-a-subject" value="${escAttr(t.subject)}"></div>
-      <div class="field"><label>Task</label><input id="m-a-task" value="${escAttr(t.task)}"></div>
-      <div class="field-row">
-        <div class="field"><label>Exam date</label><input type="date" id="m-a-exam" value="${t.exam_date||''}"></div>
-        <div class="field"><label>Effort estimate</label><select id="m-a-effort">${[30,45,60,90,120,180].map(m=>`<option value="${m}" ${t.effort_min===m?'selected':''}>${m<60?m+' min':(m/60)+' hr'}</option>`).join('')}</select></div>
-      </div>
-      <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="saveAcad('${id||''}')">Save</button></div>
-    `);
-  });
-}
-async function saveAcad(id){
-  const prev = id ? (await list('academics')).find(x=>x.id===id) : {done:false};
-  const body = {subject:val('m-a-subject')||'Untitled', task:val('m-a-task'), exam_date:val('m-a-exam')||null, effort_min:parseInt(val('m-a-effort'),10), done:!!prev.done};
-  await safe(async ()=>{ if(id) await update('academics', id, body); else await create('academics', body); closeModal(); await renderAll(); toast('Saved'); });
-}
-async function toggleAcad(id, done){
-  const t = (await list('academics')).find(x=>x.id===id);
-  await safe(async ()=>{ await update('academics', id, {...t, done}); await renderAll(); });
-}
-
-/* ===== 10. REQUESTS ===== */
-async function renderReqs(){
-  const el = document.getElementById('req-list');
-  el.innerHTML = '<div class="loading-row"><span class="spinner"></span>Loading…</div>';
-  const reqs = await list('requests');
-  if(!reqs.length){ el.innerHTML = '<div class="empty-state">No incoming requests yet.</div>'; return; }
-  el.innerHTML = reqs.map(r=>`<div class="card card-row">
-    <div>
-      <h3>${esc2(r.client)}</h3>
-      <div class="meta">
-        <span class="badge status-${r.status}">${r.status}</span>
-        ${r.timeline?`<span>timeline: ${esc2(r.timeline)}</span>`:''}
-        ${r.price?`<span>quote: ${esc2(r.price)}</span>`:''}
-      </div>
-      <div class="meta">${esc2(r.ask)}</div>
-      ${r.scope?`<div class="meta">Scope: ${esc2(r.scope)}</div>`:''}
-    </div>
-    <div class="actions">
-      ${(r.status==='New'||r.status==='Scoped')?`<button class="btn small" onclick="draftProposalFor('${r.id}')">Draft proposal</button>`:''}
-      <button class="btn ghost small" onclick="openReqModal('${r.id}')">Edit</button>
-      <button class="btn danger small" onclick="deleteRes('requests','${r.id}')">Delete</button>
-    </div>
-  </div>`).join('');
-}
-function openReqModal(id){
-  safe(async ()=>{
-    const r = id ? (await list('requests')).find(x=>x.id===id) : {client:'',ask:'',timeline:'',email:'',status:'New',scope:'',price:''};
-    showModal(`
-      <h3>${id?'Edit':'Add'} request</h3>
-      <div class="field"><label>Client / who asked</label><input id="m-r-client" value="${escAttr(r.client)}"></div>
-      <div class="field"><label>What they asked for</label><textarea id="m-r-ask">${esc2(r.ask)}</textarea></div>
-      <div class="field"><label>Scoped deliverables (used in the proposal)</label><textarea id="m-r-scope">${esc2(r.scope||'')}</textarea></div>
-      <div class="field-row">
-        <div class="field"><label>Timeline</label><input id="m-r-timeline" value="${escAttr(r.timeline)}"></div>
-        <div class="field"><label>Estimate / quote</label><input id="m-r-price" value="${escAttr(r.price||'')}"></div>
-      </div>
-      <div class="field-row">
-        <div class="field"><label>Email</label><input id="m-r-email" value="${escAttr(r.email)}"></div>
-        <div class="field"><label>Status</label><select id="m-r-status">${['New','Scoped','Quoted','Won','Declined'].map(t=>`<option ${r.status===t?'selected':''}>${t}</option>`).join('')}</select></div>
-      </div>
-      <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="saveReq('${id||''}')">Save</button></div>
-    `);
-  });
-}
-async function saveReq(id){
-  const body = {client:val('m-r-client')||'Untitled', ask:val('m-r-ask'), scope:val('m-r-scope'), timeline:val('m-r-timeline'),
-    price:val('m-r-price'), email:val('m-r-email'), status:val('m-r-status')};
-  await safe(async ()=>{ if(id) await update('requests', id, body); else await create('requests', body); closeModal(); await renderAll(); toast('Saved'); });
-}
-async function draftProposalFor(id){
-  await safe(async ()=>{
-    const draft = await POST('/v1/drafts/proposal', {request_id: id});
-    showModal(`
-      <h3>Proposal drafted</h3>
-      <div class="field"><label>To</label><input value="${escAttr(draft.to)}" disabled></div>
-      <div class="field"><label>Subject</label><input value="${escAttr(draft.subject)}" disabled></div>
-      <div class="email-preview">${esc2(draft.body)}</div>
-      <div class="modal-actions" style="justify-content:space-between;">
-        <button class="btn ghost" onclick="closeModal()">Close — review in Outbox later</button>
-        <button class="btn small" onclick="approveFromModal('${draft.outbox_id}')">Approve &amp; send now</button>
-      </div>
-    `);
-    await renderAll();
-  });
-}
-
-/* ===== 11. OUTBOX ===== */
-async function loadOutbox(){
-  const el = document.getElementById('outbox-list');
-  el.innerHTML = '<div class="loading-row"><span class="spinner"></span>Loading…</div>';
-  const items = await GET('/v1/outbox');
-  if(!items.length){ el.innerHTML = '<div class="empty-state">Nothing in the outbox yet. Draft an email or proposal to see it here.</div>'; return; }
-  el.innerHTML = items.map(o=>`
-    <div class="card">
-      <div class="card-row">
-        <div>
-          <h3>${esc2(o.payload.subject || '(no subject)')}</h3>
-          <div class="meta">
-            <span class="badge status-${o.status}">${o.status.replace('_',' ')}</span>
-            <span>${esc2(o.channel)}</span>
-            <span>to ${esc2(o.payload.to || '—')}</span>
-          </div>
-          ${o.error?`<div class="meta" style="color:var(--warn);">${esc2(o.error)}</div>`:''}
-        </div>
-        <div class="actions">
-          ${o.status==='pending_approval'?`
-            <button class="btn small" onclick="approveOutboxItem('${o.id}')">Approve &amp; send</button>
-            <button class="btn ghost small" onclick="rejectOutboxItem('${o.id}')">Reject</button>`:''}
-          <button class="btn ghost small" onclick="viewOutboxBody('${o.id}')">View</button>
-        </div>
-      </div>
-    </div>`).join('');
-  window._outboxCache = items;
-}
-async function approveOutboxItem(id){
-  await safe(async ()=>{
-    const r = await POST(`/v1/outbox/${id}/approve`);
-    await renderAll();
-    if(r.status==='sent') toast('Sent'); else if(r.status==='failed') toast('Send failed — see reason below', true); else toast('Status: '+r.status);
-  });
-}
-async function rejectOutboxItem(id){
-  await safe(async ()=>{ await POST(`/v1/outbox/${id}/reject`); await renderAll(); toast('Rejected'); });
-}
-function viewOutboxBody(id){
-  const item = (window._outboxCache||[]).find(o=>o.id===id);
-  if(!item) return;
-  showModal(`
-    <h3>${esc2(item.payload.subject || 'Outbox item')}</h3>
-    <div class="field"><label>To</label><input value="${escAttr(item.payload.to||'')}" disabled></div>
-    <div class="email-preview">${esc2(item.payload.body || JSON.stringify(item.payload))}</div>
-    <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Close</button></div>
-  `);
-}
-
-/* ===== 12. RESUME ===== */
-async function analyzeResume(){
-  const text = document.getElementById('resume-text').value;
-  const el = document.getElementById('resume-results');
-  if(!text.trim()){ el.innerHTML = '<div class="empty-state">Paste something first.</div>'; return; }
-  await safe(async ()=>{
-    const result = await POST('/v1/resume/analyze', {text});
-    const profile = await GET('/v1/profile');
-    const current = (profile.skills||'').toLowerCase();
-    el.innerHTML = `
-      <div class="card"><h3>Skills recognized (${result.skills_found.length})</h3>
-        <div style="margin-top:10px;">${result.skills_found.length?result.skills_found.map(s=>{
-          const added = current.includes(s.toLowerCase());
-          return `<span class="skill-chip ${added?'added':''}" ${added?'':`onclick="addSkill('${escAttr(s)}')"`}>${esc2(s)}${added?'':'<span class="plus">+</span>'}</span>`;
-        }).join(''):'<div class="meta">Nothing matched the known skill list.</div>'}</div>
-        <div class="meta" style="margin-top:10px;">Tap a skill to add it to your matching profile.</div>
-      </div>
-      <div class="card"><h3>Read on the draft</h3>
-        <div class="meta">${result.words} words · ${result.bullets} bullet lines · ${result.numbers} numeric details</div>
-        <ul style="margin:10px 0 0;padding-left:18px;font-size:12.5px;color:var(--ink-soft);">
-          ${(result.notes.length?result.notes:['Structure looks reasonable — length, bullets, numbers and links are all present.']).map(n=>`<li style="margin-bottom:4px;">${esc2(n)}</li>`).join('')}
-        </ul>
-      </div>`;
-  });
-}
-function clearResume(){ document.getElementById('resume-text').value=''; document.getElementById('resume-results').innerHTML=''; }
-async function addSkill(skill){
-  await safe(async ()=>{
-    const profile = await GET('/v1/profile');
-    const skillList = (profile.skills||'').split(',').map(s=>s.trim()).filter(Boolean);
-    if(!skillList.some(s=>s.toLowerCase()===skill.toLowerCase())) skillList.push(skill);
-    await PATCH('/v1/profile', {...profile, skills: skillList.join(', ')});
-    await analyzeResume();
-    await loadProfileForm();
-    toast(skill+' added to profile');
-  });
-}
-
-/* ===== 13. HISTORY ===== */
-async function renderHistory(){
-  const el = document.getElementById('history-list');
-  el.innerHTML = '<div class="loading-row"><span class="spinner"></span>Loading…</div>';
-  const hist = await GET('/v1/history');
-  if(!hist.length){ el.innerHTML = '<div class="empty-state">Nothing logged yet — complete an item on Today, or draft/approve a send, to start your history.</div>'; return; }
-  const byDay = {};
-  hist.forEach(h=>{
-    const d = h.at.slice(0,10);
-    const t = new Date(h.at).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-    (byDay[d] = byDay[d]||[]).push({time:t, text:h.text});
-  });
-  const days = Object.keys(byDay).sort().reverse();
-  el.innerHTML = days.map(d=>`
-    <div class="hist-day">
-      <div class="hist-date">${fmtDate(d)}</div>
-      ${byDay[d].map(e=>`<div class="hist-entry"><span class="t">${e.time}</span>${esc2(e.text)}</div>`).join('')}
-    </div>`).join('');
-}
-
-/* ===== 14. PROFILE ===== */
-async function loadProfileForm(){
-  const p = await GET('/v1/profile');
-  ['name','track','github','email','skills','highlight'].forEach(k=>{ document.getElementById('p-'+k).value = p[k]||''; });
-}
-async function saveProfile(){
-  const body = {};
-  ['name','track','github','email','skills','highlight'].forEach(k=>{ body[k] = document.getElementById('p-'+k).value.trim(); });
-  await safe(async ()=>{ await PATCH('/v1/profile', body); await renderAll(); toast('Profile saved'); });
-}
-
-/* ===== 15. TABS + BOOT ===== */
-function switchTab(name){
-  document.querySelectorAll('nav.sidenav button').forEach(b=>b.classList.toggle('active', b.dataset.tab===name));
-  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active', v.id === 'view-'+name));
-  const loaders = {
-    today: loadToday, applications: renderApps, opportunities: renderOpps, outreach: renderProfs,
-    projects: renderProjs, academics: renderAcads, requests: renderReqs, outbox: loadOutbox,
-    history: renderHistory, profile: loadProfileForm,
+function seed() {
+  return {
+    profile: {
+      name: 'Tiru', track: 'B.Tech Computer Science', github: '', email: '',
+      skills: 'React, Python, LLM agents, RAG, Node.js, Full-stack web, Prompt engineering',
+      highlight: 'I build AI-powered products end to end, from LLM agents to full-stack dashboards.'
+    },
+    applications: [
+      { id: uid(), company: 'Northwind Labs', role: 'ML Engineer Intern', type: 'Internship', deadline: iso(2), status: 'Not started', effort_min: 90, notes: 'Tailor the resume for LLM work' },
+      { id: uid(), company: 'BuildFest 2026', role: 'Team entry', type: 'Hackathon', deadline: iso(4), status: 'Not started', effort_min: 45, notes: '' },
+      { id: uid(), company: 'Halden Research Group', role: 'Research assistant', type: 'Research', deadline: iso(6), status: 'Applied', effort_min: 60, notes: '' },
+      { id: uid(), company: 'Lumen AI', role: 'Full-stack intern', type: 'Internship', deadline: iso(9), status: 'Interview', effort_min: 60, notes: 'Prepare a system design walkthrough' }
+    ],
+    opportunities: [
+      { id: uid(), title: 'Applied ML Fellowship', org: 'Kestrel Institute', type: 'Fellowship', tags: 'Machine learning, Python, PyTorch', deadline: iso(5), status: 'New' },
+      { id: uid(), title: 'Frontend Engineer Intern', org: 'Orbit Studio', type: 'Internship', tags: 'React, TypeScript, UI/UX design', deadline: iso(12), status: 'New' }
+    ],
+    contacts: [
+      { id: uid(), name: 'Dr. Meera Rao', institute: 'Riverside Institute of Technology', area: 'Retrieval-augmented generation', tags: 'RAG, NLP, LLM agents', email: 'meera.rao@example.edu', status: 'Not started', sent_on: null },
+      { id: uid(), name: 'Prof. Daniel Osei', institute: 'Coastal University', area: 'Computer vision', tags: 'Computer vision, Deep learning', email: 'd.osei@example.edu', status: 'Sent', sent_on: iso(-8) }
+    ],
+    projects: [
+      { id: uid(), name: 'Operating Agent MVP', description: 'Connect the dashboard to a real backend.', tasks: [
+        { id: uid(), name: 'Design the API contract', done: true },
+        { id: uid(), name: 'Wire Gmail sending', done: false },
+        { id: uid(), name: 'Connect JARVIS to a model', done: false }
+      ] },
+      { id: uid(), name: 'Portfolio refresh', description: 'Add two recent case studies.', tasks: [
+        { id: uid(), name: 'Write the first case study', done: false },
+        { id: uid(), name: 'Record a short demo video', done: false }
+      ] }
+    ],
+    academics: [
+      { id: uid(), subject: 'Operating Systems', task: 'Revise scheduling and memory management', exam_date: iso(3), effort_min: 90, done: false },
+      { id: uid(), subject: 'Database Systems', task: 'Practice normalization problems', exam_date: iso(10), effort_min: 60, done: false }
+    ],
+    requests: [
+      { id: uid(), client: 'Sunrise Bakery', ask: 'A website with online ordering', scope: '', timeline: '3 weeks', price: '', email: 'hello@sunrisebakery.example', status: 'New' },
+      { id: uid(), client: 'FitHub Gym', ask: 'Member dashboard with class booking', scope: 'Login, class calendar, booking flow, admin view', timeline: '5 weeks', price: '', email: 'owner@fithub.example', status: 'Scoped' }
+    ],
+    outbox: [],
+    history: [{ id: uid(), at: new Date().toISOString(), text: 'Workspace created with sample data' }],
+    doneToday: { date: iso(0), items: [] }
   };
-  if(loaders[name]) safe(loaders[name]);
 }
-document.getElementById('tabs').addEventListener('click', e=>{
-  const btn = e.target.closest('button[data-tab]'); if(!btn) return;
-  switchTab(btn.dataset.tab);
-});
+function load() {
+  try { const r = localStorage.getItem(LS_KEY); if (r) return JSON.parse(r); } catch (e) {}
+  return seed();
+}
+let S = load();
+function save() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) {} }
+function log(text) { S.history.unshift({ id: uid(), at: new Date().toISOString(), text }); }
+const byId = (coll, id) => S[coll].find(x => x.id === id);
+function upsert(coll, obj) {
+  if (obj.id) { const i = S[coll].findIndex(x => x.id === obj.id); if (i > -1) S[coll][i] = { ...S[coll][i], ...obj }; }
+  else S[coll].unshift({ ...obj, id: uid() });
+  save();
+}
+function remove(coll, id) { S[coll] = S[coll].filter(x => x.id !== id); save(); }
+function doneList() { if (!S.doneToday || S.doneToday.date !== iso(0)) S.doneToday = { date: iso(0), items: [] }; return S.doneToday.items; }
 
-async function renderAll(){
-  const active = document.querySelector('nav.sidenav button.active');
-  const name = active ? active.dataset.tab : 'today';
-  await Promise.all([loadToday(), name!=='today' ? (({
-    applications: renderApps, opportunities: renderOpps, outreach: renderProfs,
-    projects: renderProjs, academics: renderAcads, requests: renderReqs, outbox: loadOutbox,
-    history: renderHistory, profile: loadProfileForm,
-  })[name] || (async()=>{}))() : Promise.resolve()]);
+function matchScore(tags, skills) {
+  const t = splitList(tags).map(x => x.toLowerCase());
+  const s = splitList(skills).map(x => x.toLowerCase());
+  if (!t.length || !s.length) return 0;
+  const hits = t.filter(x => s.some(y => y.includes(x) || x.includes(y))).length;
+  return Math.round(hits / t.length * 100);
 }
 
-async function boot(){
-  await safe(async ()=>{
-    await loadToday();
+/* ================= 3. TODAY'S PLAN (computed locally) ================= */
+const KIND = {
+  app:  { label: 'Applications', color: 'var(--c-app)',  icon: 'brief' },
+  prof: { label: 'Outreach',     color: 'var(--c-prof)', icon: 'mail' },
+  proj: { label: 'Projects',     color: 'var(--c-proj)', icon: 'layers' },
+  acad: { label: 'Academics',    color: 'var(--c-acad)', icon: 'book' },
+  req:  { label: 'Requests',     color: 'var(--c-req)',  icon: 'chat' },
+  opp:  { label: 'Opportunities',color: 'var(--c-opp)',  icon: 'target' }
+};
+function buildPlan() {
+  const items = [];
+  S.applications.forEach(a => {
+    if (a.status === 'Not started') items.push({ kind:'app', id:a.id, name:'Apply to ' + a.company, sub:a.role + (a.deadline ? ' · ' + fmtDue(a.deadline) : ''), effort:a.effort_min || 60, pri:a.deadline ? daysUntil(a.deadline) : 30 });
+    else if (a.status === 'Interview') items.push({ kind:'app', id:a.id, name:'Prepare for ' + a.company, sub:a.role + ' interview', effort:a.effort_min || 60, pri:Math.min(8, a.deadline ? Math.max(daysUntil(a.deadline), 1) : 8) });
   });
+  S.contacts.forEach(c => {
+    if (c.status === 'Not started') items.push({ kind:'prof', id:c.id, name:'Email ' + c.name, sub:c.institute + (c.area ? ' · ' + c.area : ''), effort:20, pri:10 });
+    else if (c.status === 'Drafted') items.push({ kind:'prof', id:c.id, name:'Approve the draft to ' + c.name, sub:'Waiting in your Outbox', effort:5, pri:5 });
+  });
+  S.projects.forEach(p => {
+    const t = p.tasks.find(x => !x.done);
+    if (t) items.push({ kind:'proj', id:p.id, taskId:t.id, name:t.name, sub:p.name, effort:45, pri:12 });
+  });
+  S.academics.forEach(a => {
+    if (!a.done) { const d = a.exam_date ? daysUntil(a.exam_date) : 25; if (d <= 21) items.push({ kind:'acad', id:a.id, name:a.subject + ': ' + a.task, sub:a.exam_date ? 'Exam ' + fmtDate(a.exam_date) : 'No exam date', effort:a.effort_min || 60, pri:d }); }
+  });
+  S.requests.forEach(r => {
+    if (r.status === 'New') items.push({ kind:'req', id:r.id, name:'Scope the request from ' + r.client, sub:r.ask, effort:30, pri:6 });
+    else if (r.status === 'Scoped') items.push({ kind:'req', id:r.id, name:'Send a proposal to ' + r.client, sub:r.ask, effort:20, pri:4 });
+  });
+  S.opportunities.forEach(o => {
+    if (o.status === 'New' && o.deadline && daysUntil(o.deadline) <= 5) items.push({ kind:'opp', id:o.id, name:'Decide on ' + o.title, sub:o.org + ' · ' + fmtDue(o.deadline).replace('Due', 'closes'), effort:15, pri:daysUntil(o.deadline) + 1 });
+  });
+  items.forEach(i => { i.key = i.kind + ':' + i.id + ':' + (i.taskId || ''); });
+  items.sort((a, b) => a.pri - b.pri);
+  return items.slice(0, 8);
+}
+function weekAhead() {
+  const rows = [];
+  S.applications.forEach(a => { if (a.deadline && !['Offer','Rejected','Applied'].includes(a.status)) rows.push({ date:a.deadline, text:a.company + ' application closes' }); });
+  S.opportunities.forEach(o => { if (o.deadline && o.status === 'New') rows.push({ date:o.deadline, text:o.title + ' closes' }); });
+  S.academics.forEach(a => { if (a.exam_date && !a.done) rows.push({ date:a.exam_date, text:a.subject + ' exam' }); });
+  return rows.filter(r => { const d = daysUntil(r.date); return d >= 0 && d <= 7; }).sort((a, b) => a.date.localeCompare(b.date));
 }
 
-tryResume();
+/* ================= 4. FORMS, MODALS, CONFIRM ================= */
+function openModal(html) { $('dialog').innerHTML = html; $('overlay').classList.add('on'); const f = $('dialog').querySelector('input,textarea,select'); if (f) setTimeout(() => f.focus(), 30); }
+function closeModal() { $('overlay').classList.remove('on'); }
+$('overlay').addEventListener('mousedown', (e) => { if (e.target.id === 'overlay') closeModal(); });
 
-/* ===== JARVIS CHAT ===== */
-let JARVIS_MESSAGES = [];
+function fieldHTML(f, v) {
+  const val = v[f.k] == null ? '' : v[f.k];
+  let inp;
+  if (f.t === 'textarea') inp = '<textarea id="f-' + f.k + '" rows="' + (f.rows || 3) + '" placeholder="' + escA(f.ph || '') + '">' + esc(val) + '</textarea>';
+  else if (f.t === 'select') inp = '<select id="f-' + f.k + '">' + f.opts.map(o => { const ov = typeof o === 'object' ? o.v : o, ol = typeof o === 'object' ? o.l : o; return '<option value="' + escA(ov) + '"' + (String(val) === String(ov) ? ' selected' : '') + '>' + esc(ol) + '</option>'; }).join('') + '</select>';
+  else inp = '<input id="f-' + f.k + '" type="' + (f.t || 'text') + '" value="' + escA(val) + '" placeholder="' + escA(f.ph || '') + '">';
+  return '<div class="field' + (f.half ? ' half' : '') + '" id="w-' + f.k + '"><label for="f-' + f.k + '">' + f.l + '</label>' + inp + (f.hint ? '<div class="hint">' + f.hint + '</div>' : '') + '</div>';
+}
+function openForm(o) {
+  const v = o.values || {};
+  openModal('<h3>' + esc(o.title) + '</h3><div class="fields">' + o.fields.map(f => fieldHTML(f, v)).join('') + '</div><div class="foot"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" id="form-save">' + esc(o.saveLabel || 'Save') + '</button></div>');
+  $('form-save').onclick = () => {
+    const out = {}; let bad = null;
+    o.fields.forEach(f => {
+      const el = $('f-' + f.k); let x = el.value.trim();
+      $('w-' + f.k).classList.remove('bad');
+      if (f.req && !x) { $('w-' + f.k).classList.add('bad'); bad = bad || f; }
+      if (f.num) x = parseInt(x, 10) || 0;
+      out[f.k] = x;
+    });
+    if (bad) { toast('Add ' + bad.l.toLowerCase() + ' to continue', true); return; }
+    o.onSave(out);
+  };
+}
+function confirmBox(msg, yesLabel, onYes) {
+  openModal('<h3>' + esc(msg) + '</h3><div class="foot"><button class="btn ghost" onclick="closeModal()">Keep it</button><button class="btn danger" id="yes-btn">' + esc(yesLabel) + '</button></div>');
+  $('yes-btn').onclick = () => { closeModal(); onYes(); };
+}
+function confirmDelete(coll, id, label) {
+  confirmBox('Delete ' + label + '?', 'Delete', () => { remove(coll, id); log('Deleted ' + label); save(); render(); toast('Deleted'); });
+}
 
-function jarvisEscape(s){
-  return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+/* ================= 5. STATUS PILLS ================= */
+const TONE = { 'Not started':'', Applied:'brand', Interview:'warn', Offer:'good', Rejected:'bad', New:'brand', Converted:'good', Dismissed:'', Drafted:'warn', Sent:'good', Replied:'good', Scoped:'warn', Quoted:'brand', Won:'good', Declined:'bad', pending:'warn', approved:'good', rejected:'bad' };
+const LABEL = { pending:'Needs approval', approved:'Approved', rejected:'Rejected' };
+const pill = (s) => '<span class="pill ' + (TONE[s] || '') + '">' + esc(LABEL[s] || s) + '</span>';
+const meter = (score) => '<div class="meter' + (score >= 60 ? ' hi' : '') + '" title="' + score + '% skill match"><div><i style="width:' + score + '%"></i></div>' + score + '% match</div>';
+const head = (title, sub, action) => '<div class="head"><div><h1>' + title + '</h1>' + (sub ? '<p>' + sub + '</p>' : '') + '</div>' + (action || '') + '</div>';
+const addBtn = (label, fn) => '<button class="btn" onclick="' + fn + '">' + icon('plus', 16) + label + '</button>';
+const rowBtns = (edit, del) => '<button class="icon-btn" onclick="' + edit + '" aria-label="Edit" title="Edit">' + icon('edit', 16) + '</button><button class="icon-btn del" onclick="' + del + '" aria-label="Delete" title="Delete">' + icon('trash', 16) + '</button>';
+const emptyPanel = (title, text, btn) => '<div class="empty plain"><h3>' + title + '</h3><p>' + text + '</p>' + (btn || '') + '</div>';
+
+/* ================= 6. VIEWS ================= */
+let animateNext = true;
+
+/* ---- Today ---- */
+function viewToday() {
+  const plan = buildPlan();
+  const done = doneList();
+  const mins = plan.reduce((s, i) => s + i.effort, 0);
+  const CAP = 360;
+  const total = plan.length + done.length;
+  const hr = new Date().getHours();
+  const greet = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+  const name = S.profile.name ? ', ' + esc(S.profile.name.split(' ')[0]) : '';
+  const lead = plan.length
+    ? plan.length + (plan.length === 1 ? ' thing' : ' things') + ' left today, about ' + fmtMins(mins) + ' of focused work.' + (done.length ? ' ' + done.length + ' already done.' : '')
+    : (done.length ? 'Everything queued is done. Nice work.' : 'Nothing queued yet. Add an application, contact, or project to build today\'s plan.');
+  const segs = plan.map((i, n) => '<div class="seg" style="flex-grow:' + i.effort + ';--c:' + KIND[i.kind].color + ';--i:' + n + '" title="' + escA(i.name + ' (' + fmtMins(i.effort) + ')') + '"></div>').join('');
+  const free = Math.max(0, CAP - mins);
+  const kinds = [...new Set(plan.map(i => i.kind))];
+  const openApps = S.applications.filter(a => ['Not started','Applied','Interview'].includes(a.status)).length;
+  const toSend = S.contacts.filter(c => c.status === 'Not started').length;
+  const awaiting = S.outbox.filter(o => o.status === 'pending').length;
+  const newReq = S.requests.filter(r => r.status === 'New' || r.status === 'Scoped').length;
+  const week = weekAhead();
+  const planRows = plan.map(i => '<div class="plan-row" style="--c:' + KIND[i.kind].color + '"><input type="checkbox" class="ck" aria-label="Mark done: ' + escA(i.name) + '" onchange="completeItem(\'' + i.key + '\',this)"><div class="plan-ic">' + icon(KIND[i.kind].icon, 17) + '</div><div style="min-width:0"><div class="plan-name">' + esc(i.name) + '</div><div class="plan-sub">' + esc(i.sub) + '</div></div><div class="plan-dur">' + fmtMins(i.effort) + '</div></div>').join('');
+  const doneRows = done.map(i => '<div class="plan-row done" style="--c:' + KIND[i.kind].color + '"><input type="checkbox" class="ck" checked disabled aria-label="Done"><div class="plan-ic">' + icon(KIND[i.kind].icon, 17) + '</div><div style="min-width:0"><div class="plan-name">' + esc(i.name) + '</div><div class="plan-sub">' + esc(i.sub) + '</div></div><div class="plan-dur">' + fmtMins(i.effort) + '</div></div>').join('');
+  const html =
+    '<section class="hero"><h1>' + greet + name + '.</h1><p class="lead">' + lead + '</p>' +
+    (plan.length ? '<div class="load"><div class="load-top"><b>' + fmtMins(mins) + ' queued</b><span>' + (mins > CAP ? 'Over a 6h day by ' + fmtMins(mins - CAP) : fmtMins(free) + ' of a 6h day still free') + '</span></div>' +
+      '<div class="bar' + (animateNext ? ' anim' : '') + '">' + segs + (free ? '<div class="seg free" style="flex-grow:' + free + '"></div>' : '') + '</div>' +
+      '<div class="legend">' + kinds.map(k => '<span style="--c:' + KIND[k].color + '"><i></i>' + KIND[k].label + '</span>').join('') + '</div></div>' : '') +
+    '<div class="quick">' +
+      '<button onclick="switchTab(\'applications\')"><b>' + openApps + '</b><span>Open applications</span></button>' +
+      '<button onclick="switchTab(\'outreach\')"><b>' + toSend + '</b><span>Emails to write</span></button>' +
+      '<button onclick="switchTab(\'outbox\')"><b>' + awaiting + '</b><span>Awaiting approval</span></button>' +
+      '<button onclick="switchTab(\'requests\')"><b>' + newReq + '</b><span>Client requests open</span></button>' +
+    '</div></section>' +
+    '<div class="two"><section class="panel"><div class="panel-h"><h3>Today\'s plan</h3><span>' + (total ? done.length + ' of ' + total + ' done' : '') + '</span></div>' +
+      (planRows || doneRows ? planRows + doneRows : '<div class="empty"><h3>A clear day</h3><p>Add work in any tab and it will show up here, ordered by urgency.</p></div>') + '</section>' +
+    '<section class="panel"><div class="panel-h"><h3>This week ahead</h3></div>' +
+      (week.length ? week.map(r => { const d = new Date(r.date + 'T00:00:00'); return '<div class="week-row"><div class="week-d"><b>' + d.getDate() + '</b><span>' + d.toLocaleDateString('en-US', { weekday: 'short' }) + '</span></div><div class="week-t">' + esc(r.text) + '</div></div>'; }).join('') : '<div class="empty" style="padding:34px 20px"><p style="margin:0">Nothing dated in the next 7 days.</p></div>') + '</section></div>';
+  animateNext = false;
+  return html;
 }
-function jarvisPrompt(text){
-  const input = document.getElementById('jarvis-input');
-  if(input){ input.value = text; input.focus(); }
-  sendJarvisMessage();
+function completeItem(key, cb) {
+  const it = buildPlan().find(i => i.key === key);
+  if (!it) { render(); return; }
+  let mark = true;
+  if (it.kind === 'app') {
+    const a = byId('applications', it.id);
+    if (a && a.status === 'Not started') { a.status = 'Applied'; log('Applied to ' + a.company); }
+    else log('Finished preparing for ' + (a ? a.company : 'an interview'));
+  } else if (it.kind === 'prof') {
+    const c = byId('contacts', it.id);
+    if (c && c.status === 'Not started') { cb.checked = false; draftOutreach(it.id); return; }
+    if (c && c.status === 'Drafted') { cb.checked = false; toast('Approve the pending draft in your Outbox'); switchTab('outbox'); return; }
+  } else if (it.kind === 'proj') {
+    const p = byId('projects', it.id); const t = p && p.tasks.find(x => x.id === it.taskId);
+    if (t) { t.done = true; log('Finished task: ' + t.name); }
+  } else if (it.kind === 'acad') {
+    const a = byId('academics', it.id); if (a) { a.done = true; log('Finished studying: ' + a.subject); }
+  } else if (it.kind === 'req') {
+    const r = byId('requests', it.id);
+    if (r && r.status === 'Scoped') { cb.checked = false; draftProposal(it.id); return; }
+    if (r) { r.status = 'Scoped'; log('Scoped the request from ' + r.client); }
+  } else if (it.kind === 'opp') { log('Reviewed ' + it.name.replace('Decide on ', '')); }
+  if (mark) { doneList().push({ key: it.key, kind: it.kind, name: it.name, sub: it.sub, effort: it.effort }); save(); render(); toast('Done: ' + it.name); }
 }
-function jarvisNewChat(){
-  JARVIS_MESSAGES = [];
-  const box = document.getElementById('jarvis-messages');
-  if(box) box.innerHTML = `
-    <div class="jarvis-welcome" id="jarvis-welcome">
-      <div class="eyebrow">Operating intelligence</div>
-      <h3>What are we building?</h3>
-      <p>Use JARVIS as the conversational layer on top of your OPA workspace.</p>
-      <div class="jarvis-prompts">
-        <button class="jarvis-prompt" onclick="jarvisPrompt('What should I focus on today?')">What should I focus on today?</button>
-        <button class="jarvis-prompt" onclick="jarvisPrompt('Summarize my active applications and deadlines.')">Summarize my applications</button>
-        <button class="jarvis-prompt" onclick="jarvisPrompt('Which projects need attention right now?')">Which projects need attention?</button>
-        <button class="jarvis-prompt" onclick="jarvisPrompt('Help me plan the next 3 hours.')">Plan my next 3 hours</button>
-      </div>
-    </div>`;
+
+/* ---- Applications (pipeline board) ---- */
+const APP_COLS = ['Not started', 'Applied', 'Interview', 'Offer', 'Rejected'];
+const APP_NEXT = { 'Not started': 'Applied', Applied: 'Interview', Interview: 'Offer' };
+function viewApps() {
+  if (!S.applications.length) return head('Applications', 'Internships, research labs, and hackathons in one pipeline.', addBtn('Add application', 'editApp()')) + emptyPanel('No applications yet', 'Add the first one and track it from draft to offer.', '<button class="btn" onclick="editApp()">Add application</button>');
+  const cols = APP_COLS.map(st => {
+    const list = S.applications.filter(a => a.status === st);
+    const cards = list.map(a => {
+      const tone = dueTone(a.deadline, a.status);
+      return '<article class="kcard"><div class="kcard-top"><div><div class="k-title">' + esc(a.company) + '</div><div class="k-sub">' + esc(a.role) + '</div></div><div style="display:flex"><button class="icon-btn" onclick="editApp(\'' + a.id + '\')" aria-label="Edit ' + escA(a.company) + '" title="Edit">' + icon('edit', 15) + '</button><button class="icon-btn del" onclick="confirmDelete(\'applications\',\'' + a.id + '\',\'' + escA(a.company) + '\')" aria-label="Delete ' + escA(a.company) + '" title="Delete">' + icon('trash', 15) + '</button></div></div>' +
+        '<div class="row-m"><span class="chip">' + esc(a.type) + '</span>' + (a.deadline ? '<span class="chip ' + tone + '">' + (['Applied','Interview','Offer','Rejected'].includes(a.status) ? 'Deadline ' + fmtDate(a.deadline) : fmtDue(a.deadline)) + '</span>' : '') + '</div>' +
+        (a.notes ? '<div class="k-note">' + esc(a.notes) + '</div>' : '') +
+        (APP_NEXT[a.status] ? '<button class="btn soft sm" onclick="advanceApp(\'' + a.id + '\')">Mark as ' + APP_NEXT[a.status].toLowerCase() + '</button>' : '') + '</article>';
+    }).join('');
+    return '<section class="col" aria-label="' + st + '"><div class="col-h">' + st + '<span>' + list.length + '</span></div>' + (cards || '<div class="col-empty">Nothing here</div>') + '</section>';
+  }).join('');
+  return head('Applications', 'Internships, research labs, and hackathons in one pipeline.', addBtn('Add application', 'editApp()')) + '<div class="board">' + cols + '</div>';
 }
-function appendJarvisMessage(role, text){
-  const box = document.getElementById('jarvis-messages');
-  const welcome = document.getElementById('jarvis-welcome');
-  if(welcome) welcome.remove();
-  const wrap = document.createElement('div');
-  wrap.className = 'jarvis-message ' + role;
-  wrap.innerHTML = `
-    <div class="jarvis-avatar">${role==='user'?'YOU':'J'}</div>
-    <div>
-      <div class="jarvis-bubble">${jarvisEscape(text)}</div>
-      <div class="jarvis-meta">${role==='user'?'You':'JARVIS'} · just now</div>
-    </div>`;
-  box.appendChild(wrap);
+function editApp(id) {
+  const a = id ? byId('applications', id) : { type: 'Internship', status: 'Not started', effort_min: 60 };
+  openForm({ title: id ? 'Edit application' : 'Add application', values: a, saveLabel: id ? 'Save changes' : 'Add application',
+    fields: [
+      { k:'company', l:'Company or lab', req:true, ph:'e.g. Northwind Labs' },
+      { k:'role', l:'Role', ph:'e.g. ML Engineer Intern' },
+      { k:'type', l:'Type', t:'select', half:true, opts:['Internship','Research','Hackathon'] },
+      { k:'status', l:'Status', t:'select', half:true, opts:APP_COLS },
+      { k:'deadline', l:'Deadline', t:'date', half:true },
+      { k:'effort_min', l:'Time needed', t:'select', half:true, num:true, opts:[15,30,45,60,90,120,180].map(m => ({ v:m, l:fmtMins(m) })) },
+      { k:'notes', l:'Notes', t:'textarea' }
+    ],
+    onSave: (v) => { v.deadline = v.deadline || null; if (id) v.id = id; upsert('applications', v); log((id ? 'Updated ' : 'Added application: ') + v.company); closeModal(); render(); toast('Saved'); } });
+}
+function advanceApp(id) { const a = byId('applications', id); if (!a || !APP_NEXT[a.status]) return; a.status = APP_NEXT[a.status]; log(a.company + ' moved to ' + a.status); save(); render(); toast(a.company + ': ' + a.status); }
+
+/* ---- Opportunities ---- */
+function viewOpps() {
+  const h = head('Opportunities', 'Roles and labs you are weighing, scored against your profile skills. Track the good ones as applications.', addBtn('Add opportunity', 'editOpp()'));
+  if (!S.opportunities.length) return h + emptyPanel('Nothing on the radar', 'Save roles you are considering and see how well your skills match.', '<button class="btn" onclick="editOpp()">Add opportunity</button>');
+  const rows = S.opportunities.map(o => {
+    const sc = matchScore(o.tags, S.profile.skills);
+    const tone = o.status === 'New' && o.deadline && daysUntil(o.deadline) <= 3 ? 'warn' : '';
+    return '<div class="row" style="grid-template-columns:auto 1fr auto"><div class="plan-ic" style="--c:var(--c-opp)">' + icon('target', 17) + '</div><div><div class="row-t">' + esc(o.title) + '</div><div class="row-s">' + esc(o.org) + ' · ' + esc(o.type) + '</div><div class="row-m">' + pill(o.status) + (o.deadline ? '<span class="chip ' + tone + '">' + fmtDue(o.deadline).replace('Due', 'Closes') + '</span>' : '') + meter(sc) + (o.tags ? '<span class="chip">' + esc(o.tags) + '</span>' : '') + '</div></div><div class="row-a">' +
+      (o.status === 'New' ? '<button class="btn sm" onclick="convertOpp(\'' + o.id + '\')">Track as application</button><button class="btn ghost sm" onclick="dismissOpp(\'' + o.id + '\')">Dismiss</button>' : '') +
+      rowBtns('editOpp(\'' + o.id + '\')', 'confirmDelete(\'opportunities\',\'' + o.id + '\',\'' + escA(o.title) + '\')') + '</div></div>';
+  }).join('');
+  return h + '<div class="panel rows">' + rows + '</div>';
+}
+function editOpp(id) {
+  const o = id ? byId('opportunities', id) : { type: 'Internship', status: 'New' };
+  openForm({ title: id ? 'Edit opportunity' : 'Add opportunity', values: o, saveLabel: id ? 'Save changes' : 'Add opportunity',
+    fields: [
+      { k:'title', l:'Title', req:true, ph:'e.g. Applied ML Fellowship' },
+      { k:'org', l:'Organization or lab' },
+      { k:'type', l:'Type', t:'select', half:true, opts:['Internship','Research','Fellowship','Hackathon','Freelance'] },
+      { k:'status', l:'Status', t:'select', half:true, opts:['New','Converted','Dismissed'] },
+      { k:'tags', l:'Tags', ph:'React, Python, RAG', hint:'Comma-separated. Matched against the skills in your profile.' },
+      { k:'deadline', l:'Closes', t:'date' }
+    ],
+    onSave: (v) => { v.deadline = v.deadline || null; if (id) v.id = id; upsert('opportunities', v); closeModal(); render(); toast('Saved'); } });
+}
+function convertOpp(id) {
+  const o = byId('opportunities', id); if (!o) return;
+  const type = ['Internship','Research','Hackathon'].includes(o.type) ? o.type : 'Internship';
+  upsert('applications', { company: o.org || o.title, role: o.title, type, deadline: o.deadline || null, status: 'Not started', effort_min: 60, notes: '' });
+  o.status = 'Converted'; log('Tracking ' + o.title + ' as an application'); save(); render(); toast('Added to Applications');
+}
+function dismissOpp(id) { const o = byId('opportunities', id); if (!o) return; o.status = 'Dismissed'; log('Dismissed ' + o.title); save(); render(); toast('Dismissed'); }
+
+/* ---- Outreach ---- */
+function viewOutreach() {
+  const h = head('Outreach', 'Contacts matched to your skills. Drafting creates an Outbox item, and nothing goes out until you approve it.', addBtn('Add contact', 'editContact()'));
+  if (!S.contacts.length) return h + emptyPanel('No contacts yet', 'Add a professor, founder, or recruiter to start drafting.', '<button class="btn" onclick="editContact()">Add contact</button>');
+  const rows = S.contacts.map(c => {
+    const sc = matchScore(c.tags, S.profile.skills);
+    let act = '';
+    if (c.status === 'Not started') act = '<button class="btn sm" onclick="draftOutreach(\'' + c.id + '\')">Draft email</button>';
+    else if (c.status === 'Drafted') act = '<button class="btn soft sm" onclick="switchTab(\'outbox\')">Open in Outbox</button>';
+    else if (c.status === 'Sent') act = '<button class="btn soft sm" onclick="draftOutreach(\'' + c.id + '\')">Draft follow-up</button>';
+    return '<div class="row" style="grid-template-columns:auto 1fr auto"><div class="plan-ic" style="--c:var(--c-prof)">' + icon('mail', 17) + '</div><div><div class="row-t">' + esc(c.name) + '</div><div class="row-s">' + esc(c.institute) + (c.area ? ' · ' + esc(c.area) : '') + '</div><div class="row-m">' + pill(c.status) + meter(sc) + (c.sent_on ? '<span class="chip">Sent ' + fmtDate(c.sent_on) + '</span>' : '') + '</div></div><div class="row-a">' + act + rowBtns('editContact(\'' + c.id + '\')', 'confirmDelete(\'contacts\',\'' + c.id + '\',\'' + escA(c.name) + '\')') + '</div></div>';
+  }).join('');
+  return h + '<div class="panel rows">' + rows + '</div>';
+}
+function editContact(id) {
+  const c = id ? byId('contacts', id) : {};
+  openForm({ title: id ? 'Edit contact' : 'Add contact', values: c, saveLabel: id ? 'Save changes' : 'Add contact',
+    fields: [
+      { k:'name', l:'Name', req:true },
+      { k:'institute', l:'Institute or company' },
+      { k:'area', l:'Research area or focus' },
+      { k:'tags', l:'Tags', ph:'RAG, NLP', hint:'Comma-separated. Matched against your profile skills.' },
+      { k:'email', l:'Email', t:'email' }
+    ],
+    onSave: (v) => { if (id) { v.id = id; } else { v.status = 'Not started'; v.sent_on = null; } upsert('contacts', v); closeModal(); render(); toast('Saved'); } });
+}
+function makeOutbox(payload, ref) {
+  const item = { id: uid(), channel: 'email', status: 'pending', created: new Date().toISOString(), payload, ref, note: '' };
+  S.outbox.unshift(item); return item;
+}
+function draftOutreach(id) {
+  const c = byId('contacts', id); if (!c) return;
+  const p = S.profile; const follow = c.status === 'Sent';
+  const first = c.name.replace(/^(Dr\.|Prof\.)\s*/i, '');
+  const subject = follow ? 'Following up on my note about ' + (c.area || 'your work') : 'Interested in your work on ' + (c.area || 'your research');
+  const body = 'Dear ' + c.name + ',\n\n' +
+    (follow ? 'I wanted to follow up on my earlier email about ' + (c.area || 'your work') + '. I know inboxes fill up quickly, so a short reply either way would help me a lot.\n\n'
+            : 'I\'m ' + p.name + (p.track ? ', a ' + p.track + ' student' : '') + ', and I\'ve been following your work' + (c.area ? ' on ' + c.area : '') + (c.institute ? ' at ' + c.institute : '') + '.\n\n') +
+    (p.highlight ? p.highlight + '\n\n' : '') +
+    (splitList(p.skills).length ? 'My main skills: ' + splitList(p.skills).slice(0, 5).join(', ') + '.\n\n' : '') +
+    'Would you be open to a short conversation about opportunities to contribute?\n\nBest regards,\n' + p.name + (p.github ? '\n' + p.github : '');
+  const item = makeOutbox({ to: c.email, subject, body }, { kind: 'contact', id: c.id });
+  if (c.status === 'Not started') c.status = 'Drafted';
+  log('Drafted an email to ' + c.name); save(); render();
+  showDraft('Draft created', item);
+}
+function showDraft(title, item) {
+  openModal('<h3>' + esc(title) + '</h3><div class="mail-meta"><b>To:</b> ' + esc(item.payload.to || 'No email address yet') + '</div><div class="mail-meta"><b>Subject:</b> ' + esc(item.payload.subject) + '</div><div class="mail">' + esc(item.payload.body) + '</div><div class="note">Saved to your Outbox as "Needs approval". Nothing is sent from demo mode.</div><div class="foot"><button class="btn ghost" onclick="closeModal();switchTab(\'outbox\')">Review in Outbox</button><button class="btn" onclick="approveOutbox(\'' + item.id + '\');closeModal()">Approve draft</button></div>');
+}
+
+/* ---- Projects ---- */
+function viewProjects() {
+  const h = head('Projects', 'Break technical work into tasks the planner can schedule.', addBtn('Add project', 'editProject()'));
+  if (!S.projects.length) return h + emptyPanel('No projects yet', 'Create a project, add tasks, and the next open task shows up on Today.', '<button class="btn" onclick="editProject()">Add project</button>');
+  return h + '<div class="grid2">' + S.projects.map(p => {
+    const done = p.tasks.filter(t => t.done).length, total = p.tasks.length;
+    return '<section class="panel proj"><div class="proj-h"><div><h3>' + esc(p.name) + '</h3>' + (p.description ? '<div class="desc">' + esc(p.description) + '</div>' : '') + '</div><div style="display:flex">' + rowBtns('editProject(\'' + p.id + '\')', 'confirmDelete(\'projects\',\'' + p.id + '\',\'' + escA(p.name) + '\')') + '</div></div>' +
+      '<div class="prog"><i style="width:' + (total ? Math.round(done / total * 100) : 0) + '%"></i></div><div class="prog-l">' + done + ' of ' + total + ' tasks done</div>' +
+      (p.tasks.map(t => '<div class="task' + (t.done ? ' done' : '') + '"><input type="checkbox" class="ck" id="t-' + t.id + '" ' + (t.done ? 'checked' : '') + ' onchange="toggleTask(\'' + p.id + '\',\'' + t.id + '\')"><label for="t-' + t.id + '">' + esc(t.name) + '</label><button class="icon-btn del" onclick="deleteTask(\'' + p.id + '\',\'' + t.id + '\')" aria-label="Delete task" title="Delete task">' + icon('x', 14) + '</button></div>').join('') || '<div class="row-s" style="padding:6px 0">No tasks yet.</div>') +
+      '<div class="addtask"><input type="text" id="nt-' + p.id + '" placeholder="Add a task" aria-label="New task name" onkeydown="if(event.key===\'Enter\')addTask(\'' + p.id + '\')"><button class="btn ghost sm" onclick="addTask(\'' + p.id + '\')">Add</button></div></section>';
+  }).join('') + '</div>';
+}
+function editProject(id) {
+  const p = id ? byId('projects', id) : {};
+  openForm({ title: id ? 'Edit project' : 'Add project', values: p, saveLabel: id ? 'Save changes' : 'Add project',
+    fields: [{ k:'name', l:'Project name', req:true }, { k:'description', l:'Description', t:'textarea', rows:2 }],
+    onSave: (v) => { if (id) v.id = id; else v.tasks = []; upsert('projects', v); closeModal(); render(); toast('Saved'); } });
+}
+function toggleTask(pid, tid) { const t = byId('projects', pid).tasks.find(x => x.id === tid); t.done = !t.done; if (t.done) log('Finished task: ' + t.name); save(); render(); }
+function deleteTask(pid, tid) { const p = byId('projects', pid); p.tasks = p.tasks.filter(x => x.id !== tid); save(); render(); }
+function addTask(pid) { const el = $('nt-' + pid); const name = el.value.trim(); if (!name) return; byId('projects', pid).tasks.push({ id: uid(), name, done: false }); save(); render(); const n = $('nt-' + pid); if (n) n.focus(); }
+
+/* ---- Academics ---- */
+function viewAcads() {
+  const h = head('Academics', 'Exam prep and coursework, sized so the planner can fit it around everything else.', addBtn('Add study task', 'editAcad()'));
+  if (!S.academics.length) return h + emptyPanel('No study tasks yet', 'Add what you need to revise and when the exam is.', '<button class="btn" onclick="editAcad()">Add study task</button>');
+  const list = S.academics.slice().sort((a, b) => (a.done - b.done) || ((a.exam_date ? daysUntil(a.exam_date) : 999) - (b.exam_date ? daysUntil(b.exam_date) : 999)));
+  return h + '<div class="panel rows">' + list.map(t => {
+    const d = t.exam_date ? daysUntil(t.exam_date) : null;
+    return '<div class="row"><input type="checkbox" class="ck" ' + (t.done ? 'checked' : '') + ' aria-label="Mark ' + escA(t.subject) + ' done" onchange="toggleAcad(\'' + t.id + '\')"><div><div class="row-t" style="' + (t.done ? 'text-decoration:line-through;color:var(--ink3)' : '') + '">' + esc(t.subject) + '</div><div class="row-s">' + esc(t.task) + '</div><div class="row-m">' + (t.done ? '<span class="pill good">Done</span>' : (d != null ? '<span class="chip ' + (d <= 3 ? 'warn' : '') + '">' + (d < 0 ? 'Exam passed' : d === 0 ? 'Exam today' : 'Exam in ' + d + (d === 1 ? ' day' : ' days')) + '</span>' : '<span class="chip">No exam date</span>')) + '<span class="chip">' + fmtMins(t.effort_min) + '</span></div></div><div class="row-a">' + rowBtns('editAcad(\'' + t.id + '\')', 'confirmDelete(\'academics\',\'' + t.id + '\',\'' + escA(t.subject) + '\')') + '</div></div>';
+  }).join('') + '</div>';
+}
+function editAcad(id) {
+  const t = id ? byId('academics', id) : { effort_min: 60 };
+  openForm({ title: id ? 'Edit study task' : 'Add study task', values: t, saveLabel: id ? 'Save changes' : 'Add study task',
+    fields: [
+      { k:'subject', l:'Subject', req:true }, { k:'task', l:'What to study' },
+      { k:'exam_date', l:'Exam date', t:'date', half:true },
+      { k:'effort_min', l:'Time needed', t:'select', half:true, num:true, opts:[30,45,60,90,120,180].map(m => ({ v:m, l:fmtMins(m) })) }
+    ],
+    onSave: (v) => { v.exam_date = v.exam_date || null; if (id) v.id = id; else v.done = false; upsert('academics', v); closeModal(); render(); toast('Saved'); } });
+}
+function toggleAcad(id) { const t = byId('academics', id); t.done = !t.done; if (t.done) log('Finished studying: ' + t.subject); save(); render(); }
+
+/* ---- Requests ---- */
+function viewReqs() {
+  const h = head('Client requests', 'Turn "can you build me a website?" into a scoped proposal you can send.', addBtn('Add request', 'editReq()'));
+  if (!S.requests.length) return h + emptyPanel('No requests yet', 'When someone asks for work, log it here and scope it.', '<button class="btn" onclick="editReq()">Add request</button>');
+  return h + '<div class="panel rows">' + S.requests.map(r =>
+    '<div class="row" style="grid-template-columns:auto 1fr auto"><div class="plan-ic" style="--c:var(--c-req)">' + icon('chat', 17) + '</div><div><div class="row-t">' + esc(r.client) + '</div><div class="row-s">' + esc(r.ask) + '</div><div class="row-m">' + pill(r.status) + (r.timeline ? '<span class="chip">' + esc(r.timeline) + '</span>' : '') + (r.price ? '<span class="chip">Quote: ' + esc(r.price) + '</span>' : '') + '</div>' + (r.scope ? '<div class="k-note">Scope: ' + esc(r.scope) + '</div>' : '') + '</div><div class="row-a">' +
+    ((r.status === 'New' || r.status === 'Scoped') ? '<button class="btn sm" onclick="draftProposal(\'' + r.id + '\')">Draft proposal</button>' : '') + rowBtns('editReq(\'' + r.id + '\')', 'confirmDelete(\'requests\',\'' + r.id + '\',\'' + escA(r.client) + '\')') + '</div></div>').join('') + '</div>';
+}
+function editReq(id) {
+  const r = id ? byId('requests', id) : { status: 'New' };
+  openForm({ title: id ? 'Edit request' : 'Add request', values: r, saveLabel: id ? 'Save changes' : 'Add request',
+    fields: [
+      { k:'client', l:'Client', req:true },
+      { k:'ask', l:'What they asked for', t:'textarea', rows:2 },
+      { k:'scope', l:'Scoped deliverables', t:'textarea', rows:2, hint:'Used in the proposal draft.' },
+      { k:'timeline', l:'Timeline', half:true, ph:'e.g. 3 weeks' },
+      { k:'price', l:'Quote', half:true, ph:'e.g. ₹60,000' },
+      { k:'email', l:'Email', t:'email', half:true },
+      { k:'status', l:'Status', t:'select', half:true, opts:['New','Scoped','Quoted','Won','Declined'] }
+    ],
+    onSave: (v) => { if (id) v.id = id; upsert('requests', v); closeModal(); render(); toast('Saved'); } });
+}
+function draftProposal(id) {
+  const r = byId('requests', id); if (!r) return;
+  const p = S.profile;
+  const body = 'Hi ' + r.client + ',\n\nThanks for reaching out about: ' + (r.ask || 'your project') + '.\n\nProposed scope:\n' + (r.scope || 'To be confirmed after a short call.') + '\n\nTimeline: ' + (r.timeline || 'To be confirmed') + '\nEstimate: ' + (r.price || 'To be confirmed') + '\n\nIf this looks right, reply and I will send a short agreement and a start date.\n\nBest,\n' + p.name;
+  const item = makeOutbox({ to: r.email, subject: 'Proposal for ' + r.client, body }, { kind: 'request', id: r.id });
+  if (r.status === 'New') r.status = 'Scoped';
+  log('Drafted a proposal for ' + r.client); save(); render();
+  showDraft('Proposal drafted', item);
+}
+
+/* ---- Outbox ---- */
+function viewOutbox() {
+  const h = head('Outbox', 'Every message passes through here. Nothing is delivered without your approval.', '');
+  const info = '<div class="note" style="margin:0 0 18px;max-width:720px">Demo mode: approving marks a message as approved on this device. Real delivery through Gmail or WhatsApp starts once the backend is connected.</div>';
+  if (!S.outbox.length) return h + info + emptyPanel('Your outbox is empty', 'Draft an outreach email or a client proposal and it will wait here for your approval.', '<button class="btn" onclick="switchTab(\'outreach\')">Go to Outreach</button>');
+  const order = { pending: 0, approved: 1, rejected: 2 };
+  const items = S.outbox.slice().sort((a, b) => order[a.status] - order[b.status]);
+  return h + info + '<div class="panel rows">' + items.map(o =>
+    '<div class="row noicon"><div><div class="row-t">' + esc(o.payload.subject || '(no subject)') + '</div><div class="row-s">To ' + esc(o.payload.to || 'no address yet') + '</div><div class="row-m">' + pill(o.status) + '<span class="chip">' + esc(o.channel) + '</span>' + (o.note ? '<span class="chip">' + esc(o.note) + '</span>' : '') + '</div></div><div class="row-a">' +
+    (o.status === 'pending' ? '<button class="btn sm" onclick="approveOutbox(\'' + o.id + '\')">Approve</button><button class="btn ghost sm" onclick="rejectOutbox(\'' + o.id + '\')">Reject</button>' : '') +
+    '<button class="btn ghost sm" onclick="viewOutboxItem(\'' + o.id + '\')">View</button></div></div>').join('') + '</div>';
+}
+function approveOutbox(id) {
+  const o = byId('outbox', id); if (!o) return;
+  o.status = 'approved'; o.note = 'Not delivered in demo mode';
+  if (o.ref && o.ref.kind === 'contact') { const c = byId('contacts', o.ref.id); if (c) { c.status = 'Sent'; c.sent_on = iso(0); } }
+  if (o.ref && o.ref.kind === 'request') { const r = byId('requests', o.ref.id); if (r) r.status = 'Quoted'; }
+  log('Approved: ' + o.payload.subject); save(); render(); toast('Approved. Delivery starts once the backend is connected.');
+}
+function rejectOutbox(id) {
+  const o = byId('outbox', id); if (!o) return;
+  o.status = 'rejected'; log('Rejected: ' + o.payload.subject); save(); render(); toast('Rejected');
+}
+function viewOutboxItem(id) {
+  const o = byId('outbox', id); if (!o) return;
+  openModal('<h3>' + esc(o.payload.subject || 'Outbox item') + '</h3><div class="mail-meta"><b>To:</b> ' + esc(o.payload.to || 'No email address yet') + '</div><div class="mail">' + esc(o.payload.body || '') + '</div><div class="foot"><button class="btn ghost" onclick="closeModal()">Close</button></div>');
+}
+
+/* ---- Resume check ---- */
+let resumeText = '';
+function viewResume() {
+  return head('Resume check', 'Paste a resume or project summary. OPA finds the skills it recognizes so you can add them to your matching profile.', '') +
+    '<div style="max-width:720px"><div class="field"><label for="resume-text">Resume or project text</label><textarea class="resume-box" id="resume-text" placeholder="Paste resume text, a GitHub README, or a project summary" oninput="resumeText=this.value">' + esc(resumeText) + '</textarea></div><div style="display:flex;gap:10px;margin-top:14px"><button class="btn" onclick="analyzeResume()">Analyze</button><button class="btn ghost" onclick="clearResume()">Clear</button></div><div id="resume-results" style="margin-top:22px"></div></div>';
+}
+function analyzeResume() {
+  const text = $('resume-text').value; resumeText = text;
+  const el = $('resume-results');
+  if (!text.trim()) { el.innerHTML = '<div class="empty plain" style="padding:30px"><p style="margin:0">Paste some text first.</p></div>'; return; }
+  const lower = text.toLowerCase();
+  const found = MASTER_SKILLS.filter(s => { const k = s.toLowerCase(); const i = lower.indexOf(k); if (i < 0) return false; if (k.length <= 3) { const re = new RegExp('(^|[^a-z0-9+#])' + k.replace(/[.+*?^${}()|[\]\\]/g, '\\$&') + '($|[^a-z0-9+#])', 'i'); return re.test(text); } return true; });
+  const words = (text.match(/\S+/g) || []).length;
+  const bullets = text.split('\n').filter(l => /^\s*[-•*–]\s+/.test(l)).length;
+  const numbers = (text.match(/\d+%?/g) || []).length;
+  const links = /(https?:\/\/|github\.com|linkedin\.com)/i.test(text);
+  const notes = [];
+  if (words < 120) notes.push('This is short (' + words + ' words). A full resume usually runs 250 words or more.');
+  if (bullets < 3) notes.push('Use bullet points for accomplishments so they are easy to scan.');
+  if (numbers < 3) notes.push('Add measurable results, such as users, percentages, or time saved.');
+  if (!links) notes.push('Add a GitHub or portfolio link so reviewers can see your work.');
+  const have = splitList(S.profile.skills).map(x => x.toLowerCase());
+  el.innerHTML = '<section class="panel" style="padding:20px;margin-bottom:14px"><h3 style="font-family:var(--display);font-size:18px;margin-bottom:12px">Skills recognized (' + found.length + ')</h3>' +
+    (found.length ? found.map(s => have.includes(s.toLowerCase()) ? '<span class="skill added">' + icon('check', 13) + esc(s) + '</span>' : '<button class="skill" onclick="addSkill(\'' + escA(s) + '\')">' + icon('plus', 13) + esc(s) + '</button>').join('') + '<div class="row-s" style="margin-top:6px">Select a skill to add it to your profile.</div>' : '<div class="row-s">Nothing matched the known skill list.</div>') + '</section>' +
+    '<section class="panel" style="padding:20px"><h3 style="font-family:var(--display);font-size:18px;margin-bottom:4px">How the draft reads</h3><div class="row-s">' + words + ' words, ' + bullets + ' bullet lines, ' + numbers + ' numbers</div><ul class="notes">' + (notes.length ? notes : ['The structure looks solid: length, bullets, numbers, and links are all present.']).map(n => '<li>' + esc(n) + '</li>').join('') + '</ul></section>';
+}
+function addSkill(s) { const list = splitList(S.profile.skills); if (!list.some(x => x.toLowerCase() === s.toLowerCase())) list.push(s); S.profile.skills = list.join(', '); log('Added skill: ' + s); save(); analyzeResume(); renderNav(); toast(s + ' added to your profile'); }
+function clearResume() { resumeText = ''; $('resume-text').value = ''; $('resume-results').innerHTML = ''; }
+
+/* ---- History ---- */
+function viewHistory() {
+  const h = head('History', 'A log of everything you complete, draft, and approve.', '');
+  if (!S.history.length) return h + emptyPanel('Nothing logged yet', 'Complete an item on Today or draft a message to start your history.', '');
+  const days = {};
+  S.history.forEach(e => { const d = e.at.slice(0, 10); (days[d] = days[d] || []).push(e); });
+  return h + '<div class="tl">' + Object.keys(days).sort().reverse().map(d => {
+    const label = d === iso(0) ? 'Today' : d === iso(-1) ? 'Yesterday' : new Date(d + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+    return '<div class="tl-day"><h3>' + label + '</h3>' + days[d].map(e => '<div class="tl-e"><time>' + new Date(e.at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) + '</time><span>' + esc(e.text) + '</span></div>').join('') + '</div>';
+  }).join('') + '</div>';
+}
+
+/* ---- Profile ---- */
+function viewProfile() {
+  const p = S.profile;
+  const f = (k, l, ph, t) => '<div class="field"><label for="p-' + k + '">' + l + '</label>' + (t === 'ta' ? '<textarea id="p-' + k + '" rows="2">' + esc(p[k]) + '</textarea>' : '<input id="p-' + k + '" type="text" value="' + escA(p[k]) + '" placeholder="' + escA(ph || '') + '">') + '</div>';
+  return head('Profile', 'Used to personalize skill matching and outreach drafts.', '') +
+    '<section class="panel form-panel">' + f('name', 'Name') + f('track', 'Track or year', 'e.g. B.Tech Computer Science, 3rd year') + f('github', 'GitHub', 'github.com/username') + f('email', 'Email') +
+    '<div class="field"><label for="p-skills">Skills</label><input id="p-skills" type="text" value="' + escA(p.skills) + '"><div class="hint">Comma-separated. Used to score opportunities and contacts.</div></div>' +
+    '<div class="field"><label for="p-highlight">Resume highlight</label><textarea id="p-highlight" rows="2">' + esc(p.highlight) + '</textarea><div class="hint">One line, used in outreach drafts.</div></div>' +
+    '<button class="btn" onclick="saveProfile()">Save profile</button></section>' +
+    '<section class="panel form-panel" style="margin-top:20px"><h3 style="font-family:var(--display);font-size:19px;font-weight:650;margin-bottom:8px">Data on this device</h3><p class="row-s" style="margin-bottom:16px">Everything you see is stored in this browser as demo data. The FastAPI backend is switched off, so nothing is sent anywhere. When the full MVP is ready, this app will read and write real records instead.</p><button class="btn ghost" onclick="resetData()">Reset to sample data</button></section>';
+}
+function saveProfile() {
+  ['name','track','github','email','skills','highlight'].forEach(k => { S.profile[k] = $('p-' + k).value.trim(); });
+  save(); render(); toast('Profile saved');
+}
+function resetData() { confirmBox('Reset all data to the sample workspace?', 'Reset data', () => { S = seed(); save(); render(); toast('Sample data restored'); }); }
+
+/* ---- JARVIS ---- */
+let CHAT = [];
+const PROMPTS = ['What should I focus on today?', 'Summarize my applications and deadlines.', 'Which projects need attention?', 'Help me plan the next 3 hours.'];
+function viewJarvis() {
+  return head('JARVIS', 'Your operating copilot. Ask about today\'s work, applications, projects, outreach, or what to do next.', '') +
+    '<div class="jv"><section class="panel jv-main"><div class="jv-top"><div class="orb"></div><div><b>JARVIS</b><span>Answering from your workspace data</span></div><button class="btn ghost sm" onclick="jarvisNew()">New chat</button></div>' +
+    '<div class="msgs" id="msgs">' + (CHAT.length ? CHAT.map(bubbleHTML).join('') : welcomeHTML()) + '</div>' +
+    '<div class="composer"><div class="cbox"><textarea id="jv-input" rows="1" placeholder="Ask JARVIS about your workspace" aria-label="Message JARVIS"></textarea><button class="send" onclick="jarvisSend()" aria-label="Send message">' + icon('up', 18) + '</button></div></div></section>' +
+    '<aside class="panel jv-ctx"><h3>Workspace right now</h3><div id="ctx"></div><div class="ctx-note">JARVIS replies from your local data. A language model can be connected later through the chat endpoint.</div></aside></div>';
+}
+function welcomeHTML() { return '<div class="welcome" id="welcome"><h2>What should we work on?</h2><p>Pick a starting point or type your own question below.</p><div class="prompts">' + PROMPTS.map(p => '<button onclick="jarvisSend(this.textContent)">' + esc(p) + '</button>').join('') + '</div></div>'; }
+function fmtMsg(t) { return esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>'); }
+function bubbleHTML(m) { return '<div class="m ' + (m.role === 'user' ? 'you' : '') + '"><div class="bubble">' + fmtMsg(m.text) + '</div></div>'; }
+function ctxHTML() {
+  const plan = buildPlan(); const mins = plan.reduce((s, i) => s + i.effort, 0);
+  const rows = [['Queued today', fmtMins(mins)], ['Open applications', S.applications.filter(a => ['Not started','Applied','Interview'].includes(a.status)).length], ['Emails to write', S.contacts.filter(c => c.status === 'Not started').length], ['Open requests', S.requests.filter(r => r.status === 'New' || r.status === 'Scoped').length], ['Awaiting approval', S.outbox.filter(o => o.status === 'pending').length]];
+  return rows.map(r => '<div class="ctx-row"><span>' + r[0] + '</span><b>' + r[1] + '</b></div>').join('');
+}
+function refreshCtx() { const el = $('ctx'); if (el) el.innerHTML = ctxHTML(); }
+function jarvisNew() { CHAT = []; $('msgs').innerHTML = welcomeHTML(); }
+function jarvisSend(text) {
+  const input = $('jv-input');
+  const t = (text || (input ? input.value : '')).trim(); if (!t) return;
+  if (input) { input.value = ''; input.style.height = 'auto'; }
+  const box = $('msgs'); const w = $('welcome'); if (w) w.remove();
+  CHAT.push({ role: 'user', text: t }); box.insertAdjacentHTML('beforeend', bubbleHTML({ role: 'user', text: t }));
+  box.insertAdjacentHTML('beforeend', '<div class="m" id="typing"><div class="bubble"><span class="typing"><i></i><i></i><i></i></span></div></div>');
   box.scrollTop = box.scrollHeight;
+  /* BACKEND (later): const r = await POST('/v1/jarvis/chat', { messages: CHAT }); reply = r.reply; */
+  setTimeout(() => {
+    const reply = jarvisReply(t);
+    const ty = $('typing'); if (ty) ty.remove();
+    CHAT.push({ role: 'assistant', text: reply });
+    box.insertAdjacentHTML('beforeend', bubbleHTML({ role: 'assistant', text: reply }));
+    box.scrollTop = box.scrollHeight; refreshCtx();
+  }, 550);
 }
-function appendJarvisTyping(){
-  const box = document.getElementById('jarvis-messages');
-  const wrap = document.createElement('div');
-  wrap.className='jarvis-message';
-  wrap.id='jarvis-typing';
-  wrap.innerHTML='<div class="jarvis-avatar">J</div><div><div class="jarvis-bubble"><span class="typing"><i></i><i></i><i></i></span></div></div>';
-  box.appendChild(wrap); box.scrollTop=box.scrollHeight;
+function clock(d) { return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }); }
+function jarvisReply(text) {
+  const t = text.toLowerCase(); const plan = buildPlan();
+  if (/(3 hours|three hours|next 3|schedule)/.test(t)) {
+    if (!plan.length) return 'Your queue is empty, so the next three hours are open. Add an application, contact, or project task and I will build a schedule around it.';
+    let cur = new Date(); cur.setMinutes(Math.ceil(cur.getMinutes() / 15) * 15, 0, 0); let left = 180; const lines = [];
+    for (const i of plan) { const m = Math.min(i.effort, left); if (m < 10) break; lines.push('**' + clock(cur) + '** ' + i.name + ' (' + fmtMins(m) + ')'); cur = new Date(cur.getTime() + m * 60000); left -= m; if (left <= 0) break; }
+    return 'Here is a plan for the next three hours, most urgent first:\n\n' + lines.join('\n') + (left > 0 ? '\n\nThat leaves about ' + fmtMins(left) + ' of buffer.' : '');
+  }
+  if (/(focus|today|first|what should|next)/.test(t)) {
+    if (!plan.length) return 'Nothing is queued today. A good use of a free day: draft an outreach email or add tasks to a project.';
+    const top = plan.slice(0, 3).map((i, n) => (n + 1) + '. **' + i.name + '**, ' + i.sub + ' (' + fmtMins(i.effort) + ')').join('\n');
+    return 'Start with the most urgent items:\n\n' + top + '\n\nThe full plan is about ' + fmtMins(plan.reduce((s, i) => s + i.effort, 0)) + ' of work.';
+  }
+  if (/(application|deadline|apply)/.test(t)) {
+    const open = S.applications.filter(a => ['Not started','Applied','Interview'].includes(a.status));
+    if (!open.length) return 'You have no open applications. Add one from the Applications tab.';
+    const soon = open.filter(a => a.deadline).sort((a, b) => a.deadline.localeCompare(b.deadline)).slice(0, 3).map(a => '• **' + a.company + '** (' + a.status.toLowerCase() + '): ' + fmtDue(a.deadline).toLowerCase()).join('\n');
+    const c = (s) => S.applications.filter(a => a.status === s).length;
+    return 'You have ' + open.length + ' open applications: ' + c('Not started') + ' not started, ' + c('Applied') + ' applied, ' + c('Interview') + ' in interview stage.\n\nNearest deadlines:\n' + soon;
+  }
+  if (/project|task/.test(t)) {
+    const ps = S.projects.map(p => ({ p, left: p.tasks.filter(x => !x.done).length })).filter(x => x.left).sort((a, b) => b.left - a.left);
+    if (!ps.length) return 'Every project is caught up. Add new tasks to keep the planner fed.';
+    return 'Projects with the most open work:\n\n' + ps.slice(0, 3).map(x => '• **' + x.p.name + '**: ' + x.left + ' open, next up "' + x.p.tasks.find(k => !k.done).name + '"').join('\n');
+  }
+  if (/(outreach|email|contact|professor)/.test(t)) {
+    const n = S.contacts.filter(c => c.status === 'Not started'); const d = S.contacts.filter(c => c.status === 'Drafted').length;
+    return n.length ? 'You have ' + n.length + ' contact' + (n.length > 1 ? 's' : '') + ' waiting for a first email, starting with **' + n[0].name + '**.' + (d ? ' ' + d + ' draft' + (d > 1 ? 's are' : ' is') + ' also waiting for approval.' : '') : 'No first emails are pending.' + (d ? ' ' + d + ' draft(s) need approval in the Outbox.' : '');
+  }
+  if (/(request|client|proposal)/.test(t)) {
+    const r = S.requests.filter(x => x.status === 'New' || x.status === 'Scoped');
+    return r.length ? 'Open client requests:\n\n' + r.map(x => '• **' + x.client + '** (' + x.status.toLowerCase() + '): ' + x.ask).join('\n') : 'No open client requests right now.';
+  }
+  if (/(exam|study|academic)/.test(t)) {
+    const a = S.academics.filter(x => !x.done).sort((p, q) => (p.exam_date ? daysUntil(p.exam_date) : 999) - (q.exam_date ? daysUntil(q.exam_date) : 999));
+    return a.length ? 'Study priorities:\n\n' + a.slice(0, 3).map(x => '• **' + x.subject + '**: ' + x.task + (x.exam_date ? ' (exam ' + fmtDate(x.exam_date) + ')' : '')).join('\n') : 'No pending study tasks.';
+  }
+  return 'I can help with your plan, applications, projects, outreach, client requests, and study tasks. Try "What should I focus on today?" or "Help me plan the next 3 hours."';
 }
-function removeJarvisTyping(){ const el=document.getElementById('jarvis-typing'); if(el) el.remove(); }
 
-async function getJarvisContext(){
-  const ctx={};
-  try{
-    const plan=await GET('/v1/plan/today');
-    ctx.load=fmtHrs(plan.load_min);
-    ctx.apps=(plan.items||[]).filter(x=>x.kind==='app').length;
-    ctx.outreach=(plan.items||[]).filter(x=>x.kind==='prof').length;
-  }catch(e){}
-  try{
-    const [apps,contacts,requests,outbox]=await Promise.all([
-      GET('/v1/applications').catch(()=>[]),
-      GET('/v1/contacts').catch(()=>[]),
-      GET('/v1/requests').catch(()=>[]),
-      GET('/v1/outbox').catch(()=>[])
-    ]);
-    ctx.apps = ctx.apps ?? apps.length;
-    ctx.outreach = ctx.outreach ?? contacts.filter(x=>x.status==='Not started'||x.status==='Drafted').length;
-    ctx.requests = requests.filter(x=>x.status==='New'||x.status==='Scoped').length;
-    ctx.outbox = outbox.filter(x=>x.status==='pending_approval').length;
-  }catch(e){}
-  return ctx;
+/* ================= 7. NAVIGATION & RENDER ================= */
+const NAV = [
+  { id:'jarvis', l:'JARVIS', i:'spark', g:'Assistant' },
+  { id:'today', l:'Today', i:'sun', g:'Plan' },
+  { id:'applications', l:'Applications', i:'brief' },
+  { id:'opportunities', l:'Opportunities', i:'target' },
+  { id:'outreach', l:'Outreach', i:'mail' },
+  { id:'projects', l:'Projects', i:'layers', g:'Work' },
+  { id:'academics', l:'Academics', i:'book' },
+  { id:'requests', l:'Requests', i:'chat' },
+  { id:'outbox', l:'Outbox', i:'send', g:'Tools' },
+  { id:'resume', l:'Resume check', i:'file' },
+  { id:'history', l:'History', i:'clock' },
+  { id:'profile', l:'Profile', i:'user' }
+];
+const VIEWS = { jarvis: viewJarvis, today: viewToday, applications: viewApps, opportunities: viewOpps, outreach: viewOutreach, projects: viewProjects, academics: viewAcads, requests: viewReqs, outbox: viewOutbox, resume: viewResume, history: viewHistory, profile: viewProfile };
+let cur = 'today';
+
+function badge(id) {
+  if (id === 'applications') return S.applications.filter(a => ['Not started','Applied','Interview'].includes(a.status)).length;
+  if (id === 'opportunities') return S.opportunities.filter(o => o.status === 'New').length;
+  if (id === 'requests') return S.requests.filter(r => r.status === 'New' || r.status === 'Scoped').length;
+  if (id === 'outbox') return S.outbox.filter(o => o.status === 'pending').length;
+  return 0;
 }
-async function refreshJarvisContext(){
-  const c=await getJarvisContext();
-  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v==null?'—':v};
-  set('jctx-connection',CONNECTED?'Connected':'Offline');
-  set('jctx-load',c.load||'—'); set('jctx-apps',c.apps); set('jctx-outreach',c.outreach);
-  set('jctx-requests',c.requests); set('jctx-outbox',c.outbox);
+function renderNav() {
+  $('nav').innerHTML = NAV.map(n => {
+    const c = badge(n.id);
+    return (n.g ? '<div class="nav-group">' + n.g + '</div>' : '') + '<button class="' + (n.id === cur ? 'on' : '') + '" onclick="switchTab(\'' + n.id + '\')"' + (n.id === cur ? ' aria-current="page"' : '') + '>' + icon(n.i, 18) + n.l + (c ? '<span class="count' + (n.id === 'outbox' ? ' alert' : '') + '">' + c + '</span>' : '') + '</button>';
+  }).join('');
 }
-async function localJarvisReply(text){
-  const t=text.toLowerCase();
-  const c=await getJarvisContext();
-  if(t.includes('today')||t.includes('focus')||t.includes('next')){
-    return `Here’s the current operating picture:\n\n• Today’s planned load: ${c.load||'not available'}\n• Applications in today’s plan: ${c.apps??'—'}\n• Outreach items: ${c.outreach??'—'}\n• Requests needing attention: ${c.requests??'—'}\n\nStart with the highest-deadline item, then clear one communication task.`;
-  }
-  if(t.includes('application')){
-    return `Your workspace currently shows ${c.apps??'—'} application-related items in the current plan. Open Applications to review status, deadlines, and next actions.`;
-  }
-  if(t.includes('project')){
-    return `Projects are managed in the Projects workspace. I can help break a project into tasks once the real model endpoint is connected.`;
-  }
-  if(t.includes('plan')){
-    return `A simple next-3-hours structure:\n\n1. Highest-impact deadline item\n2. One deep technical/project block\n3. One outreach or application action\n4. Quick review and update OPA\n\nI’ll be able to generate a context-aware schedule from your actual data once the model endpoint is wired.`;
-  }
-  return `I’m JARVIS — the conversational layer for OPA. I can already surface workspace context through this UI, but the LLM response endpoint is not connected yet.\n\nTry asking: “What should I focus on today?”`;
+function render(fromNav) {
+  renderNav();
+  if (cur === 'jarvis' && !fromNav) { refreshCtx(); return; }
+  const y = window.scrollY;
+  $('view').innerHTML = VIEWS[cur]();
+  if (cur === 'jarvis') { refreshCtx(); wireJarvis(); }
+  if (!fromNav) window.scrollTo(0, y);
 }
-async function sendJarvisMessage(){
-  const input=document.getElementById('jarvis-input');
-  if(!input) return;
-  const text=input.value.trim();
-  if(!text) return;
-  input.value='';
-  input.style.height='auto';
-  appendJarvisMessage('user',text);
-  JARVIS_MESSAGES.push({role:'user',content:text});
-  appendJarvisTyping();
-  try{
-    /* Preferred future backend contract:
-       POST /v1/jarvis/chat
-       {messages: JARVIS_MESSAGES}
-       Expected response: {reply:"..."}
-    */
-    let reply=null;
-    try{
-      const result=await POST('/v1/jarvis/chat',{messages:JARVIS_MESSAGES});
-      reply=result?.reply || result?.message || result?.content || null;
-    }catch(e){}
-    if(!reply) reply=await localJarvisReply(text);
-    removeJarvisTyping();
-    appendJarvisMessage('assistant',reply);
-    JARVIS_MESSAGES.push({role:'assistant',content:reply});
-  }catch(e){
-    removeJarvisTyping();
-    appendJarvisMessage('assistant','I hit a connection issue. Check the backend and try again.');
-  }
-  refreshJarvisContext();
+function wireJarvis() {
+  const input = $('jv-input'); if (!input) return;
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); jarvisSend(); } });
+  input.addEventListener('input', () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 130) + 'px'; });
+  const m = $('msgs'); if (m) m.scrollTop = m.scrollHeight;
 }
-document.addEventListener('DOMContentLoaded',()=>{
-  const input=document.getElementById('jarvis-input');
-  if(input){
-    input.addEventListener('keydown',e=>{
-      if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendJarvisMessage();}
-    });
-    input.addEventListener('input',()=>{
-      input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,130)+'px';
-    });
-  }
+function switchTab(name) {
+  if (!VIEWS[name]) name = 'today';
+  cur = name; animateNext = true;
+  document.body.classList.remove('nav-open');
+  if (location.hash !== '#/' + name) history.replaceState(null, '', '#/' + name);
+  render(true); window.scrollTo(0, 0);
+}
+$('menu-btn').innerHTML = icon('menu', 22);
+$('menu-btn').addEventListener('click', () => document.body.classList.toggle('nav-open'));
+$('scrim').addEventListener('click', () => document.body.classList.remove('nav-open'));
+window.addEventListener('hashchange', () => { const n = location.hash.replace('#/', ''); if (VIEWS[n] && n !== cur) switchTab(n); });
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closeModal(); document.body.classList.remove('nav-open'); }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); switchTab('jarvis'); setTimeout(() => { const i = $('jv-input'); if (i) i.focus(); }, 40); }
 });
 
-
-/* ============================================================
-   OPA DEV MODE — AUTHENTICATION BYPASSED
-   This is temporary. Original auth code remains in the file.
-   ============================================================ */
-window.OPA_DEV_NO_AUTH = true;
-
-document.addEventListener("DOMContentLoaded", function () {
-  // Hide any login/auth gate without deleting it.
-  document.querySelectorAll(
-    '[id*="login" i],[id*="auth" i],[class*="login" i],[class*="auth" i]'
-  ).forEach(function (el) {
-    if (el.id === "view-login" || el.id === "login" || el.classList.contains("login-view")) {
-      el.style.display = "none";
-    }
-  });
-
-  // Force the application shell visible.
-  document.querySelectorAll(".app, .app-shell, #app, main").forEach(function (el) {
-    el.style.visibility = "visible";
-    el.style.opacity = "1";
-  });
-
-  // Open Today using the app's own navigation function if available.
-  if (typeof setTab === "function") {
-    try { setTab("today"); } catch (e) {}
-  } else {
-    var today = document.getElementById("view-today");
-    if (today) today.classList.add("active");
-  }
-});
+(function boot() {
+  const n = location.hash.replace('#/', '');
+  cur = VIEWS[n] ? n : 'today';
+  render(true);
+})();
 </script>
 </body>
 </html>
