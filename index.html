@@ -622,7 +622,8 @@ const IC = {
   menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
   up:'<path d="M12 19V5M5 12l7-7 7 7"/>',
   x:'<path d="M6 6l12 12M18 6 6 18"/>',
-  play:'<path d="M8 5v14l11-7z"/>'
+  play:'<path d="M8 5v14l11-7z"/>',
+  grad:'<path d="M2 9.5 12 5l10 4.5-10 4.5-10-4.5z"/><path d="M6 12v4.5c0 1.2 2.7 2.5 6 2.5s6-1.3 6-2.5V12"/>'
 };
 const icon = (n, s = 18) => '<svg class="ic" viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[n] + '</svg>';
 
@@ -639,6 +640,15 @@ function toast(msg, isErr, act) {
 /* ================= 2. LOCAL DATA (stands in for the backend) ================= */
 const LS_KEY = 'opa_demo_v3';
 const MASTER_SKILLS = ['React','Node.js','Next.js','Vue','Angular','Python','JavaScript','TypeScript','Java','C++','RAG','LLM agents','Gemini','Google ADK','LangChain','Prompt engineering','Machine learning','Deep learning','TensorFlow','PyTorch','Computer vision','NLP','SQL','MongoDB','PostgreSQL','Firebase','AWS','Docker','Kubernetes','Git','GitHub Actions','REST APIs','GraphQL','Access control','RBAC','Security','Full-stack web','Mobile development','Flutter','React Native','UI/UX design','Data structures','Algorithms','System design','WhatsApp API','Odoo'];
+
+/* Small, verified starter set of IIT faculty — pulled by hand from public
+   department pages (not a live scrape; see the note in the Outreach tab).
+   Each entry links back to its source so you can double-check before
+   emailing. Treat this as a seed, not a full directory. */
+const IIT_SEED_FACULTY = [
+  { name:'Parag Singla', institute:'IIT Delhi \u00b7 CSE', area:'Machine learning, neuro-symbolic reasoning', tags:'Machine learning, Deep learning, NLP', email:'parags@cse.iitd.ac.in', source:'https://www.cse.iitd.ac.in/~parags/' },
+  { name:'Naveen Garg', institute:'IIT Delhi \u00b7 CSE', area:'Algorithms, approximation algorithms, optimization', tags:'Algorithms, System design', email:'naveen@cse.iitd.ac.in', source:'https://en.wikipedia.org/wiki/Naveen_Garg' }
+];
 
 function seed() {
   return {
@@ -952,9 +962,91 @@ function convertOpp(id) {
 function dismissOpp(id) { const o = byId('opportunities', id); if (!o) return; o.status = 'Dismissed'; log('Dismissed ' + o.title); save(); render(); toast('Dismissed'); }
 
 /* ---- Outreach ---- */
+/* ---- Find IIT faculty (a verified starter set + paste-and-parse importer for Outreach) ---- */
+const IIT_LINKS = [
+  { l: 'IIT Delhi \u00b7 CSE', u: 'https://www.cse.iitd.ac.in/people/faculty.shtml' },
+  { l: 'IIT Kanpur \u00b7 CSE', u: 'https://iitk.ac.in/july14cse/faculty' },
+  { l: 'IIT Madras \u00b7 CSE', u: 'https://www.cse.iitm.ac.in/listpeople.php?arg=MSQw' },
+  { l: 'IIT BHU \u00b7 CSE', u: 'https://iitbhu.ac.in/dept/cse/faculty' },
+  { l: 'IIT Palakkad \u00b7 CSE', u: 'https://cse.iitpkd.ac.in/faculty' },
+  { l: 'IIT Kharagpur \u00b7 CSE', u: 'https://cse.iitkgp.ac.in/people/faculty' },
+  { l: 'Find another IIT dept', u: 'https://www.google.com/search?q=IIT+CSE+department+faculty+list' }
+];
+let facultyOpen = false, facultyRows = [];
+function toggleFacultyFinder() { facultyOpen = !facultyOpen; render(); }
+function seedAdded(email) { return S.contacts.some(c => c.email && c.email.toLowerCase() === email.toLowerCase()); }
+function addSeedFaculty(i) {
+  const f = IIT_SEED_FACULTY[i]; if (!f) return;
+  if (seedAdded(f.email)) { toast(f.name + ' is already in Outreach'); return; }
+  upsert('contacts', { name: f.name, institute: f.institute, area: f.area, tags: f.tags, email: f.email, status: 'Not started', sent_on: null });
+  log('Added ' + f.name + ' (' + f.institute + ') to Outreach'); save(); render();
+  toast('Added ' + f.name + ' \u2014 verify the email before sending');
+}
+function parseFacultyPaste() {
+  const text = $('faculty-paste').value;
+  const inst = $('faculty-inst').value.trim();
+  const emailRe = /[a-zA-Z0-9._%+-]+\s*(?:@|\bAT\b|\[at\])\s*[a-zA-Z0-9.-]+\s*(?:\.|\[dot\])\s*[a-zA-Z]{2,}(?:\s*(?:\.|\[dot\])\s*[a-zA-Z]{2,})*/g;
+  const blocks = text.split(/\n\s*\n+/).map(b => b.trim()).filter(Boolean);
+  const rows = [];
+  const scan = (block) => {
+    const m = block.match(emailRe); if (!m) return;
+    const email = m[0].replace(/\s*\[at\]\s*|\s*\bAT\b\s*/gi, '@').replace(/\s*\[dot\]\s*|\s+\.\s+/gi, '.').replace(/\s+/g, '');
+    const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+    let name = lines.find(l => !l.includes('@') && !/^(email|e-mail|tel|phone|office|room|ph\.?d|research|area|interest)/i.test(l) && l.length < 60) || '';
+    name = name.replace(/^(Dr\.?|Prof\.?|Professor|Mr\.?|Ms\.?|Mrs\.?)\s+/i, '').trim();
+    const area = lines.filter(l => /research|interest|area/i.test(l)).map(l => l.replace(/research interests?\s*:?\s*/i, '').replace(/area\s*:?\s*/i, '')).join('; ') ||
+      lines.filter(l => l !== name && !l.includes('@') && !/^(tel|phone|office|room)/i.test(l)).join(' ').slice(0, 140);
+    if (name && email) rows.push({ name, email, area: area.slice(0, 160), sel: true });
+  };
+  blocks.forEach(scan);
+  if (!rows.length) { const m2 = text.match(emailRe); if (m2) m2.forEach(e => scan(e)); }
+  facultyRows = rows;
+  if (!rows.length) toast('Couldn\u2019t find name+email pairs in that paste \u2014 try pasting a bigger chunk including the research interests line', true);
+  else toast('Found ' + rows.length + ' possible contact' + (rows.length > 1 ? 's' : '') + ' \u2014 review below');
+  S._facultyInst = inst; render();
+}
+function toggleFacultyRow(i) { facultyRows[i].sel = !facultyRows[i].sel; render(); }
+function addSelectedFaculty() {
+  const inst = ($('faculty-inst') ? $('faculty-inst').value.trim() : S._facultyInst) || 'IIT';
+  const picked = facultyRows.filter(r => r.sel);
+  if (!picked.length) { toast('Select at least one row first', true); return; }
+  picked.forEach(r => {
+    const tags = MASTER_SKILLS.filter(s => r.area.toLowerCase().includes(s.toLowerCase())).join(', ');
+    upsert('contacts', { name: r.name, institute: inst, area: r.area, tags, email: r.email, status: 'Not started', sent_on: null });
+  });
+  log('Imported ' + picked.length + ' faculty contact' + (picked.length > 1 ? 's' : '') + ' from ' + inst);
+  facultyRows = []; facultyOpen = false; save(); render();
+  toast('Added ' + picked.length + ' contact' + (picked.length > 1 ? 's' : '') + ' to Outreach');
+}
+function facultyFinderHTML() {
+  const linkRow = IIT_LINKS.map(x => '<a class="btn ghost sm" href="' + x.u + '" target="_blank" rel="noopener">' + esc(x.l) + '</a>').join('');
+  const seedRows = IIT_SEED_FACULTY.map((f, i) => {
+    const added = seedAdded(f.email);
+    return '<div class="row" style="grid-template-columns:auto 1fr auto"><div class="swatch" style="--c:var(--c-out)">' + icon('grad', 16) + '</div><div><div class="row-t">' + esc(f.name) + '</div><div class="row-s">' + esc(f.institute) + ' \u00b7 ' + esc(f.area) + '</div><div class="row-m"><span class="chip">' + esc(f.email) + '</span><a class="chip" href="' + escA(f.source) + '" target="_blank" rel="noopener">Source</a></div></div><div class="row-a">' +
+      (added ? '<span class="pill good">' + icon('check', 13) + ' Added</span>' : '<button class="btn sm" onclick="addSeedFaculty(' + i + ')">Add to Outreach</button>') + '</div></div>';
+  }).join('');
+  const rowsHTML = facultyRows.length ? '<div class="panel rows" style="margin-top:14px">' + facultyRows.map((r, i) =>
+    '<div class="row noicon"><div style="display:flex;gap:12px;align-items:flex-start"><input type="checkbox" class="ck" ' + (r.sel ? 'checked' : '') + ' onchange="toggleFacultyRow(' + i + ')" style="margin-top:2px"><div><div class="row-t">' + esc(r.name) + '</div><div class="row-s">' + esc(r.email) + (r.area ? ' \u00b7 ' + esc(r.area) : '') + '</div></div></div></div>').join('') + '</div>' +
+    '<button class="btn" style="margin-top:12px" onclick="addSelectedFaculty()">Add ' + facultyRows.filter(r => r.sel).length + ' selected to Outreach</button>' : '';
+  return '<section class="panel" style="margin-bottom:18px">' +
+    '<div class="panel-h"><h3>IIT faculty database</h3><button class="icon-btn" onclick="toggleFacultyFinder()" aria-label="' + (facultyOpen ? 'Collapse' : 'Expand') + '" title="' + (facultyOpen ? 'Collapse' : 'Expand') + '">' + icon(facultyOpen ? 'x' : 'plus', 16) + '</button></div>' +
+    (facultyOpen ? '<div style="padding:18px 20px">' +
+      '<div class="note" style="margin:0 0 16px">Being straight about how this works: a page running in your browser cannot reach iitd.ac.in, iitk.ac.in, etc. directly \u2014 those sites block cross-origin requests from other sites, which is a browser security rule, not something OPA can bypass. So "full data" here means two things: a small hand-verified starter list below, sourced from public department pages, and a scanner that turns a pasted faculty page into structured contacts in one go. Always double-check an email before sending \u2014 department pages change.</div>' +
+      '<h4 style="font-family:var(--display);font-weight:650;font-size:14px;margin-bottom:8px">Verified starter contacts</h4>' +
+      '<div class="panel rows" style="margin-bottom:18px">' + seedRows + '</div>' +
+      '<h4 style="font-family:var(--display);font-weight:650;font-size:14px;margin-bottom:8px">Scan a full department page</h4>' +
+      '<p class="row-s" style="margin-bottom:14px">Open a department\u2019s page below, select-all + copy the faculty section, and paste it here. OPA pulls out every name, email, and research area it can find in one pass, matches each against your skills, and you pick which ones become outreach contacts.</p>' +
+      '<div class="row-m" style="margin-bottom:16px">' + linkRow + '</div>' +
+      '<div class="field"><label for="faculty-inst">Institute (used for every row you add)</label><input id="faculty-inst" type="text" placeholder="e.g. IIT Delhi, CSE" value="' + escA(S._facultyInst || '') + '"></div>' +
+      '<div class="field"><label for="faculty-paste">Pasted faculty listing</label><textarea id="faculty-paste" rows="6" placeholder="Paste the copied faculty section here \u2014 works best with one professor\u2019s name, research interests, and email per block"></textarea></div>' +
+      '<button class="btn soft" onclick="parseFacultyPaste()">Scan for contacts</button>' +
+      rowsHTML +
+      '</div>' : '') + '</section>';
+}
 function viewOutreach() {
   const h = head('Outreach', 'Contacts matched to your skills. Drafting creates an Outbox item, and nothing goes out until you approve it.', addBtn('Add contact', 'editContact()'));
-  if (!S.contacts.length) return h + emptyPanel('No contacts yet', 'Add a professor, founder, or recruiter to start drafting.', '<button class="btn" onclick="editContact()">Add contact</button>');
+  const finder = facultyFinderHTML();
+  if (!S.contacts.length) return h + finder + emptyPanel('No contacts yet', 'Add a professor, founder, or recruiter to start drafting, or use the IIT faculty database above.', '<button class="btn" onclick="editContact()">Add contact</button>');
   const rows = S.contacts.map(c => {
     const sc = matchScore(c.tags, S.profile.skills);
     let act = '';
@@ -963,7 +1055,7 @@ function viewOutreach() {
     else if (c.status === 'Sent') act = '<button class="btn soft sm" onclick="draftOutreach(\'' + c.id + '\')">Draft follow-up</button>';
     return '<div class="row" style="grid-template-columns:auto 1fr auto"><div class="swatch" style="--c:var(--c-out)">' + icon('mail', 16) + '</div><div><div class="row-t">' + esc(c.name) + '</div><div class="row-s">' + esc(c.institute) + (c.area ? ' · ' + esc(c.area) : '') + '</div><div class="row-m">' + pill(c.status) + meter(sc) + (c.sent_on ? '<span class="chip">Sent ' + fmtDate(c.sent_on) + '</span>' : '') + '</div></div><div class="row-a">' + act + rowBtns('editContact(\'' + c.id + '\')', 'confirmDelete(\'contacts\',\'' + c.id + '\',\'' + escA(c.name) + '\')') + '</div></div>';
   }).join('');
-  return h + '<div class="panel rows">' + rows + '</div>';
+  return h + finder + '<div class="panel rows">' + rows + '</div>';
 }
 function editContact(id) {
   const c = id ? byId('contacts', id) : {};
@@ -1177,6 +1269,7 @@ function resetData() { confirmBox('Reset all data to the sample workspace?', 'Re
 
 /* ---- Groq (optional live JARVIS) ---- */
 const GROQ_MODELS = [
+  { v: 'llama-3.3-70b-versatile', l: 'Llama 3.3 70B (best quality)' },
   { v: 'llama-3.1-8b-instant', l: 'Llama 3.1 8B (fastest)' },
   { v: 'openai/gpt-oss-20b', l: 'GPT-OSS 20B' }
 ];
