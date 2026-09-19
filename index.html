@@ -496,6 +496,82 @@ button.skill:hover{border-color:var(--accent);background:var(--accent-soft);colo
   *,*:before,*:after{animation-duration:.01ms!important;animation-delay:0ms!important;
     transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
+
+/* ---------- Floating calendar ---------- */
+main{padding-top:78px}
+.cal-fab{position:fixed;top:16px;right:22px;z-index:60;display:flex;align-items:center;gap:10px;padding:7px 16px 7px 7px;
+  border-radius:999px;border:1px solid var(--line-2);background:color-mix(in srgb,var(--surface) 82%,transparent);
+  backdrop-filter:blur(12px);box-shadow:var(--shadow-2),var(--glow);color:var(--ink);transition:transform .15s,box-shadow .15s}
+.cal-fab:hover{transform:translateY(-2px)}
+.cal-badge{width:38px;height:38px;border-radius:50%;background:var(--accent);color:#04141A;display:grid;place-items:center;
+  font-family:var(--mono);font-weight:700;font-size:16px;box-shadow:var(--glow)}
+.cal-txt{text-align:left;line-height:1.15}
+.cal-txt b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.cal-txt span{font-size:12px;color:var(--ink-2)}
+.cal-pop{position:fixed;top:74px;right:22px;width:420px;max-height:calc(100vh - 96px);overflow-y:auto;z-index:60;
+  background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(14px);border:1px solid var(--line-2);border-radius:12px;
+  box-shadow:var(--shadow-2),var(--glow);padding:18px;display:none}
+.cal-pop.on{display:block;animation:pop .2s cubic-bezier(.2,.8,.2,1)}
+.cal-pop:before,.cal-pop:after{content:"";position:absolute;width:14px;height:14px;border:1.5px solid var(--accent);opacity:.7;pointer-events:none}
+.cal-pop:before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.cal-pop:after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.cal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px}
+.cal-mo{font-family:var(--display);font-size:26px;font-weight:700;letter-spacing:-.035em;line-height:1}
+.cal-yr{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--ink-3);margin-top:5px}
+.cal-ctl{display:flex;gap:4px;align-items:center}
+.cal-ctl .icon-btn{font-size:18px;font-weight:700;border:1px solid var(--line)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-wd{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink-3);text-align:center;padding:2px 0 5px;text-transform:uppercase}
+.cal-wd.we{color:var(--c-acad)}
+.cal-d{position:relative;aspect-ratio:1/1.02;border:1px solid var(--line);border-radius:8px;
+  background:color-mix(in srgb,var(--accent) calc(var(--h,0)*9%),var(--surface-2));color:var(--ink-2);
+  font-family:var(--mono);font-size:13px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  transition:transform .12s,border-color .12s,background .12s}
+.cal-d:hover{transform:translateY(-1px);border-color:var(--accent);color:var(--ink)}
+.cal-d.we{color:var(--c-acad)}
+.cal-d.past{opacity:.72}
+.cal-d.today{border-color:var(--accent);color:var(--ink);box-shadow:0 0 0 1px var(--accent),0 0 14px -2px var(--accent)}
+.cal-d.sel{background:var(--accent);border-color:var(--accent);color:#04141A;opacity:1}
+.cal-d em{display:flex;gap:2px;height:5px;font-style:normal}
+.cal-d em i{width:5px;height:5px;border-radius:50%}
+.cal-d.sel em i{box-shadow:0 0 0 1px #04141A}
+.cal-d s{position:absolute;top:3px;right:4px;width:5px;height:5px;border-radius:50%;background:var(--good);text-decoration:none;box-shadow:0 0 6px var(--good)}
+.cal-lg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:12px;font-size:11.5px;color:var(--ink-2)}
+.cal-lg span{display:inline-flex;align-items:center;gap:6px}
+.cal-lg i{width:8px;height:8px;border-radius:2.5px;background:var(--c)}
+.cal-day{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.cal-dh{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.cal-dh b{font-family:var(--display);font-size:18px;font-weight:650;letter-spacing:-.02em}
+.cal-rel{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent-d);border:1px solid var(--line-2)}
+.cal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:12px 0 4px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.cal-stats div{background:var(--surface);padding:9px 12px}
+.cal-stats b{display:block;font-family:var(--mono);font-size:18px;font-weight:600;line-height:1.1}
+.cal-stats span{font-size:11.5px;color:var(--ink-2)}
+.cal-sec{margin-top:14px}
+.cal-sec h5{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 0 6px}
+.cal-it{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 10px;margin-bottom:5px;border-radius:8px;
+  background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--c)}
+.cal-it i{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 8px -1px var(--c)}
+.cal-it b{display:block;font-size:13px;font-weight:650;line-height:1.3}
+.cal-it small{display:block;font-size:11.5px;color:var(--ink-3)}
+.cal-r{font-family:var(--mono);font-size:11px;color:var(--ink-2);white-space:nowrap}
+.cal-it.done b{text-decoration:line-through;color:var(--ink-3)}
+.cal-it.done .cal-r{color:var(--good)}
+.cal-log{display:flex;gap:10px;padding:4px 2px;font-size:12.5px;color:var(--ink-2)}
+.cal-log time{font-family:var(--mono);font-size:11px;color:var(--ink-3);width:54px;flex-shrink:0;padding-top:1px}
+.cal-none{font-size:12.5px;color:var(--ink-3);padding:6px 2px}
+.cal-ai{margin-top:16px;padding:13px 15px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--line-2);font-size:12.5px;color:var(--ink-2);line-height:1.55}
+.cal-ai b{display:flex;align-items:center;gap:7px;color:var(--accent-d);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.cal-ai p{margin:0}
+.ai-note{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:7px 12px;border-radius:999px;font-size:12.5px;
+  background:var(--accent-soft);color:var(--accent-d);border:1px solid var(--line-2)}
+@media (max-width:920px){
+  main{padding-top:22px}
+  .cal-fab{top:8px;right:56px;padding:4px}
+  .cal-txt{display:none}
+  .cal-badge{width:34px;height:34px}
+  .cal-pop{top:58px;right:10px;left:10px;width:auto;padding:14px}
+}
 </style>
 </head>
 <body>
@@ -529,6 +605,8 @@ button.skill:hover{border-color:var(--accent);background:var(--accent-soft);colo
   </div>
 </div>
 
+<button class="cal-fab" id="cal-fab" onclick="calToggle()" aria-label="Open calendar" aria-expanded="false"></button>
+<div class="cal-pop" id="cal-pop" role="dialog" aria-label="Calendar"></div>
 <div class="scanline"></div>
 <div class="overlay" id="overlay"><div class="dialog" id="dialog" role="dialog" aria-modal="true"></div></div>
 <div class="overlay" id="palette"><div class="pal" role="dialog" aria-modal="true" aria-label="Search and commands">
@@ -692,7 +770,8 @@ function seed() {
     ],
     outbox: [],
     history: [{ id: uid(), at: new Date().toISOString(), text: 'Workspace created with sample data' }],
-    doneToday: { date: iso(0), items: [] }
+    doneToday: { date: iso(0), items: [] },
+    daily: {}
   };
 }
 function load() {
@@ -844,7 +923,7 @@ function viewToday() {
   const planRows = plan.map(i => '<div class="plan-row" style="--c:' + KIND[i.kind].color + '"><input type="checkbox" class="ck" aria-label="Mark done: ' + escA(i.name) + '" onchange="completeItem(\'' + i.key + '\',this)"><div class="plan-ic">' + icon(KIND[i.kind].icon, 16) + '</div><div style="min-width:0"><div class="plan-name">' + esc(i.name) + '</div><div class="plan-sub">' + esc(i.sub) + '</div></div><div class="plan-dur">' + fmtMins(i.effort) + '</div><button class="icon-btn" onclick="startFocus(\'' + i.key + '\')" aria-label="Start a focus timer for ' + escA(i.name) + '" title="Start focus timer">' + icon('play', 14) + '</button></div>').join('');
   const doneRows = done.map(i => '<div class="plan-row done" style="--c:' + KIND[i.kind].color + '"><input type="checkbox" class="ck" checked disabled aria-label="Done"><div class="plan-ic">' + icon(KIND[i.kind].icon, 16) + '</div><div style="min-width:0"><div class="plan-name">' + esc(i.name) + '</div><div class="plan-sub">' + esc(i.sub) + '</div></div><div class="plan-dur">' + fmtMins(i.effort) + '</div><span></span></div>').join('');
   const html =
-    '<section class="hero"><div class="hero-top"><div><h1>' + greet + name + '.</h1><p class="lead">' + lead + '</p></div>' + ring + '</div>' +
+    '<section class="hero"><div class="hero-top"><div><h1>' + greet + name + '.</h1><p class="lead">' + lead + '</p><div class="ai-note">' + icon('spark', 14) + 'We will get AI to write your task data daily</div></div>' + ring + '</div>' +
     (plan.length ? '<div class="strip"><div class="strip-top"><b>' + fmtMins(mins) + ' queued</b><span>' + (mins > CAP ? 'Over a 6-hour day by ' + fmtMins(mins - CAP) : fmtMins(free) + ' of a 6-hour day still free') + '</span></div>' +
       '<div class="strip-bar' + (animateNext ? ' anim' : '') + '">' + segs + (free ? '<div class="seg free" style="flex-grow:' + free + '"></div>' : '') + '</div>' +
       '<div class="strip-ticks"><span>0h</span><span>1h</span><span>2h</span><span>3h</span><span>4h</span><span>5h</span><span>6h</span></div>' +
@@ -1606,6 +1685,106 @@ function importData(inp) {
   };
   r.readAsText(f);
 }
+
+/* ================= FLOATING CALENDAR ================= */
+let calOpen = false, calY = new Date().getFullYear(), calM = new Date().getMonth(), calSel = iso(0);
+function localKey(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function calRel(key) { const n = daysUntil(key); return n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : n === -1 ? 'Yesterday' : n > 0 ? 'In ' + n + ' days' : (-n) + ' days ago'; }
+function calActivity(key) { return S.history.filter(e => localKey(new Date(e.at)) === key); }
+function dailySnapshot() {
+  S.daily = S.daily || {};
+  const k = iso(0);
+  const items = buildPlan().map(i => ({ name: i.name, sub: i.sub, kind: i.kind, effort: i.effort, done: false }))
+    .concat(doneList().map(i => ({ name: i.name, sub: i.sub, kind: i.kind, effort: i.effort, done: true })));
+  const prev = S.daily[k];
+  if (!prev || JSON.stringify(prev.items) !== JSON.stringify(items)) { S.daily[k] = { at: new Date().toISOString(), items }; save(); }
+}
+function calEvents() {
+  const m = {};
+  const add = (d, t, k, sub) => { if (!d) return; (m[d] = m[d] || []).push({ t, k, sub }); };
+  S.applications.forEach(a => { if (!['Offer', 'Rejected'].includes(a.status)) add(a.deadline, a.company, 'app', a.role + ' \u00b7 ' + a.status); });
+  S.opportunities.forEach(o => { if (o.status === 'New') add(o.deadline, o.title + ' closes', 'opp', o.org); });
+  S.academics.forEach(a => { if (!a.done) add(a.exam_date, a.subject + ' exam', 'acad', a.task); });
+  S.contacts.forEach(c => { if (c.sent_on) add(c.sent_on, 'Emailed ' + c.name, 'out', c.institute); });
+  return m;
+}
+function calFab() {
+  const d = new Date();
+  $('cal-fab').innerHTML = '<span class="cal-badge">' + d.getDate() + '</span><span class="cal-txt"><b>Calendar</b><span>' +
+    d.toLocaleDateString('en-US', { weekday: 'long', month: 'short' }) + '</span></span>';
+}
+function calItem(color, title, sub, right, done) {
+  return '<div class="cal-it' + (done ? ' done' : '') + '" style="--c:' + color + '"><i></i><div><b>' + esc(title) + '</b>' + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</div>' + (right ? '<span class="cal-r">' + esc(right) + '</span>' : '<span></span>') + '</div>';
+}
+function calSec(title, count, body) { return '<div class="cal-sec"><h5><span>' + title + '</span>' + (count != null ? '<span>' + count + '</span>' : '') + '</h5>' + body + '</div>'; }
+function calDayHTML(key, ev) {
+  const events = ev[key] || [];
+  const acts = calActivity(key);
+  const n = daysUntil(key);
+  const label = new Date(key + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+  const snap = (S.daily || {})[key];
+  let plannedRows = [], doneCount = 0, mins = 0, planTitle = 'AI daily tasks', empty = '';
+  if (n === 0) {
+    const plan = buildPlan(), done = doneList();
+    let tm = new Date(); tm.setSeconds(0, 0);
+    if (tm.getHours() < 9 || tm.getHours() >= 20) tm.setHours(9, 0, 0, 0); else tm.setMinutes(Math.ceil(tm.getMinutes() / 15) * 15, 0, 0);
+    plan.forEach(i => { const t = clockStrOf(tm); tm = new Date(tm.getTime() + i.effort * 60000); plannedRows.push(calItem(KIND[i.kind].color, i.name, i.sub, t + ' \u00b7 ' + fmtMins(i.effort), false)); mins += i.effort; });
+    done.forEach(i => { plannedRows.push(calItem(KIND[i.kind].color, i.name, i.sub, 'Done', true)); doneCount++; });
+    empty = 'Nothing queued for today. Add work in any tab and it shows here.';
+  } else if (n < 0) {
+    planTitle = 'What was planned';
+    if (snap) snap.items.forEach(i => { plannedRows.push(calItem(KIND[i.kind].color, i.name, i.sub, i.done ? 'Done' : fmtMins(i.effort), i.done)); if (i.done) doneCount++; mins += i.effort; });
+    empty = 'No daily snapshot was saved for this day.';
+  } else {
+    empty = 'AI will write this day\u2019s tasks on the morning of ' + fmtDate(key) + '. Deadlines below are already locked in.';
+  }
+  const stats = '<div class="cal-stats"><div><b>' + events.length + '</b><span>Due &amp; events</span></div><div><b>' + doneCount + '</b><span>Done</span></div><div><b>' + fmtMins(mins) + '</b><span>Planned</span></div></div>';
+  let html = '<div class="cal-day"><div class="cal-dh"><b>' + label + '</b><span class="cal-rel">' + calRel(key) + '</span></div>' + stats;
+  html += calSec(planTitle, plannedRows.length || null, plannedRows.length ? plannedRows.join('') : '<div class="cal-none">' + empty + '</div>');
+  html += calSec('Deadlines &amp; events', events.length || null, events.length ? events.map(e => calItem(KIND[e.k].color, e.t, e.sub, '', false)).join('') : '<div class="cal-none">Nothing due.</div>');
+  if (n <= 0) html += calSec('Activity log', acts.length || null, acts.length ? acts.map(e => '<div class="cal-log"><time>' + new Date(e.at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) + '</time><span>' + esc(e.text) + '</span></div>').join('') : '<div class="cal-none">No activity logged.</div>');
+  return html + '</div>';
+}
+function calDraw() {
+  dailySnapshot();
+  const ev = calEvents();
+  const start = new Date(calY, calM, 1).getDay(), days = new Date(calY, calM + 1, 0).getDate();
+  let cells = ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((w, i) => '<div class="cal-wd' + (i === 0 || i === 6 ? ' we' : '') + '">' + w + '</div>').join('');
+  for (let i = 0; i < start; i++) cells += '<span></span>';
+  for (let d = 1; d <= days; d++) {
+    const key = calY + '-' + pad(calM + 1) + '-' + pad(d);
+    const dow = new Date(calY, calM, d).getDay();
+    const evs = ev[key] || [];
+    const kinds = [...new Set(evs.map(x => x.k))].slice(0, 3);
+    const heat = Math.min(4, evs.length + (calActivity(key).length ? 1 : 0));
+    const snap = (S.daily || {})[key];
+    cells += '<button class="cal-d' + (dow === 0 || dow === 6 ? ' we' : '') + (daysUntil(key) < 0 ? ' past' : '') + (key === iso(0) ? ' today' : '') + (key === calSel ? ' sel' : '') + '" style="--h:' + heat + '" onclick="calPick(\'' + key + '\')" aria-label="' + key + '">' +
+      (snap && snap.items.length ? '<s title="AI daily data saved"></s>' : '') + d + '<em>' + kinds.map(k => '<i style="background:' + KIND[k].color + '"></i>').join('') + '</em></button>';
+  }
+  const legend = ['app', 'out', 'acad', 'opp'].map(k => '<span style="--c:' + KIND[k].color + '"><i></i>' + KIND[k].label + '</span>').join('') + '<span style="--c:var(--good)"><i style="border-radius:50%"></i>AI data saved</span>';
+  const saved = Object.keys(S.daily || {}).length;
+  $('cal-pop').innerHTML =
+    '<div class="cal-head"><div><div class="cal-mo">' + new Date(calY, calM, 1).toLocaleDateString('en-US', { month: 'long' }) + '</div><div class="cal-yr">' + calY + '</div></div>' +
+    '<div class="cal-ctl"><button class="icon-btn" onclick="calNav(-1)" aria-label="Previous month">\u2039</button><button class="btn ghost sm" onclick="calToday()">Today</button><button class="icon-btn" onclick="calNav(1)" aria-label="Next month">\u203a</button></div></div>' +
+    '<div class="cal-grid">' + cells + '</div><div class="cal-lg">' + legend + '</div>' +
+    calDayHTML(calSel, ev) +
+    '<div class="cal-ai"><b>' + icon('spark', 14) + ' AI daily task data</b><p>Every morning AI writes a fresh task list from your applications, deadlines, exams and projects, and saves it against that date. Right now the same plan is built on this device and saved daily (' + saved + ' day' + (saved === 1 ? '' : 's') + ' stored). Real AI takes over once the backend is connected.</p></div>';
+}
+function calToggle() {
+  calOpen = !calOpen;
+  $('cal-pop').classList.toggle('on', calOpen);
+  $('cal-fab').setAttribute('aria-expanded', calOpen);
+  if (calOpen) { calSel = iso(0); const d = new Date(); calY = d.getFullYear(); calM = d.getMonth(); calDraw(); }
+}
+function calPick(k) { calSel = k; calDraw(); }
+function calNav(n) { calM += n; if (calM < 0) { calM = 11; calY--; } if (calM > 11) { calM = 0; calY++; } calDraw(); }
+function calToday() { const d = new Date(); calY = d.getFullYear(); calM = d.getMonth(); calSel = iso(0); calDraw(); }
+document.addEventListener('mousedown', (e) => { if (calOpen && !e.target.closest('#cal-pop') && !e.target.closest('#cal-fab')) calToggle(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && calOpen) calToggle(); });
+const _renderBase = render;
+render = function (f) { _renderBase(f); dailySnapshot(); if (calOpen) calDraw(); };
+calFab();
+dailySnapshot();
 
 /* ================= 11. BOOT ================= */
 (function boot() {
