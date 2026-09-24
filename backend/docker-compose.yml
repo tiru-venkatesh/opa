@@ -1,0 +1,21 @@
+# OPTIONAL. The app defaults to a local SQLite file and does not need this.
+# Only run `docker-compose up -d` if you want to point DATABASE_URL at a real
+# Postgres instance instead (see .env.example).
+version: '3.8'
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: opa_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: opa_user
+      POSTGRES_PASSWORD: opa_password
+      POSTGRES_DB: opa_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
