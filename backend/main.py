@@ -1,4 +1,6 @@
 import os
+from dotenv import load_dotenv
+load_dotenv()  # reads backend/.env if present, before any os.environ.get() calls below
 from uuid import UUID
 from datetime import date, datetime, timedelta
 from typing import List, Optional
@@ -86,12 +88,14 @@ def serve_ui():
 
 # ================= AUTH (DEV) =================
 @app.post("/v1/auth/dev-login")
-def dev_login(email: str = "student@university.edu", db: Session = Depends(get_db)):
+def dev_login(email: str = "student@university.edu", name: str = None, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == email).first()
     if not user:
+        # Real signed-in users pass their actual name; only fall back to the
+        # demo placeholder profile when none was given (e.g. raw API testing).
         user = User(
             email=email,
-            name="Aditya Verma",
+            name=name or "Aditya Verma",
             branch="Computer Science",
             degree="B.Tech",
             cgpa=8.84,
@@ -99,6 +103,12 @@ def dev_login(email: str = "student@university.edu", db: Session = Depends(get_d
             preferences={"deep_work": "morning"}
         )
         db.add(user)
+        db.commit()
+        db.refresh(user)
+    elif name and user.name == "Aditya Verma":
+        # One-time repair for accounts created before this fix, which were
+        # stuck on the placeholder name forever.
+        user.name = name
         db.commit()
         db.refresh(user)
     return {"user_id": str(user.id), "name": user.name, "email": user.email}

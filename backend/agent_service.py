@@ -994,8 +994,16 @@ def _process_jarvis_message_legacy(user_id: UUID, message: str, db: Session) -> 
         "Return raw JSON only, nothing else: { 'action': 'plan'|'matches'|'emails'|'chat', 'reply': string }"
     )
 
-    raw_decision = call_groq_json(routing_prompt, f"User message: {message}", model="openai/gpt-oss-20b")
-    decision = json.loads(raw_decision)
+    try:
+        raw_decision = call_groq_json(routing_prompt, f"User message: {message}", model="openai/gpt-oss-20b")
+        decision = json.loads(raw_decision)
+    except Exception:
+        # Groq unreachable/erroring (bad key, rate limit, timeout, network) or
+        # returned unparseable JSON: degrade to a plain reply instead of a 500.
+        return JarvisChatResponse(
+            action="chat",
+            reply="I couldn't reach the AI model just now, so I can't process that message. Please try again in a moment.",
+        )
     action = decision.get("action", "chat")
 
     if action == "plan":

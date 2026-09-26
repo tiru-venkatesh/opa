@@ -7,32 +7,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<!-- Tailwind, scoped to the KARNA Study Workflow redesign only. Preflight is
-     disabled so Tailwind's base-element reset never touches the rest of
-     OPAI's own design system (buttons, inputs, panels, etc. elsewhere keep
-     their existing CSS untouched). -->
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config = { corePlugins: { preflight: false } };</script>
+<!-- Tailwind removed: the KARNA/Study Workflow redesign that used it has
+     been rebuilt with OPAI's own design system (var() tokens, .panel,
+     .btn, .rtabs, etc.) for a consistent look across the app. -->
 <style>
   body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    .orb-gradient {
-      background: radial-gradient(circle at 35% 35%, #ffd1b3 0%, #ff8359 45%, #e14b27 80%, #9e2a10 100%);
-      box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(225, 75, 39, 0.25);
-    }
-    .custom-select {
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-      background-position: right 0.75rem center;
-      background-repeat: no-repeat;
-      background-size: 1.25em 1.25em;
-      padding-right: 2.5rem;
-      appearance: none;
-    }
-.workflow-app-container, .workflow-app-container * { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; box-sizing: border-box; }
-.workflow-app-container .orb-gradient { background: radial-gradient(circle at 35% 35%, #ffd1b3 0%, #ff8359 45%, #e14b27 80%, #9e2a10 100%); box-shadow: inset 0 2px 6px rgba(255,255,255,.6), 0 4px 12px rgba(225,75,39,.25); }
-.workflow-app-container select.custom-select { background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position:right .75rem center; background-repeat:no-repeat; background-size:1.25em 1.25em; padding-right:2.5rem; appearance:none; }
 </style>
 <style>
 /* =====================================================================
@@ -489,10 +470,10 @@ button.skill:hover{border-color:var(--accent);background:var(--accent-soft);colo
 .jv-main{display:flex;flex-direction:column;height:calc(100vh - 160px);min-height:540px;overflow:hidden}
 .jv-top{display:flex;align-items:center;gap:11px;padding:14px 18px;border-bottom:1px solid var(--line)}
 .orb{width:34px;height:34px;border-radius:50%;flex-shrink:0;
-  background:radial-gradient(circle at 32% 28%,#fff 0 6%,#FFE9B8 22%,var(--accent) 60%,#3A2A10 100%);
-  box-shadow:0 0 16px rgba(226,167,62,.55),0 0 3px rgba(255,255,255,.4);
+  background:radial-gradient(circle at 32% 28%,#fff 0 15%,#D4D4D4 55%,#6B6B6B 100%);
+  box-shadow:0 0 16px rgba(255,255,255,.35),0 0 3px rgba(255,255,255,.5);
   animation:orbpulse 2.6s ease-in-out infinite}
-@keyframes orbpulse{0%,100%{box-shadow:0 0 12px rgba(226,167,62,.4),0 0 3px rgba(255,255,255,.35)}50%{box-shadow:0 0 22px rgba(226,167,62,.75),0 0 5px rgba(255,255,255,.55)}}
+@keyframes orbpulse{0%,100%{box-shadow:0 0 12px rgba(255,255,255,.22),0 0 3px rgba(255,255,255,.35)}50%{box-shadow:0 0 22px rgba(255,255,255,.45),0 0 5px rgba(255,255,255,.55)}}
 .jv-top b{font-family:var(--display);font-size:16px;display:block;line-height:1.1}
 .jv-top span{font-size:12px;color:var(--ink-3)}
 .jv-top .btn{margin-left:auto}
@@ -536,6 +517,46 @@ button.skill:hover{border-color:var(--accent);background:var(--accent-soft);colo
     transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
  
+/* ---------- Study Plan Canvas (Figma-style box/arrow planner) ---------- */
+.spc-wrap{display:flex;flex-direction:column;gap:12px}
+.spc-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.spc-top-r{display:flex;align-items:center;gap:10px}
+.spc-tabs{display:inline-flex;gap:4px;padding:4px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
+.spc-tabs button{border:0;background:none;padding:7px 16px;border-radius:7px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.spc-tabs button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.spc-canvas{border:1px solid var(--line);border-radius:12px;background:
+  linear-gradient(var(--surface),var(--surface)) padding-box,
+  repeating-linear-gradient(0deg,var(--line) 0 1px,transparent 1px 28px),
+  repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 28px);
+  background-blend-mode:normal;position:relative;touch-action:none}
+.spc-node{position:absolute;width:176px;min-height:64px;background:var(--surface-2);border:1px solid var(--line-2);
+  border-left:3px solid var(--c-app);border-radius:8px;padding:9px 10px;cursor:grab;box-shadow:0 4px 14px -8px rgba(0,0,0,.5);user-select:none;
+  transition:box-shadow .15s,transform .15s}
+.spc-node:hover{transform:translateY(-1px);box-shadow:0 8px 20px -8px rgba(0,0,0,.6)}
+.spc-node.spc-dragging{cursor:grabbing;box-shadow:0 14px 30px -10px rgba(0,0,0,.75);transform:scale(1.035);z-index:5}
+.spc-node.spc-linking{outline:2px solid var(--accent);outline-offset:2px;animation:spcPulse 1.1s ease-in-out infinite}
+@keyframes spcPulse{0%,100%{outline-color:var(--accent)}50%{outline-color:var(--ink-3)}}
+@keyframes spcIn{from{opacity:0;transform:scale(.82) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.spc-node.spc-enter{animation:spcIn .38s cubic-bezier(.2,.8,.2,1) both}
+@keyframes spcLineIn{from{opacity:0}to{opacity:1}}
+#spc-svg line.spc-edge-enter{opacity:0;animation:spcLineIn .3s ease both}
+.spc-prompt-row{display:flex;gap:8px}
+.spc-prompt-row input{flex:1;padding:9px 12px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13.5px}
+.spc-prompt-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);outline:none}
+.spc-node-h{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.spc-node-h b{font-size:13px;font-weight:650;line-height:1.3;color:var(--ink)}
+.spc-node-actions{display:flex;gap:2px;flex-shrink:0}
+.spc-node-actions button{width:20px;height:20px;display:grid;place-items:center;border:0;background:none;color:var(--ink-3);border-radius:5px;flex-shrink:0}
+.spc-node-actions button:hover{background:var(--bg);color:var(--ink)}
+.spc-node-note{font-size:11.5px;color:var(--ink-2);margin-top:5px;line-height:1.4}
+.spc-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:13px;text-align:center;padding:20px}
+.spc-edges{display:flex;flex-wrap:wrap;gap:8px}
+.spc-edge-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 6px 4px 10px;border-radius:999px;background:var(--bg);border:1px solid var(--line);color:var(--ink-2)}
+.spc-edge-chip button{width:16px;height:16px;display:grid;place-items:center;border:0;background:none;color:var(--ink-3);border-radius:50%}
+.spc-edge-chip button:hover{background:var(--bad-soft);color:var(--bad)}
+#spc-svg line{stroke:var(--ink-3);stroke-width:1.6}
+.kw-reconnect{padding:11px 14px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);font-size:13px;margin:14px 0}
+
 /* ---------- Floating calendar ---------- */
 main{padding-top:78px}
 .cal-fab{position:fixed;top:16px;right:22px;z-index:60;display:flex;align-items:center;gap:10px;padding:7px 16px 7px 7px;
@@ -655,23 +676,23 @@ main{padding-top:78px}
 .userchip .icon-btn{margin-left:auto}
  
 /* =====================================================================
-   "PERSONAL AI" LIGHT SKIN — overrides everything above
+   "OPAI" MONOCHROME SKIN — black/white brand palette, overrides everything above
    ===================================================================== */
 html:root:root, html:root:root[data-theme]{
-  --bg:#F6F4EE; --surface:#FDFCF9; --surface-2:#EFEDE3;
-  --ink:#1E2A28; --ink-2:#5E6A66; --ink-3:#8F9894;
-  --line:#E7E4D9; --line-2:#D8D4C6;
-  --accent:#EE7B5D; --accent-d:#D9613F; --accent-soft:#FCE4DB;
-  --good:#1B5A50; --good-soft:#E0EBE5;
-  --warn:#E0873A; --warn-soft:#FBEBD9;
-  --bad:#D9613F; --bad-soft:#FCE4DB;
-  --c-app:#1B5A50; --c-out:#EE7B5D; --c-proj:#2F7A6B; --c-acad:#8A7BB0; --c-req:#E0873A; --c-opp:#8F9894;
-  --side:#134E48;
-  --shadow-1:none; --shadow-2:0 12px 32px -16px rgba(19,78,72,.25); --glow:none;
+  --bg:#0A0A0A; --surface:#141414; --surface-2:#1E1E1E;
+  --ink:#F5F5F5; --ink-2:#A3A3A3; --ink-3:#6B6B6B;
+  --line:#262626; --line-2:#363636;
+  --accent:#FFFFFF; --accent-d:#D4D4D4; --accent-soft:#262626;
+  --good:#4ADE80; --good-soft:#16241C;
+  --warn:#FBBF24; --warn-soft:#2A2313;
+  --bad:#F87171; --bad-soft:#2A1717;
+  --c-app:#7CA8E0; --c-out:#F87171; --c-proj:#4ADE80; --c-acad:#C084FC; --c-req:#FBBF24; --c-opp:#9CA3AF;
+  --side:#000000;
+  --shadow-1:none; --shadow-2:0 12px 32px -16px rgba(0,0,0,.6); --glow:none;
   --display:'Newsreader',Georgia,serif;
   --body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
-  color-scheme:light;
+  color-scheme:dark;
 }
 body{background:var(--bg);background-image:none;font-size:14px}
 .scanline{display:none}
@@ -684,34 +705,34 @@ body{background:var(--bg);background-image:none;font-size:14px}
 .panel-h h3{font-family:var(--display);font-size:18px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--ink)}
 .panel{border-radius:12px;box-shadow:none}
  
-/* buttons */
-.btn{color:#fff;border-radius:8px;box-shadow:none}
+/* buttons \u2014 accent is now white, so solid buttons need dark text to stay legible */
+.btn{color:#0A0A0A;border-radius:8px;box-shadow:none}
 .btn:hover{box-shadow:none}
 .btn.soft{color:var(--accent-d)}
 .btn.ghost{color:var(--ink)}
-.m.you .bubble,.send,.cal-badge,.cal-d.sel{color:#fff;box-shadow:none}
+.m.you .bubble,.send,.cal-badge,.cal-d.sel{color:#0A0A0A;box-shadow:none}
  
-/* sidebar */
-.side{background:var(--side);border-right:0;color:#CFE0DB}
+/* sidebar \u2014 pure black, matching the logo tile exactly */
+.side{background:var(--side);border-right:0;color:#A3A3A3}
 .brand-mark{background:var(--accent);border-radius:6px;box-shadow:none}
 .brand b{color:#fff;font-size:18px;font-weight:600}
-.brand span{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#7FA79E}
+.brand span{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#7A7A7A}
 .search-btn{display:none}
-.nav-group{color:#6E9A91}
-.nav button{color:#BFD4CE;border-radius:6px;font-size:13px}
+.nav-group{color:#6B6B6B}
+.nav button{color:#A8A8A8;border-radius:6px;font-size:13px}
 .nav button:hover{background:rgba(255,255,255,.07);color:#fff}
-.nav button.on{background:var(--accent);color:#fff;box-shadow:none;font-weight:600}
-.nav .count{background:rgba(255,255,255,.12);color:#DCEBE7}
-html:root .nav button.on .count{background:rgba(255,255,255,.25);color:#fff}
-.nav .count.alert{background:var(--accent);color:#fff}
-.conn{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:#9FBFB7}
-.conn b{color:#6FD1A6}
-.conn i{background:#4FD08F;box-shadow:none;animation:none}
-.side .kbd{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:#BFD4CE}
+.nav button.on{background:var(--accent);color:#0A0A0A;box-shadow:none;font-weight:600}
+.nav .count{background:rgba(255,255,255,.12);color:#E5E5E5}
+html:root .nav button.on .count{background:rgba(0,0,0,.14);color:#0A0A0A}
+.nav .count.alert{background:var(--accent);color:#0A0A0A}
+.conn{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:#999}
+.conn b{color:var(--good)}
+.conn i{background:var(--good);box-shadow:none;animation:none}
+.side .kbd{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:#A8A8A8}
 .userchip{border-color:rgba(255,255,255,.12)}
 .userchip b{color:#fff}
-.userchip span{color:#8FB3AA}
-.userchip .icon-btn{color:#BFD4CE}
+.userchip span{color:#808080}
+.userchip .icon-btn{color:#A8A8A8}
 .userchip .icon-btn:hover{background:rgba(255,255,255,.1);color:#fff}
  
 /* header bar */
@@ -720,11 +741,12 @@ html:root .nav button.on .count{background:rgba(255,255,255,.25);color:#fff}
   .hdr{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;height:64px;padding:0 28px 0 16px;
     background:var(--surface);border-bottom:1px solid var(--line)}
   .hdr-search{display:flex;align-items:center;gap:10px;flex:1;max-width:520px;height:100%;padding:0 22px;border:0;
-    background:var(--good-soft);color:var(--ink-3);font-size:13px;text-align:left}
+    background:var(--surface-2);color:var(--ink-3);font-size:13px;text-align:left}
   .hdr-search .kbd{margin-left:auto}
   .hdr-sp{flex:1}
   .hdr-user{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500}
-  .hdr-av{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:600;font-size:13px}
+  .hdr-av{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#0A0A0A;display:grid;place-items:center;font-weight:600;font-size:13px}
+}
 @media (min-width:921px){
   main{padding:32px 36px 90px;max-width:1280px}
   .cal-fab{top:15px;right:250px;padding:4px;background:var(--surface);backdrop-filter:none;box-shadow:none}
@@ -739,19 +761,19 @@ html:root .nav button.on .count{background:rgba(255,255,255,.25);color:#fff}
 .hm-top h1{font-family:var(--display);font-weight:500;font-size:clamp(34px,4.2vw,50px);letter-spacing:-.02em;line-height:1.08}
 .hm-top p{color:var(--ink-2);font-size:14px;max-width:44ch;margin-top:10px}
 .hm-btns{display:flex;gap:10px}
-.hm-btns .btn.ghost{background:var(--good-soft);border-color:transparent}
+.hm-btns .btn.ghost{background:var(--surface-2);border-color:transparent}
 .hm-plan{padding:0 20px 20px;margin-bottom:18px}
 .hm-plan .panel-h{padding:18px 0 14px}
 .hm-link{border:0;background:none;color:var(--accent-d);font-size:12.5px;font-weight:500;padding:0}
 .hm-link:hover{text-decoration:underline}
 .hm-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.hm-card{text-align:left;border:0;border-radius:8px;padding:14px 16px 16px;background:var(--good-soft);transition:transform .12s;color:var(--ink)}
+.hm-card{text-align:left;border:0;border-radius:8px;padding:14px 16px 16px;background:var(--surface-2);transition:transform .12s;color:var(--ink)}
 .hm-card:first-child{background:var(--accent-soft)}
 .hm-card:hover{transform:translateY(-1px)}
 .hm-card-t{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
 .hm-card:first-child .n{color:var(--accent-d)}
-.hm-tag{font-family:var(--mono);font-size:10px;padding:2px 9px;border-radius:999px;background:rgba(255,255,255,.7);color:var(--ink-2)}
-.hm-card:first-child .hm-tag{background:var(--warn);color:#fff}
+.hm-tag{font-family:var(--mono);font-size:10px;padding:2px 9px;border-radius:999px;background:rgba(255,255,255,.12);color:var(--ink-2)}
+.hm-card:first-child .hm-tag{background:var(--warn);color:#1A1A1A}
 .hm-card b{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
 .hm-card small{font-family:var(--mono);font-size:10.5px;color:var(--ink-2)}
 .hm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:start}
@@ -763,17 +785,17 @@ html:root .nav button.on .count{background:rgba(255,255,255,.25);color:#fff}
 .hm-li b{display:block;font-size:13px;font-weight:600}
 .hm-li small{display:block;font-size:11.5px;color:var(--ink-3);margin-top:1px}
 .hm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:4px 20px 20px}
-.hm-stat{background:#E7EAE2;border-radius:8px;padding:10px 12px}
+.hm-stat{background:var(--surface-2);border-radius:8px;padding:10px 12px}
 .hm-stat b{display:block;font-family:var(--display);font-size:26px;font-weight:500;line-height:1.1}
 .hm-stat span{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--ink-3)}
 .hm-stat.hot{background:var(--accent-soft)}
 .hm-stat.hot b{color:var(--accent-d)}
 .hm-stat.dark{background:var(--good)}
-.hm-stat.dark b,.hm-stat.dark span{color:#fff}
+.hm-stat.dark b,.hm-stat.dark span{color:#0A0A0A}
 .hm-wk{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:12px;color:var(--ink-2)}
 .hm-bar{display:block;height:3px;border-radius:3px;background:var(--good)}
 .hm-bar.hot{background:var(--accent)}
-.hm-ins{background:var(--accent-soft);border:1px solid #F3CFC2;border-left:3px solid var(--accent);border-radius:12px;padding:16px 18px}
+.hm-ins{background:var(--accent-soft);border:1px solid var(--line-2);border-left:3px solid var(--accent);border-radius:12px;padding:16px 18px}
 .hm-ins h3{display:flex;justify-content:space-between;align-items:center;font-family:var(--display);font-size:17px;font-weight:600;margin-bottom:8px}
 .hm-ins h3 i{width:7px;height:7px;border-radius:50%;background:var(--accent)}
 .hm-ins p{font-size:12.5px;color:var(--ink-2);line-height:1.55}
@@ -818,7 +840,7 @@ body.nav-open #page{left:min(300px,84vw);border-radius:20px 0 0 20px;box-shadow:
 <div class="app">
   <aside class="side" id="side" aria-label="Main navigation">
     <div class="brand">
-      <div class="brand-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/></svg></div>
+      <div class="brand-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/></svg></div>
       <div><b>OPAI</b><span>Operating agent</span></div>
     </div>
     <button class="search-btn" onclick="openPalette()" aria-label="Search or jump to">
@@ -923,7 +945,7 @@ async function ensureUser() {
   if (BACKEND.userId) return BACKEND.userId;
   let r;
   if (AUTH.user && AUTH.user.email) {
-    r = await POST('/v1/auth/dev-login?email=' + encodeURIComponent(AUTH.user.email));
+    r = await POST('/v1/auth/dev-login?email=' + encodeURIComponent(AUTH.user.email) + '&name=' + encodeURIComponent(AUTH.user.name || ''));
   } else {
     // Guests get their own isolated backend user, remembered on this device only.
     let gid = null; try { gid = localStorage.getItem('opa_guest_uid'); } catch (e) {}
@@ -938,13 +960,29 @@ function updateConnBadge() {
   const el = $('conn-status'); if (!el) return;
   el.innerHTML = BACKEND.ready
     ? '<i style="background:var(--good);animation:none"></i><div><b>Connected</b>Live at ' + esc(getBase()) + '. Your data is saved to the backend.</div>'
-    : '<i></i><div><b>Offline mode</b>Could not reach ' + esc(getBase()) + '. Data is stored in this browser until the backend is running.</div>';
+    : '<i></i><div><b>Reconnecting\u2026</b>' + esc(getBase()) + ' is waking up or unreachable. Retrying automatically \u2014 no action needed.</div>';
+}
+/* No "connect" button anywhere: if the backend was unreachable (e.g. Render
+   free-tier cold start after being idle), keep retrying silently in the
+   background until it answers, then stop. This is what makes the connection
+   feel "always on" instead of needing a manual reconnect. */
+let _reconnectTimer = null;
+function ensureAutoReconnect() {
+  if (_reconnectTimer) return;
+  _reconnectTimer = setInterval(async () => {
+    if (BACKEND.ready) { clearInterval(_reconnectTimer); _reconnectTimer = null; return; }
+    await syncBackend(true);
+    if (BACKEND.ready) { clearInterval(_reconnectTimer); _reconnectTimer = null; render(true); toast('Backend connected'); }
+  }, 15000);
 }
 
 /* -- profile: maps 1:1 to schemas.ProfileOut/ProfileUpdate, so no field renaming needed -- */
 const PROFILE_FIELDS = ['name', 'branch', 'degree', 'cgpa', 'github', 'skills', 'highlight'];
 function profileFromApi(r) {
-  return { name: r.name || '', branch: r.branch || '', degree: r.degree || '', cgpa: r.cgpa != null ? String(r.cgpa) : '',
+  // Never let a blank or stale-placeholder backend name overwrite a real
+  // name already showing locally (e.g. the person's Google display name).
+  const name = (r.name && r.name !== 'Aditya Verma') ? r.name : (S.profile.name || '');
+  return { name, branch: r.branch || '', degree: r.degree || '', cgpa: r.cgpa != null ? String(r.cgpa) : '',
     github: r.github || '', skills: r.skills || '', highlight: r.highlight || '', email: r.email || S.profile.email,
     track: [r.degree, r.branch].filter(Boolean).join(' ') };
 }
@@ -1086,6 +1124,7 @@ async function syncBackend(silent) {
   } catch (e) {
     BACKEND.ready = false;
     console.warn('Backend unreachable, using local demo data:', e.message);
+    ensureAutoReconnect();
   }
   updateConnBadge();
   render();
@@ -1171,7 +1210,8 @@ function seed() {
     outbox: [],
     history: [{ id: uid(), at: new Date().toISOString(), text: 'Workspace created' }],
     doneToday: { date: iso(0), items: [] },
-    daily: {}
+    daily: {},
+    studyPlanCanvas: { month: { nodes: [], edges: [] }, year: { nodes: [], edges: [] } }
   };
 }
 function load() {
@@ -1186,6 +1226,7 @@ function load() {
           o.history = [];
         }
       }
+      if (!o.studyPlanCanvas) o.studyPlanCanvas = { month: { nodes: [], edges: [] }, year: { nodes: [], edges: [] } };
       return o;
     }
   } catch (e) {}
@@ -1698,6 +1739,218 @@ function editAcad(id) {
 }
 function toggleAcad(id) { const t = byId('academics', id); t.done = !t.done; if (t.done) log('Finished studying: ' + t.subject); save(); render(); }
  
+/* ---- Exams & Courses (SEMS) ---- */
+let SEMS = { loading: false, error: null, semester: null, courses: null, exams: null, openCourse: null, courseTopics: {} };
+function semsReset() { SEMS = { loading: false, error: null, semester: null, courses: null, exams: null, openCourse: null, courseTopics: {} }; }
+async function loadSems(force) {
+  if (!BACKEND.ready) { SEMS.error = 'backend'; render(true); return; }
+  if (SEMS.loading) return;
+  if (!force && SEMS.courses !== null) return;
+  SEMS.loading = true; SEMS.error = null; render(true);
+  try {
+    const uid = await ensureUser();
+    SEMS.semester = await GET('/v1/semesters/current?user_id=' + uid).catch(() => null);
+    SEMS.courses = await GET('/v1/courses?user_id=' + uid);
+    SEMS.exams = await GET('/v1/exams?user_id=' + uid).catch(() => []);
+  } catch (e) { SEMS.error = e.message || 'Request failed'; SEMS.courses = SEMS.courses || []; SEMS.exams = SEMS.exams || []; }
+  SEMS.loading = false; render(true);
+}
+function semsCourseExams(cid) { return (SEMS.exams || []).filter(e => e.course_id === cid); }
+function semsCourseTopics(cid) { return SEMS.courseTopics[cid] || null; }
+async function loadCourseTopics(cid) { try { SEMS.courseTopics[cid] = await GET('/v1/courses/' + cid + '/topics'); } catch (e) { SEMS.courseTopics[cid] = []; } render(true); }
+function toggleCourseOpen(cid) { SEMS.openCourse = SEMS.openCourse === cid ? null : cid; if (SEMS.openCourse && !semsCourseTopics(cid)) loadCourseTopics(cid); render(true); }
+
+function editSemester() {
+  const s = SEMS.semester || {};
+  openForm({ title: SEMS.semester ? 'Edit semester' : 'Set up semester', values: s, saveLabel: 'Save',
+    fields: [
+      { k: 'college', l: 'College', half: true }, { k: 'degree', l: 'Degree', half: true, ph: 'e.g. B.Tech' },
+      { k: 'branch', l: 'Branch', half: true }, { k: 'semester_number', l: 'Semester number', half: true, num: true, ph: 'e.g. 5' },
+      { k: 'academic_year', l: 'Academic year', half: true, ph: 'e.g. 2026-27' },
+      { k: 'daily_study_minutes', l: 'Daily study minutes', half: true, num: true, ph: '180' },
+      { k: 'start_date', l: 'Semester start', t: 'date', half: true }, { k: 'end_date', l: 'Semester end', t: 'date', half: true },
+      { k: 'exam_period_start', l: 'Exam period start', t: 'date', half: true }, { k: 'exam_period_end', l: 'Exam period end', t: 'date', half: true },
+      { k: 'peak_start', l: 'Peak focus start', half: true, ph: '19:00' }, { k: 'peak_end', l: 'Peak focus end', half: true, ph: '22:00' }
+    ],
+    onSave: async (v) => {
+      try {
+        const uid = await ensureUser();
+        const body = { ...v };
+        ['start_date', 'end_date', 'exam_period_start', 'exam_period_end'].forEach(k => { body[k] = body[k] || null; });
+        body.semester_number = v.semester_number ? +v.semester_number : null;
+        body.daily_study_minutes = v.daily_study_minutes ? +v.daily_study_minutes : 180;
+        const row = SEMS.semester
+          ? await PATCH('/v1/semesters/' + SEMS.semester.id, { user_id: uid, ...body })
+          : await POST('/v1/semesters', { user_id: uid, ...body });
+        SEMS.semester = row; closeModal(); render(true); toast('Semester saved');
+      } catch (e) { toast('Could not save: ' + e.message, true); }
+    }
+  });
+}
+function editCourse() {
+  openForm({ title: 'Add course', saveLabel: 'Add course',
+    fields: [
+      { k: 'name', l: 'Course name', req: true, ph: 'e.g. Database Systems' },
+      { k: 'code', l: 'Course code', half: true, ph: 'e.g. CS301' },
+      { k: 'credits', l: 'Credits', half: true, ph: 'e.g. 4' },
+      { k: 'faculty', l: 'Faculty', half: true }
+    ],
+    onSave: async (v) => {
+      if (!SEMS.semester) { toast('Set up your semester first', true); return; }
+      try {
+        const uid = await ensureUser();
+        const body = { name: v.name, code: v.code || null, credits: v.credits ? parseFloat(v.credits) : null, faculty: v.faculty || null };
+        const row = await POST('/v1/courses', { user_id: uid, semester_id: SEMS.semester.id, source: 'manual', ...body });
+        SEMS.courses = [row].concat(SEMS.courses || []);
+        closeModal(); render(true); toast('Course added');
+      } catch (e) { toast('Could not save: ' + e.message, true); }
+    }
+  });
+}
+function editTopic(courseId) {
+  openForm({ title: 'Add topic', saveLabel: 'Add topic',
+    fields: [
+      { k: 'name', l: 'Topic name', req: true },
+      { k: 'unit', l: 'Unit', half: true },
+      { k: 'estimated_minutes', l: 'Estimated minutes', half: true, num: true, ph: '60' },
+      { k: 'difficulty', l: 'Difficulty (1-5)', half: true, num: true, ph: '3' },
+      { k: 'exam_weightage', l: 'Exam weightage %', half: true, num: true, ph: '10' },
+      { k: 'confidence', l: 'Your confidence (1-5)', half: true, num: true, ph: '1' },
+      { k: 'notes', l: 'Notes', t: 'textarea', rows: 2 }
+    ],
+    onSave: async (v) => {
+      try {
+        const body = { name: v.name, unit: v.unit || null, estimated_minutes: v.estimated_minutes ? +v.estimated_minutes : 60,
+          difficulty: v.difficulty ? +v.difficulty : 3, exam_weightage: v.exam_weightage ? +v.exam_weightage : 10,
+          confidence: v.confidence ? +v.confidence : 1, notes: v.notes || null };
+        const row = await POST('/v1/courses/' + courseId + '/topics', body);
+        SEMS.courseTopics[courseId] = (SEMS.courseTopics[courseId] || []).concat([row]);
+        closeModal(); render(true); toast('Topic added');
+      } catch (e) { toast('Could not add topic: ' + e.message, true); }
+    }
+  });
+}
+function quickTopicUpdate(topicId) {
+  let cid = null, cur = null;
+  Object.keys(SEMS.courseTopics).forEach(k => { const t = (SEMS.courseTopics[k] || []).find(x => x.id === topicId); if (t) { cid = k; cur = t; } });
+  if (!cur) return;
+  openForm({ title: 'Update \u201c' + cur.name + '\u201d', saveLabel: 'Save', values: cur,
+    fields: [
+      { k: 'status', l: 'Status', t: 'select', half: true, opts: ['not_started', 'in_progress', 'done'] },
+      { k: 'confidence', l: 'Confidence (1-5)', half: true, num: true },
+      { k: 'difficulty', l: 'Difficulty (1-5)', half: true, num: true },
+      { k: 'notes', l: 'Notes', t: 'textarea', rows: 2 }
+    ],
+    onSave: async (v) => {
+      try {
+        const body = { status: v.status, confidence: v.confidence ? +v.confidence : undefined, difficulty: v.difficulty ? +v.difficulty : undefined, notes: v.notes || undefined };
+        const row = await PATCH('/v1/topics/' + topicId, body);
+        SEMS.courseTopics[cid] = SEMS.courseTopics[cid].map(x => x.id === topicId ? row : x);
+        closeModal(); render(true); toast('Saved');
+      } catch (e) { toast('Could not save: ' + e.message, true); }
+    }
+  });
+}
+function editExam(courseId, examId) {
+  const e = examId ? (SEMS.exams || []).find(x => x.id === examId) : { exam_type: 'End Semester', weightage: 100, status: 'tentative' };
+  openForm({ title: examId ? 'Edit exam' : 'Add exam', values: e, saveLabel: examId ? 'Save changes' : 'Add exam',
+    fields: [
+      { k: 'exam_type', l: 'Exam type', half: true, ph: 'e.g. End Semester' },
+      { k: 'status', l: 'Status', t: 'select', half: true, opts: ['tentative', 'confirmed', 'completed'] },
+      { k: 'exam_date', l: 'Exam date', t: 'date', half: true },
+      { k: 'exam_time', l: 'Exam time', half: true, ph: 'e.g. 10:00 AM' },
+      { k: 'venue', l: 'Venue', half: true },
+      { k: 'weightage', l: 'Weightage %', half: true, num: true, ph: '100' }
+    ],
+    onSave: async (v) => {
+      try {
+        const uid = await ensureUser();
+        const body = { exam_type: v.exam_type, exam_date: v.exam_date || null, exam_time: v.exam_time || null, venue: v.venue || null,
+          weightage: v.weightage ? +v.weightage : 100, status: v.status || 'tentative' };
+        const row = examId ? await PATCH('/v1/exams/' + examId, { user_id: uid, course_id: courseId, ...body }) : await POST('/v1/exams', { user_id: uid, course_id: courseId, ...body });
+        SEMS.exams = examId ? SEMS.exams.map(x => x.id === examId ? row : x) : (SEMS.exams || []).concat([row]);
+        closeModal(); render(true); toast('Saved');
+      } catch (e) { toast('Could not save: ' + e.message, true); }
+    }
+  });
+}
+async function viewExamRisk(examId) {
+  try {
+    const r = await GET('/v1/exams/' + examId + '/risk');
+    openModal('<h3>' + esc(r.course_name) + '</h3>' +
+      '<div class="row-s" style="margin-bottom:10px">' + (r.exam_date ? 'Exam ' + fmtDate(r.exam_date) + ' \u00b7 ' : '') + (r.days_until != null ? r.days_until + ' days away' : 'No date set') + '</div>' +
+      '<div class="score-grid"><div class="score-cell ' + (r.preparation_pct >= 70 ? 'good' : r.preparation_pct >= 40 ? 'warn' : 'bad') + '"><b>' + r.preparation_pct + '%</b><span>Prepared</span></div>' +
+      '<div class="score-cell ' + (r.risk_level === 'low' ? 'good' : r.risk_level === 'medium' ? 'warn' : 'bad') + '"><b>' + esc(r.risk_level) + '</b><span>Risk</span></div></div>' +
+      (r.weak_topics.length ? '<div class="row-s" style="margin-top:14px">Weak topics: ' + r.weak_topics.map(esc).join(', ') + '</div>' : '') +
+      '<div class="foot"><button class="btn ghost" onclick="closeModal()">Close</button></div>');
+  } catch (e) { toast('Could not load risk: ' + e.message, true); }
+}
+let SEMS_IMPORT = null;
+function importCoursesOpen() {
+  if (!SEMS.semester) { toast('Set up your semester first', true); return; }
+  openModal('<h3>Import a timetable</h3><div class="field"><label for="sems-csv">Paste CSV or a copied table</label><textarea id="sems-csv" rows="8" placeholder="course_code,course_name,credits,faculty,exam_date,exam_time,venue"></textarea></div><div class="foot"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="importCoursesPreview()">Preview</button></div>');
+}
+async function importCoursesPreview() {
+  const text = $('sems-csv').value;
+  if (!text.trim()) { toast('Paste something first', true); return; }
+  try {
+    const res = await POST('/v1/courses/import-csv/preview', { csv_text: text });
+    SEMS_IMPORT = res.rows;
+    const rows = SEMS_IMPORT.map((r) => '<div class="row noicon"><div><div class="row-t">' + esc(r.name) + (r.code ? ' \u00b7 ' + esc(r.code) : '') + '</div><div class="row-s">' + (r.exam_date ? fmtDate(r.exam_date) : 'No date') + (r.faculty ? ' \u00b7 ' + esc(r.faculty) : '') + '</div>' + (r.issues.length ? '<div class="chip warn" style="margin-top:6px">' + esc(r.issues.join('; ')) + '</div>' : '') + '</div><div class="row-a"><span class="chip">' + r.confidence_pct + '% confident</span></div></div>').join('');
+    openModal('<h3>Review ' + SEMS_IMPORT.length + ' row' + (SEMS_IMPORT.length === 1 ? '' : 's') + '</h3><div class="panel rows" style="max-height:340px;overflow-y:auto">' + rows + '</div><div class="note">Rows with low confidence or issues can be fixed afterward in Courses. Nothing is saved until you confirm.</div><div class="foot"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="importCoursesConfirm()">Create ' + SEMS_IMPORT.length + ' course' + (SEMS_IMPORT.length === 1 ? '' : 's') + '</button></div>');
+  } catch (e) { toast('Could not parse: ' + e.message, true); }
+}
+async function importCoursesConfirm() {
+  try {
+    const uid = await ensureUser();
+    const rows = await POST('/v1/courses/import-csv/confirm', { user_id: uid, semester_id: SEMS.semester.id, rows: SEMS_IMPORT });
+    closeModal(); toast('Imported ' + rows.length + ' course' + (rows.length === 1 ? '' : 's')); loadSems(true);
+  } catch (e) { toast('Could not import: ' + e.message, true); }
+}
+function viewSems() {
+  const h = head('Exams & Courses', 'Set up your semester and courses so Study Workflow can build a real study plan from your syllabus.', '');
+  if (!BACKEND.ready) return h + emptyPanel('Needs the backend', 'Semester and course setup is saved on your FastAPI server, which could not be reached.', '<button class="btn" onclick="loadSems(true)">Retry</button>');
+  if (SEMS.courses === null) return h + '<div class="empty plain"><h3>Loading\u2026</h3><p>Fetching your semester and courses.</p></div>';
+  if (SEMS.error && SEMS.error !== 'backend') return h + emptyPanel('Could not load', esc(SEMS.error), '<button class="btn" onclick="loadSems(true)">Retry</button>');
+
+  const semPanel = SEMS.semester
+    ? '<section class="panel" style="padding:18px;margin-bottom:18px"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">' +
+        '<div><div class="row-t">' + esc([SEMS.semester.degree, SEMS.semester.branch].filter(Boolean).join(' \u00b7 ') || 'Current semester') + '</div>' +
+        '<div class="row-s">' + esc(SEMS.semester.academic_year || '') + (SEMS.semester.semester_number ? ' \u00b7 Semester ' + SEMS.semester.semester_number : '') + ' \u00b7 ' + SEMS.semester.daily_study_minutes + ' min/day \u00b7 peak ' + esc(SEMS.semester.peak_start) + '\u2013' + esc(SEMS.semester.peak_end) + '</div></div>' +
+        '<button class="btn ghost sm" onclick="editSemester()">Edit</button></div></section>'
+    : '<section class="panel" style="padding:18px;margin-bottom:18px"><div class="row-t" style="margin-bottom:4px">No semester set up yet</div><div class="row-s" style="margin-bottom:12px">Set this up once \u2014 it drives your daily study capacity and exam window.</div><button class="btn" onclick="editSemester()">Set up semester</button></section>';
+
+  const courseRows = (SEMS.courses || []).map(c => {
+    const exams = semsCourseExams(c.id);
+    const topics = semsCourseTopics(c.id);
+    const open = SEMS.openCourse === c.id;
+    const examChips = exams.map(e => '<span class="chip">' + esc(e.exam_type) + (e.exam_date ? ' \u00b7 ' + fmtDate(e.exam_date) : '') + '</span>').join('');
+    const body = open ? (
+      '<div style="padding:0 20px 18px">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 8px"><b class="row-s" style="font-weight:650">Topics</b><button class="btn ghost sm" onclick="editTopic(\'' + c.id + '\')">Add topic</button></div>' +
+        (topics === null ? '<div class="row-s">Loading\u2026</div>' :
+          topics.length ? '<div class="panel rows">' + topics.map(t =>
+            '<div class="row noicon"><div><div class="row-t">' + esc(t.name) + (t.unit ? ' \u00b7 ' + esc(t.unit) : '') + '</div><div class="row-m">' + pill(t.status) + '<span class="chip">weight ' + t.exam_weightage + '%</span><span class="chip">difficulty ' + t.difficulty + '/5</span><span class="chip">confidence ' + t.confidence + '/5</span></div></div>' +
+            '<div class="row-a"><button class="btn ghost sm" onclick="quickTopicUpdate(\'' + t.id + '\')">Update</button></div></div>'
+          ).join('') + '</div>' : '<div class="row-s">No topics yet.</div>') +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin:18px 0 8px"><b class="row-s" style="font-weight:650">Exams</b><button class="btn ghost sm" onclick="editExam(\'' + c.id + '\')">Add exam</button></div>' +
+        (exams.length ? '<div class="panel rows">' + exams.map(e =>
+          '<div class="row noicon"><div><div class="row-t">' + esc(e.exam_type) + '</div><div class="row-s">' + (e.exam_date ? fmtDate(e.exam_date) : 'No date set') + (e.exam_time ? ' \u00b7 ' + esc(e.exam_time) : '') + (e.venue ? ' \u00b7 ' + esc(e.venue) : '') + '</div></div>' +
+          '<div class="row-a"><button class="btn ghost sm" onclick="viewExamRisk(\'' + e.id + '\')">Risk</button><button class="btn ghost sm" onclick="editExam(\'' + c.id + '\',\'' + e.id + '\')">Edit</button></div></div>'
+        ).join('') + '</div>' : '<div class="row-s">No exams yet.</div>') +
+      '</div>'
+    ) : '';
+    return '<div class="panel" style="margin-bottom:10px"><div class="row noicon" style="cursor:pointer" onclick="toggleCourseOpen(\'' + c.id + '\')"><div><div class="row-t">' + esc(c.name) + (c.code ? ' \u00b7 ' + esc(c.code) : '') + '</div><div class="row-m">' + (c.faculty ? '<span class="chip">' + esc(c.faculty) + '</span>' : '') + (c.credits != null ? '<span class="chip">' + c.credits + ' credits</span>' : '') + examChips + '</div></div><div class="row-a">' + icon(open ? 'x' : 'plus', 16) + '</div></div>' + body + '</div>';
+  }).join('');
+
+  const coursesSection = '<div style="display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px"><h3 style="font-family:var(--display);font-size:18px;font-weight:650">Courses</h3>' + addBtn('Add course', 'editCourse()') + '</div>' +
+    (SEMS.courses.length ? courseRows : emptyPanel('No courses yet', 'Add your first course, then add its topics and exams.', addBtn('Add course', 'editCourse()')));
+
+  const importSection = '<section class="panel" style="padding:18px;margin-top:22px"><div class="row-t" style="margin-bottom:4px">Import a timetable</div><div class="row-s" style="margin-bottom:12px">Paste a course/exam timetable (CSV or a copied table) and OPAI will match columns and show a preview before creating anything.</div><button class="btn ghost" onclick="importCoursesOpen()">Paste a timetable</button></section>';
+
+  return h + semPanel + coursesSection + importSection;
+}
+
 /* ---- Requests ---- */
 function viewReqs() {
   const h = head('Client requests', 'Turn \u201ccan you build me a website?\u201d into a scoped proposal you can send.', addBtn('Add request', 'editReq()'));
@@ -2418,164 +2671,277 @@ function stepIcon(name) {
     review:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>'
   }; return map[name] || map.plan;
 }
+/* ---- Study Plan Canvas: a Figma-style box/arrow board for a 1-month or
+   1-year plan the user designs themselves \u2014 separate from the backend
+   SEMS-generated task list below it. Pure client-side, saved in S. ---- */
+let SPC_MODE = 'month';
+let SPC_LINK_FROM = null;
+let SPC_DRAG = null;
+function spcState() { return S.studyPlanCanvas[SPC_MODE]; }
+function spcSetMode(m) { SPC_MODE = m; SPC_LINK_FROM = null; render(true); }
+const SPC_COLORS = ['#7CA8E0','#4ADE80','#FBBF24','#C084FC','#F87171','#9CA3AF'];
+function spcAddNode() {
+  const st = spcState();
+  const perRow = 3;
+  const x = 24 + (st.nodes.length % perRow) * 200;
+  const y = 24 + Math.floor(st.nodes.length / perRow) * 130;
+  openForm({
+    title: 'New ' + (SPC_MODE === 'month' ? 'week / block' : 'month / quarter') + ' box',
+    saveLabel: 'Add box',
+    fields: [
+      { k: 'title', l: 'Title', req: true, ph: SPC_MODE === 'month' ? 'e.g. Week 1 \u2014 Basics' : 'e.g. Q1 \u2014 Foundations' },
+      { k: 'note', l: 'Notes', t: 'textarea', rows: 2, ph: 'What happens in this box' }
+    ],
+    onSave: (v) => {
+      st.nodes.push({ id: uid(), title: v.title, note: v.note || '', x, y, color: SPC_COLORS[st.nodes.length % SPC_COLORS.length] });
+      save(); closeModal(); render(true); toast('Box added');
+    }
+  });
+}
+function spcEditNode(id) {
+  const st = spcState(); const nd = st.nodes.find(n => n.id === id); if (!nd) return;
+  openForm({
+    title: 'Edit box', saveLabel: 'Save changes', values: nd,
+    fields: [
+      { k: 'title', l: 'Title', req: true },
+      { k: 'note', l: 'Notes', t: 'textarea', rows: 3 }
+    ],
+    onSave: (v) => { nd.title = v.title; nd.note = v.note || ''; save(); closeModal(); render(true); toast('Saved'); }
+  });
+}
+function spcDeleteNode(id) {
+  confirmBox('Delete this box?', 'Delete', () => {
+    const st = spcState();
+    st.nodes = st.nodes.filter(n => n.id !== id);
+    st.edges = st.edges.filter(e => e.from !== id && e.to !== id);
+    save(); render(true); toast('Deleted');
+  });
+}
+function spcToggleLink(id) {
+  if (SPC_LINK_FROM === id) { SPC_LINK_FROM = null; render(true); return; }
+  if (!SPC_LINK_FROM) { SPC_LINK_FROM = id; render(true); toast('Now click the link icon on another box to connect an arrow'); return; }
+  const st = spcState();
+  const dup = st.edges.some(e => (e.from === SPC_LINK_FROM && e.to === id) || (e.from === id && e.to === SPC_LINK_FROM));
+  if (!dup) { st.edges.push({ id: uid(), from: SPC_LINK_FROM, to: id }); save(); }
+  SPC_LINK_FROM = null; render(true);
+}
+function spcCancelLink() { SPC_LINK_FROM = null; render(true); }
+function spcDeleteEdge(id) { const st = spcState(); st.edges = st.edges.filter(e => e.id !== id); save(); render(true); }
+function spcRedrawEdgesLive() {
+  const svg = $('spc-svg'); const canvas = $('spc-canvas'); if (!svg || !canvas) return;
+  spcState().edges.forEach(e => {
+    const line = svg.querySelector('[data-edge="' + e.id + '"]'); if (!line) return;
+    const a = canvas.querySelector('.spc-node[data-id="' + e.from + '"]');
+    const b = canvas.querySelector('.spc-node[data-id="' + e.to + '"]');
+    if (!a || !b) return;
+    line.setAttribute('x1', a.offsetLeft + a.offsetWidth / 2); line.setAttribute('y1', a.offsetTop + a.offsetHeight / 2);
+    line.setAttribute('x2', b.offsetLeft + b.offsetWidth / 2); line.setAttribute('y2', b.offsetTop + b.offsetHeight / 2);
+  });
+}
+function spcWire() {
+  const canvas = $('spc-canvas'); if (!canvas) return;
+  canvas.querySelectorAll('.spc-node').forEach(el => {
+    el.onpointerdown = (e) => {
+      if (e.target.closest('.spc-node-actions')) return;
+      SPC_DRAG = { id: el.dataset.id, offX: e.clientX - el.offsetLeft, offY: e.clientY - el.offsetTop };
+      try { el.setPointerCapture(e.pointerId); } catch (err) {}
+      el.classList.add('spc-dragging');
+    };
+    el.onpointermove = (e) => {
+      if (!SPC_DRAG || SPC_DRAG.id !== el.dataset.id) return;
+      const x = Math.max(0, e.clientX - SPC_DRAG.offX), y = Math.max(0, e.clientY - SPC_DRAG.offY);
+      el.style.left = x + 'px'; el.style.top = y + 'px';
+      spcRedrawEdgesLive();
+    };
+    const finish = (e) => {
+      if (!SPC_DRAG || SPC_DRAG.id !== el.dataset.id) return;
+      const nd = spcState().nodes.find(n => n.id === el.dataset.id);
+      if (nd) { nd.x = parseFloat(el.style.left) || 0; nd.y = parseFloat(el.style.top) || 0; save(); }
+      SPC_DRAG = null; el.classList.remove('spc-dragging');
+    };
+    el.onpointerup = finish; el.onpointercancel = finish;
+  });
+}
+let SPC_ANIMATE_IDS = null;
+let SPC_BUSY = false;
+const SPC_TEMPLATES = {
+  month: ['Learn the basics', 'Practice with exercises', 'Build a small project', 'Review & mock test'],
+  year: ['Foundations', 'Core skills', 'Applied projects', 'Advanced & interview prep']
+};
+function spcLocalPlan(topic, mode) {
+  const unit = mode === 'month' ? 'Week' : 'Quarter';
+  const tpl = SPC_TEMPLATES[mode];
+  return tpl.map((t, i) => ({ title: unit + ' ' + (i + 1) + ' \u2014 ' + t, note: t + ' for ' + topic }));
+}
+function spcParseBoxesJSON(text) {
+  if (!text) return null;
+  const candidates = [];
+  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i); if (fenced) candidates.push(fenced[1]);
+  const a = text.indexOf('{'), b = text.lastIndexOf('}'); if (a >= 0 && b > a) candidates.push(text.slice(a, b + 1));
+  for (const raw of candidates) {
+    try {
+      const data = JSON.parse(raw.trim());
+      const arr = Array.isArray(data) ? data : (Array.isArray(data.boxes) ? data.boxes : null);
+      if (!arr || !arr.length) continue;
+      const out = arr.slice(0, 6).map(x => ({ title: String(x.title || x.name || '').trim(), note: String(x.note || x.desc || '').trim() })).filter(x => x.title);
+      if (out.length) return out;
+    } catch (e) {}
+  }
+  return null;
+}
+async function spcGenerateFromPrompt() {
+  if (SPC_BUSY) return;
+  const inp = $('spc-prompt'); const q = (inp && inp.value || '').trim();
+  if (!q) { toast('Describe what you want to plan first', true); return; }
+  SPC_BUSY = true; render(true);
+  let boxes = null;
+  if (S.profile.groqKey) {
+    try {
+      const n = SPC_MODE === 'month' ? 4 : 4;
+      const sys = 'Turn the user\u2019s goal into exactly ' + n + ' ' + (SPC_MODE === 'month' ? 'weekly' : 'quarterly') +
+        ' plan boxes for a visual board. Return ONLY JSON, no prose: {"boxes":[{"title":"...","note":"..."}]}. Titles under 8 words, notes under 16 words.';
+      const reply = await groqChat([{ role: 'system', content: sys }, { role: 'user', content: q }]);
+      boxes = spcParseBoxesJSON(reply);
+    } catch (e) {}
+  }
+  if (!boxes) boxes = spcLocalPlan(q, SPC_MODE);
+  const st = spcState();
+  st.nodes = []; st.edges = [];
+  const perRow = 3;
+  const ids = [];
+  boxes.forEach((b, i) => {
+    const id = uid();
+    st.nodes.push({ id, title: b.title, note: b.note || '', x: 24 + (i % perRow) * 200, y: 24 + Math.floor(i / perRow) * 130, color: SPC_COLORS[i % SPC_COLORS.length] });
+    ids.push(id);
+  });
+  for (let i = 1; i < st.nodes.length; i++) st.edges.push({ id: uid(), from: st.nodes[i - 1].id, to: st.nodes[i].id });
+  save();
+  SPC_ANIMATE_IDS = new Set(ids);
+  SPC_BUSY = false;
+  if (inp) inp.value = '';
+  render(true);
+  toast('Board generated');
+}
+function spcRenderHTML() {
+  const st = spcState();
+  const W = Math.max(700, ...(st.nodes.map(n => n.x + 210)), 700);
+  const H = Math.max(360, ...(st.nodes.map(n => n.y + 150)), 360);
+  const animIds = SPC_ANIMATE_IDS;
+  const nodesHTML = st.nodes.map((n, idx) => {
+    const isNew = animIds && animIds.has(n.id);
+    return '<div class="spc-node' + (SPC_LINK_FROM === n.id ? ' spc-linking' : '') + (isNew ? ' spc-enter' : '') + '" data-id="' + n.id + '" style="left:' + n.x + 'px;top:' + n.y + 'px;border-left-color:' + (n.color || '#7CA8E0') + (isNew ? ';animation-delay:' + (idx * 110) + 'ms' : '') + '">' +
+      '<div class="spc-node-h"><b>' + esc(n.title) + '</b><div class="spc-node-actions">' +
+        '<button title="Connect an arrow" onclick="spcToggleLink(\'' + n.id + '\')">' + icon('send', 12) + '</button>' +
+        '<button title="Edit" onclick="spcEditNode(\'' + n.id + '\')">' + icon('edit', 12) + '</button>' +
+        '<button title="Delete" onclick="spcDeleteNode(\'' + n.id + '\')">' + icon('trash', 12) + '</button>' +
+      '</div></div>' +
+      (n.note ? '<div class="spc-node-note">' + esc(n.note) + '</div>' : '') +
+    '</div>';
+  }).join('');
+  const edgesHTML = st.edges.map((e, idx) => {
+    const isNew = animIds && animIds.has(e.to);
+    return '<line data-edge="' + e.id + '" x1="0" y1="0" x2="0" y2="0" marker-end="url(#spc-arrow)"' + (isNew ? ' class="spc-edge-enter" style="animation-delay:' + (idx * 110 + 160) + 'ms"' : '') + '/>';
+  }).join('');
+  SPC_ANIMATE_IDS = null;
+  const edgeChips = st.edges.map(e => {
+    const a = st.nodes.find(n => n.id === e.from), b = st.nodes.find(n => n.id === e.to);
+    return '<span class="spc-edge-chip">' + esc(a ? a.title : '?') + ' \u2192 ' + esc(b ? b.title : '?') + '<button onclick="spcDeleteEdge(\'' + e.id + '\')" aria-label="Remove arrow">' + icon('x', 11) + '</button></span>';
+  }).join('');
+  return '<section class="spc-wrap">' +
+    '<div class="spc-top">' +
+      '<div class="spc-tabs" role="tablist">' +
+        '<button role="tab" aria-selected="' + (SPC_MODE === 'month') + '" class="' + (SPC_MODE === 'month' ? 'on' : '') + '" onclick="spcSetMode(\'month\')">1 Month</button>' +
+        '<button role="tab" aria-selected="' + (SPC_MODE === 'year') + '" class="' + (SPC_MODE === 'year' ? 'on' : '') + '" onclick="spcSetMode(\'year\')">1 Year</button>' +
+      '</div>' +
+      '<div class="spc-top-r">' +
+        (SPC_LINK_FROM ? '<span class="row-s">Click the link icon on another box &mdash; <button class="btn ghost sm" onclick="spcCancelLink()">Cancel</button></span>' : '') +
+        '<button class="btn sm" onclick="spcAddNode()">' + icon('plus', 14) + 'Add box</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="spc-prompt-row">' +
+      '<input type="text" id="spc-prompt" placeholder="Describe your goal \u2014 e.g. \u2018Crack DBMS in 4 weeks\u2019 \u2014 and KARNA lays out the boxes" onkeydown="if(event.key===\'Enter\'){event.preventDefault();spcGenerateFromPrompt()}">' +
+      '<button class="btn sm" onclick="spcGenerateFromPrompt()" ' + (SPC_BUSY ? 'disabled' : '') + '>' + (SPC_BUSY ? 'Generating\u2026' : 'Generate board') + '</button>' +
+    '</div>' +
+    '<div class="spc-canvas" id="spc-canvas" style="width:100%;height:420px;overflow:auto">' +
+      '<div style="position:relative;width:' + W + 'px;height:' + H + 'px">' +
+        '<svg id="spc-svg" width="' + W + '" height="' + H + '" style="position:absolute;left:0;top:0;pointer-events:none">' +
+          '<defs><marker id="spc-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--ink-3)"/></marker></defs>' +
+          edgesHTML +
+        '</svg>' +
+        (nodesHTML || '<div class="spc-empty">No boxes yet \u2014 describe your goal above and tap "Generate board", or add boxes by hand. Drag boxes to arrange them, and use the arrow icon to connect two.</div>') +
+      '</div>' +
+    '</div>' +
+    (edgeChips ? '<div class="spc-edges">' + edgeChips + '</div>' : '') +
+  '</section>';
+}
 function renderStudyWorkflowBody() {
-  const totalTasks = STUDY_WORKFLOW.tasks.length; const doneTasks = STUDY_WORKFLOW.tasks.filter(t=>t.done).length;
-  const pct = totalTasks ? Math.round(doneTasks/totalTasks*100) : 0; const dashArr = pct + ', 100';
-  const stages = workflowStageData();
-  const doneCls = 'bg-[#FFF9F6] border border-[#FDE3DA]';
-  const activeCls = 'bg-[#FFF9F6] border-2 border-[#FED7AA]';
-  const waitCls = 'bg-[#FAFBFB] border border-gray-200';
-  const badge = (s) => s.status==='done' ? '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#E6F4EA] text-[#137333]">&check; Done</span>'
-    : s.status==='active' ? '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#FFEDD5] text-[#C2410C]">' + (WORKFLOW_BUSY ? '&hellip; Generating' : '+ In Progress') + '</span>'
-    : '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-[#F1F3F4] text-gray-600">Waiting</span>';
-  const iconCls = (s) => s.status==='wait' ? (s.icon==='learn' ? 'text-amber-500' : s.icon==='review' ? 'text-[#9333EA]' : 'text-gray-400') : 'text-[#EE5839]';
-  const pipeline = stages.map((s,i) => `
-    ${i ? '<span class="text-gray-400 text-xs font-mono select-none px-0.5 shrink-0">&rarr;</span>' : ''}
-    <div class="min-w-[185px] flex-1 ${s.status==='done'?doneCls:s.status==='active'?activeCls:waitCls} rounded-2xl p-3.5 flex flex-col justify-between h-[170px] shadow-sm">
-      <div>
-        <div class="flex items-center justify-between gap-1 mb-2">
-          <div class="flex items-center gap-1.5 font-bold text-xs text-gray-900">
-            <svg class="w-4 h-4 ${iconCls(s)}" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">${stepIcon(s.icon)}</svg>
-            <span>${s.n}. ${esc(s.title)}</span>
-          </div>
-          ${badge(s)}
-        </div>
-        <p class="text-xs ${s.status==='wait'?'text-gray-500':'text-gray-700'} leading-snug">${esc(s.body)}</p>
-      </div>
-      ${s.footer ? '<span class="text-[10px] text-gray-400 font-medium">' + esc(s.footer) + '</span>'
-        : '<div class="text-xs text-gray-400 font-mono tracking-widest leading-none">&bull;&bull;&bull;</div>'}
-    </div>`).join('');
-  const rowsHTML = STUDY_WORKFLOW.tasks.map((t,idx)=>`
-    <div class="py-2.5 flex items-center justify-between gap-4 border-b border-gray-50 last:border-0">
-      <div class="flex items-center gap-3 flex-1 min-w-0">
-        <div class="w-5 h-5 rounded-md ${t.done?'bg-[#EE5839] text-white':'border border-gray-300'} flex items-center justify-center shrink-0 cursor-pointer" onclick="toggleWorkflowTask(${idx})">
-          ${t.done?'<svg class="w-3.5 h-3.5 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>':''}
-        </div>
-        <div class="text-xs md:text-sm font-bold text-gray-900 w-36 shrink-0">${idx+1}. ${esc(t.title)}</div>
-        <div class="text-xs text-gray-500 truncate flex-1">${esc(t.desc)}</div>
-      </div>
-      <div class="flex items-center gap-4 shrink-0">
-        <span class="text-xs text-gray-500 font-medium">${esc(t.time)}</span>
-        <span class="px-3 py-1 rounded-full text-[11px] font-semibold min-w-[75px] text-center ${t.done?'bg-[#E6F4EA] text-[#137333]':'bg-[#F1F3F4] text-gray-600 font-medium'}">${t.done?'Completed':'Pending'}</span>
-      </div>
-    </div>`).join('');
+  const totalTasks = STUDY_WORKFLOW.tasks.length; const doneTasks = STUDY_WORKFLOW.tasks.filter(t => t.done).length;
+  const pct = totalTasks ? Math.round(doneTasks / totalTasks * 100) : 0;
   const ex = workflowExam();
-  const examLabel = ex && ex.exam_date ? 'Exam on '+esc(fmtDate(ex.exam_date)) : (STUDY_WORKFLOW.examDate ? 'Exam on '+esc(fmtDate(STUDY_WORKFLOW.examDate)) : 'No exam date');
-  const opt = (v, sel) => '<option '+(sel?'selected':'')+'>'+esc(v)+'</option>';
+  const examLabel = ex && ex.exam_date ? 'Exam on ' + fmtDate(ex.exam_date) : (STUDY_WORKFLOW.examDate ? 'Exam on ' + fmtDate(STUDY_WORKFLOW.examDate) : 'No exam date');
+  const opt = (v, sel) => '<option ' + (sel ? 'selected' : '') + '>' + esc(v) + '</option>';
   const subjectOptions = SEMS_COURSES.length
-    ? SEMS_COURSES.map(c => opt(c.name, STUDY_WORKFLOW.subject===c.name)).join('')
-    : ['Database Systems','Operating Systems','Computer Networks'].map(v=>opt(v, STUDY_WORKFLOW.subject===v)).join('');
-  const quick = (action, label) => `<button class="px-3.5 py-1.5 bg-white border border-gray-200 hover:border-gray-300 rounded-full text-xs font-medium text-gray-700 transition shadow-sm" onclick="runQuickAction('${action}')">${label}</button>`;
-  return `
-  <div class="border border-gray-200/90 rounded-2xl p-5 md:p-6 flex flex-col gap-6 bg-white">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div class="flex items-start gap-3">
-        <span class="text-[#F16442] mt-0.5"><svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4L12 0Z"/></svg></span>
-        <div>
-          <h2 class="text-xl font-bold text-gray-900 tracking-tight">Study Workflow</h2>
-          <p class="text-xs md:text-sm text-gray-500 font-medium">${BACKEND.ready ? 'Backed by your real SEMS exam map — risk and priority computed server-side.' : 'Turn your goal into a focused learn → practice → review loop with KARNA.'}</p>
-        </div>
-      </div>
-      <div class="flex items-center gap-3 bg-[#FFF7F4] border border-[#FDE3DA] rounded-2xl px-4 py-2.5 shadow-sm">
-        <div class="w-8 h-8 rounded-full bg-[#FEEBE3] flex items-center justify-center text-[#EA580C] shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></div>
-        <div class="text-xs"><span class="font-semibold text-gray-900 block">Stay consistent.</span><span class="text-gray-500">Make progress. You got this.</span></div>
-      </div>
-    </div>
-
-    <div class="flex items-center gap-2 overflow-x-auto pb-2">${pipeline}</div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-      <div><label class="block text-xs font-semibold text-gray-700 mb-1.5">Select Exam / Subject</label>
-        <select class="custom-select w-full bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs md:text-sm font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#EE5839]/20 shadow-sm cursor-pointer" id="sw-select-subject">${subjectOptions}</select></div>
-      <div><label class="block text-xs font-semibold text-gray-700 mb-1.5">Available Time</label>
-        <select class="custom-select w-full bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs md:text-sm font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#EE5839]/20 shadow-sm cursor-pointer" id="sw-select-time">${['1 hour','2 hours','3 hours','4 hours'].map(v=>opt(v, STUDY_WORKFLOW.duration===v)).join('')}</select></div>
-      <div><label class="block text-xs font-semibold text-gray-700 mb-1.5">Study Mode</label>
-        <select class="custom-select w-full bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs md:text-sm font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#EE5839]/20 shadow-sm cursor-pointer" id="sw-select-mode">${['Balanced (Plan + Practice)','Exam Sprint (Speed & PYQs)','Weak-Topic Recovery'].map(v=>opt(v, STUDY_WORKFLOW.mode===v)).join('')}</select></div>
-      <div><button class="w-full bg-gradient-to-r from-[#EB5E3C] to-[#F16A46] hover:from-[#e05230] hover:to-[#e85e39] text-white font-semibold py-2.5 px-4 rounded-xl text-xs md:text-sm flex items-center justify-center gap-2 shadow-sm transition disabled:opacity-60" onclick="generateWorkflowFromUI()" ${WORKFLOW_BUSY?'disabled':''}>
-        <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4L12 0Z"/></svg>${WORKFLOW_BUSY?'Generating…':'Generate Workflow'}</button></div>
-    </div>
-
-    <div class="border border-gray-200 rounded-2xl p-5 bg-white flex flex-col gap-4">
-      <div class="flex flex-col md:flex-row md:items-center justify-between pb-3 border-b border-gray-100 gap-4">
-        <div class="flex items-start gap-3">
-          <div class="w-7 h-7 mt-0.5 rounded-lg bg-[#FFF2ED] flex items-center justify-center text-[#EE5839] shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="2"/><path stroke-linecap="round" d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-          <div><h3 class="text-sm font-bold text-gray-900">Today's Study Plan</h3><p class="text-xs text-gray-500 font-medium">${esc(STUDY_WORKFLOW.subject)} &bull; ${esc(STUDY_WORKFLOW.duration)} &bull; ${examLabel}</p></div>
-        </div>
-        <div class="flex items-center gap-6">
-          <div class="flex items-center gap-3">
-            <div class="relative w-8 h-8 flex items-center justify-center">
-              <svg class="w-8 h-8 transform -rotate-90" viewBox="0 0 36 36">
-                <path class="text-gray-100" stroke-width="4" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path class="text-[#EE5839]" stroke-dasharray="${dashArr}" stroke-width="4" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              </svg>
-            </div>
-            <div><span class="text-xs font-semibold text-gray-800 block">${doneTasks} / ${totalTasks} completed</span>
-              <div class="flex items-center gap-2"><span class="text-xs font-bold text-gray-900">${pct}%</span><div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-[#EE5839] rounded-full" style="width:${pct}%"></div></div></div>
-            </div>
-          </div>
-          <div class="hidden sm:flex items-center gap-2.5 bg-[#FFF7F4] border border-[#FDE3DA] rounded-xl px-3.5 py-2">
-            <svg class="w-4 h-4 text-[#EE5839]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-            <div class="text-[11px] leading-tight"><span class="font-bold text-gray-900 block">${pct===100?'Done!':'Keep going!'}</span><span class="text-gray-500">${pct===100?'Plan complete.':'You are on track.'}</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col">${rowsHTML || '<div class="py-4 text-xs text-gray-500">No blocks yet — generate a workflow above.</div>'}</div>
-    </div>
-
-    <div class="flex items-center gap-2 flex-wrap">
-      <div class="flex items-center gap-1.5 text-xs font-bold text-[#EE5839] mr-2"><svg class="w-4 h-4 fill-[#EE5839]" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Quick actions</div>
-      ${quick('plan3h','Plan for next 3 hours')}${quick('weak','Focus on weak topics')}${quick('pyq','Generate PYQs')}${quick('explain','Explain this topic')}${quick('quiz','Take a quick quiz')}${quick('track','Track my progress')}
-    </div>
-
-    <div class="relative flex items-center bg-white border border-gray-200 rounded-2xl px-4 py-2.5 shadow-sm focus-within:border-gray-300">
-      <button class="text-gray-400 hover:text-gray-600 transition p-1 mr-2" title="Attach notes" onclick="toast('Attach notes or syllabus')"><svg class="w-5 h-5 transform rotate-45" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg></button>
-      <input type="text" id="sw-prompt-input" placeholder="Ask KARNA about your study goal…" class="w-full text-xs md:text-sm text-gray-800 placeholder-gray-400 bg-transparent focus:outline-none" onkeydown="if(event.key==='Enter' \u0026\u0026 (event.ctrlKey || event.metaKey)){event.preventDefault();handleWorkflowPrompt()}">
-      <div class="flex items-center gap-3 shrink-0 ml-2"><span class="text-[11px] text-gray-400 hidden sm:inline-block">Ctrl + Enter</span>
-        <button class="w-8 h-8 rounded-xl bg-[#EE5839] hover:bg-[#e04a2c] text-white flex items-center justify-center transition shadow-sm" onclick="handleWorkflowPrompt()" title="Send"><svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg></button>
-      </div>
-    </div>
-  </div>`;
+    ? SEMS_COURSES.map(c => opt(c.name, STUDY_WORKFLOW.subject === c.name)).join('')
+    : ['Database Systems', 'Operating Systems', 'Computer Networks'].map(v => opt(v, STUDY_WORKFLOW.subject === v)).join('');
+  const quick = (action, label) => '<button class="chip" style="cursor:pointer" onclick="runQuickAction(\'' + action + '\')">' + esc(label) + '</button>';
+  const rowsHTML = STUDY_WORKFLOW.tasks.map((t, idx) =>
+    '<div class="row"><input type="checkbox" class="ck" ' + (t.done ? 'checked' : '') + ' aria-label="Mark ' + escA(t.title) + ' done" onchange="toggleWorkflowTask(' + idx + ')">' +
+    '<div><div class="row-t" style="' + (t.done ? 'text-decoration:line-through;color:var(--ink-3)' : '') + '">' + (idx + 1) + '. ' + esc(t.title) + '</div>' +
+    (t.desc ? '<div class="row-s">' + esc(t.desc) + '</div>' : '') + '</div>' +
+    '<div class="row-a"><span class="chip">' + esc(t.time) + '</span><span class="pill ' + (t.done ? 'good' : '') + '">' + (t.done ? 'Completed' : 'Pending') + '</span></div></div>'
+  ).join('');
+  return '<p class="row-s" style="margin:14px 0 16px">' + (BACKEND.ready ? 'Backed by your real SEMS exam map \u2014 risk and priority computed server-side.' : 'Design your own plan on the board below, or let KARNA generate one from your goal.') + '</p>' +
+    '<section class="panel" style="padding:20px;margin-bottom:16px">' + spcRenderHTML() + '</section>' +
+    '<section class="panel" style="padding:20px;margin-bottom:16px">' +
+      '<div class="fields" style="margin-bottom:4px">' +
+        '<div class="field half"><label for="sw-select-subject">Subject</label><select id="sw-select-subject">' + subjectOptions + '</select></div>' +
+        '<div class="field half"><label for="sw-select-time">Available time</label><select id="sw-select-time">' + ['1 hour', '2 hours', '3 hours', '4 hours'].map(v => opt(v, STUDY_WORKFLOW.duration === v)).join('') + '</select></div>' +
+        '<div class="field half"><label for="sw-select-mode">Study mode</label><select id="sw-select-mode">' + ['Balanced (Plan + Practice)', 'Exam Sprint (Speed & PYQs)', 'Weak-Topic Recovery'].map(v => opt(v, STUDY_WORKFLOW.mode === v)).join('') + '</select></div>' +
+        '<div class="field half" style="display:flex;align-items:flex-end"><button class="btn" style="width:100%" onclick="generateWorkflowFromUI()" ' + (WORKFLOW_BUSY ? 'disabled' : '') + '>' + (WORKFLOW_BUSY ? 'Generating\u2026' : 'Generate workflow') + '</button></div>' +
+      '</div>' +
+    '</section>' +
+    '<section class="panel" style="padding:20px;margin-bottom:16px">' +
+      '<div class="panel-h" style="padding:0 0 14px;margin-bottom:4px">' +
+        '<h3 style="text-transform:none;letter-spacing:0;font-family:var(--display);font-size:16px;font-weight:650;color:var(--ink)">Today\'s study plan</h3>' +
+        '<span>' + esc(STUDY_WORKFLOW.subject) + ' \u00b7 ' + esc(STUDY_WORKFLOW.duration) + ' \u00b7 ' + esc(examLabel) + '</span>' +
+      '</div>' +
+      '<div class="meter hi" style="margin-bottom:14px"><div><i style="width:' + pct + '%"></i></div>' + doneTasks + ' / ' + totalTasks + ' completed \u00b7 ' + pct + '%</div>' +
+      '<div class="rows">' + (rowsHTML || '<div class="row-s" style="padding:16px 0">No blocks yet \u2014 generate a workflow above.</div>') + '</div>' +
+    '</section>' +
+    '<section class="panel" style="padding:18px 20px;margin-bottom:16px">' +
+      '<div class="row-s" style="margin-bottom:10px;font-weight:600;color:var(--ink)">Quick actions</div>' +
+      '<div class="row-m">' + quick('plan3h', 'Plan for next 3 hours') + quick('weak', 'Focus on weak topics') + quick('pyq', 'Generate PYQs') + quick('explain', 'Explain this topic') + quick('quiz', 'Take a quick quiz') + quick('track', 'Track my progress') + '</div>' +
+    '</section>' +
+    '<section class="panel" style="padding:8px">' +
+      '<div class="cbox"><textarea id="sw-prompt-input" rows="1" placeholder="Ask KARNA about your study goal\u2026" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();handleWorkflowPrompt()}"></textarea>' +
+      '<button class="send" onclick="handleWorkflowPrompt()" title="Send">' + icon('up', 17) + '</button></div>' +
+    '</section>';
 }
 
 function viewJarvis() {
-  const live = !!S.profile.groqKey; const gm = S.profile.groqModel || GROQ_MODELS[0].v;
-  const tab = (mode, label, svg) => `<button class="flex items-center gap-2 text-sm font-medium pb-2 transition ${KARNA_MODE===mode ? 'font-semibold text-[#EE5839] border-b-2 border-[#EE5839]' : 'text-gray-500 hover:text-gray-800'}" onclick="setJarvisMode('${mode}')">${svg}${label}</button>`;
-  const headerHTML = `
-    <header class="flex flex-col gap-4 border-b border-gray-100 pb-5 mb-6">
-      <div class="flex items-center justify-between flex-wrap gap-3">
-        <div class="flex items-center gap-3.5">
-          <div class="w-10 h-10 rounded-full orb-gradient shrink-0"></div>
-          <div>
-            <div class="flex items-center gap-3">
-              <h1 class="text-xl font-bold text-gray-900 tracking-tight">KARNA</h1>
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${live?'bg-[#E6F4EA] text-[#137333] border border-[#CEEAD6]':'bg-gray-100 text-gray-600 border border-gray-200'}">
-                <span class="w-1.5 h-1.5 rounded-full ${live?'bg-[#1E8E3E]':'bg-gray-400'}"></span>${live?'Live':'Local'}
-              </span>
-            </div>
-            <p class="text-xs text-gray-400 font-medium">${live ? 'Live on Groq &bull; ' + esc(gm) : 'Groq not connected &bull; local workspace replies'}</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-3">
-          ${live ? '<button class="px-4 py-1.5 text-xs md:text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition shadow-sm" onclick="clearGroqKey()">Disconnect</button>'
-                 : '<button class="px-4 py-1.5 text-xs md:text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition shadow-sm" onclick="switchTab(\'profile\')">Connect Groq</button>'}
-          <button class="px-4 py-1.5 text-xs md:text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition shadow-sm" onclick="jarvisNew();setJarvisMode('chat')">New chat</button>
-        </div>
-      </div>
-      <div class="flex items-center justify-between pt-1 flex-wrap gap-3">
-        <div class="flex items-center gap-6">
-          ${tab('chat','Chat','<svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>')}
-          ${tab('study','Study Workflow','<svg class="w-4 h-4 '+(KARNA_MODE==='study'?'text-[#EE5839]':'text-gray-400')+'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h7M7 16h4" /></svg>')}
-        </div>
-        <div class="hidden md:flex items-center text-xs font-medium text-gray-400 gap-1.5">
-          <span>Goal</span><span>&rarr;</span><span>Plan</span><span>&rarr;</span><span>Focus</span><span>&rarr;</span><span>Learn</span><span>&rarr;</span><span>Practice</span><span>&rarr;</span><span>Review</span>
-        </div>
-      </div>
-
-      
-    </header>`;
-  if (KARNA_MODE === 'study') return `<div class="workflow-app-container w-full bg-white rounded-3xl border border-gray-200/80 shadow-[0_4px_24px_rgba(0,0,0,0.03)] p-6 md:p-8 flex flex-col gap-6">${headerHTML}${renderStudyWorkflowBody()}</div>`;
-  const connectBanner = live ? '' : '<div style="padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surface-2)"><div class="row-s" style="margin-bottom:8px">Connect a Groq key from your Profile to replace local replies with live model responses.</div><button class="btn sm" onclick="switchTab(\'profile\')">Open Profile</button></div>';
-  return `<div class="workflow-app-container w-full bg-white rounded-3xl border border-gray-200/80 shadow-[0_4px_24px_rgba(0,0,0,0.03)] p-6 md:p-8 flex flex-col gap-6">${headerHTML}<div class="jv"><section class="panel jv-main"><div class="jv-top"><div class="orb"></div><div><b>KARNA</b><span>${live?'Live on Groq · '+escA(gm):'Answering from your workspace data'}</span></div>${live?'<span class="pill good" style="margin-left:auto;margin-right:10px">Live</span>':'<span class="pill" style="margin-left:auto;margin-right:10px">Local</span>'}<button class="btn ghost sm" onclick="jarvisNew()">New chat</button></div>${connectBanner}<div class="msgs" id="msgs">${CHAT.length?CHAT.map(bubbleHTML).join(''):welcomeHTML()}</div><div class="composer"><div class="cbox"><textarea id="jv-input" rows="1" placeholder="Ask KARNA about your workspace" aria-label="Message KARNA"></textarea><button class="send" onclick="jarvisSend()" aria-label="Send message">${icon('up',17)}</button></div></div></section><aside class="panel jv-ctx"><h3>Workspace right now</h3><div id="ctx"></div><div class="ctx-note">${live?'Connected to Groq ('+escA(gm)+').':'Running on local pattern-matched replies.'}</div></aside></div></div>`;
+  /* "Live" now means KARNA is actually answering from an LLM: either the
+     backend agent (BACKEND.ready — preferred, has tools + RAG) or, if the
+     backend is unreachable, a personal Groq key pasted in Profile. This
+     used to only check groqKey, which showed "Local" even while the
+     backend agent was working fine. */
+  const live = BACKEND.ready || !!S.profile.groqKey;
+  const liveLabel = BACKEND.ready ? 'Connected to your OPAI backend' : (S.profile.groqKey ? 'Live on Groq \u00b7 ' + (S.profile.groqModel || GROQ_MODELS[0].v) : '');
+  const gm = S.profile.groqModel || GROQ_MODELS[0].v;
+  const sub = live ? liveLabel : 'Backend unreachable &amp; no Groq key \u2014 answering from your workspace data';
+  const action = '<span class="pill ' + (live ? 'good' : '') + '">' + (live ? 'Live' : 'Local') + '</span>' +
+    '<button class="btn ghost sm" onclick="jarvisNew();setJarvisMode(\'chat\')">New chat</button>';
+  const tabs = '<div class="rtabs" role="tablist">' +
+      '<button role="tab" aria-selected="' + (KARNA_MODE === 'chat') + '" class="' + (KARNA_MODE === 'chat' ? 'on' : '') + '" onclick="setJarvisMode(\'chat\')">Chat</button>' +
+      '<button role="tab" aria-selected="' + (KARNA_MODE === 'study') + '" class="' + (KARNA_MODE === 'study' ? 'on' : '') + '" onclick="setJarvisMode(\'study\')">Study Workflow</button>' +
+    '</div>';
+  const headBlock = head('KARNA', sub, action) + tabs;
+  if (KARNA_MODE === 'study') return headBlock + renderStudyWorkflowBody();
+  /* No "connect" step shown to the user anymore \u2014 KARNA always tries the
+     backend agent first, silently. The Groq-key path only still exists as
+     an invisible safety net inside jarvisSend() for the rare case the
+     backend is down; nothing here asks the user to paste a key. */
+  const connectBanner = live ? '' : '<div class="kw-reconnect">Reconnecting to the backend\u2026 this can take up to a minute if it has been idle.</div>';
+  return headBlock + '<div class="jv"><section class="panel jv-main"><div class="jv-top"><div class="orb"></div><div><b>KARNA</b><span>' + (live ? escA(liveLabel) : 'Answering from your workspace data') + '</span></div></div>' + connectBanner + '<div class="msgs" id="msgs">' + (CHAT.length ? CHAT.map(bubbleHTML).join('') : welcomeHTML()) + '</div><div class="composer"><div class="cbox"><textarea id="jv-input" rows="1" placeholder="Ask KARNA about your workspace" aria-label="Message KARNA"></textarea><button class="send" onclick="jarvisSend()" aria-label="Send message">' + icon('up', 17) + '</button></div></div></section><aside class="panel jv-ctx"><h3>Workspace right now</h3><div id="ctx"></div><div class="ctx-note">' + (BACKEND.ready ? 'Connected to your OPAI backend (KARNA agent).' : (S.profile.groqKey ? 'Connected to Groq (' + escA(gm) + ').' : 'Backend is waking up \u2014 retry in a moment.')) + '</div></aside></div>';
 }
 function welcomeHTML() { return '<div class="welcome" id="welcome"><h2>Start here: set up your whole OPAI app</h2><p>Tap the first option and I will walk you through everything: profile, applications, exams, projects and outreach. Or type your own question.</p><div class="prompts">' + PROMPTS.map(p => '<button onclick="jarvisSend(this.textContent)">' + esc(p) + '</button>').join('') + '</div></div>'; }
 function fmtMsg(t) { return esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>'); }
@@ -2746,6 +3112,38 @@ async function jarvisSend(text) {
     return;
   }
   let reply;
+  /* Primary path: the real backend agent (run_jarvis_agent) — validated tool
+     whitelist, activity log, RAG-grounded answers. This is what actually
+     "connects KARNA" instead of the browser talking to Groq directly. */
+  if (BACKEND.ready) {
+    try {
+      const uid = await ensureUser();
+      const res = await POST('/v1/jarvis/chat', { user_id: uid, message: t });
+      reply = res.reply || 'Done.';
+      if (res.tool_calls && res.tool_calls.length) { syncBackend(true).catch(() => {}); }
+    } catch (e) {
+      reply = 'KARNA backend call failed (' + e.message + ').';
+      if (S.profile.groqKey) {
+        try {
+          const sys = 'You are KARNA, the AI copilot inside OPAI, ' + (S.profile.name || 'the user') + '\u2019s personal operating agent. ' +
+            'Answer from the workspace snapshot below. Be direct and brief \u2014 a few sentences or a short list, not an essay. ' +
+            'You cannot send emails or apply anywhere. You CAN create records. When the user asks you to add/create something, confirm in one short sentence and end your reply with one line: ACTION: {"type":"<application|task|project|study|request|contact|mail>","data":{...}}. ' +
+            'Data fields: application {company, role, type: Internship|Research|Hackathon, deadline: YYYY-MM-DD or null}; task {name, project}; mail {to: email or contact name}; project {name}; study {subject, task, exam_date: YYYY-MM-DD or null}; request {client, ask}; contact {name, institute, email}. Today is ' + iso(0) + '. Only emit ACTION when the user clearly asked to create something.\n\n' + workspaceSnapshot();
+          const msgs = [{ role: 'system', content: sys }, ...CHAT.slice(-10).map(m => ({ role: m.role, content: m.text }))];
+          const gReply = await groqChat(msgs);
+          if (gReply) { const ex = extractAction(gReply); if (ex.action) { const done = execAction(ex.action); reply += '\n\nFalling back to Groq:\n' + (ex.text ? ex.text + '\n\n' : '') + (done || 'I could not create that record.'); } else reply += '\n\nFalling back to Groq:\n' + ex.text; }
+        } catch (e2) { reply += '\n\nFalling back to a local reply:\n' + jarvisReply(t); }
+      } else {
+        reply += '\n\nFalling back to a local reply:\n' + jarvisReply(t);
+      }
+    }
+    const ty = $('typing'); if (ty) ty.remove();
+    CHAT.push({ role: 'assistant', text: reply });
+    box.insertAdjacentHTML('beforeend', bubbleHTML({ role: 'assistant', text: reply }));
+    box.scrollTop = box.scrollHeight; refreshCtx();
+    return;
+  }
+  /* Backend unreachable: same client-side Groq / local-pattern fallback as before. */
   if (S.profile.groqKey) {
     try {
       const sys = 'You are KARNA, the AI copilot inside OPAI, ' + (S.profile.name || 'the user') + '\u2019s personal operating agent. ' +
@@ -2873,6 +3271,7 @@ const NAV = [
   { id:'outreach', l:'Outreach', i:'mail' },
   { id:'projects', l:'Projects', i:'layers', g:'Work' },
   { id:'academics', l:'Academics', i:'book' },
+  { id:'sems', l:'Exams & Courses', i:'grad' },
   { id:'requests', l:'Requests', i:'chat' },
   { id:'outbox', l:'Outbox', i:'send', g:'Tools' },
   { id:'resume', l:'Resume Lab', i:'file' },
@@ -2880,7 +3279,7 @@ const NAV = [
   { id:'history', l:'History', i:'clock' },
   { id:'profile', l:'Profile', i:'user' }
 ];
-const VIEWS = { jarvis: viewJarvis, overview: viewOverview, today: viewToday, applications: viewApps, opportunities: viewOpps, outreach: viewOutreach, projects: viewProjects, academics: viewAcads, requests: viewReqs, outbox: viewOutbox, resume: viewResume, agent: viewAgent, history: viewHistory, profile: viewProfile };
+const VIEWS = { jarvis: viewJarvis, overview: viewOverview, today: viewToday, applications: viewApps, opportunities: viewOpps, outreach: viewOutreach, projects: viewProjects, academics: viewAcads, sems: viewSems, requests: viewReqs, outbox: viewOutbox, resume: viewResume, agent: viewAgent, history: viewHistory, profile: viewProfile };
 let cur = 'today';
  
 function badge(id) {
@@ -2905,10 +3304,12 @@ function render(fromNav) {
   v.innerHTML = VIEWS[cur]();
   if (cur === 'jarvis') { refreshCtx(); wireJarvis(); }
   if (cur === 'agent') { loadAgentConsole(); }
+  if (cur === 'sems') { loadSems(); }
   if (cur === 'resume') { resumeAfterRender(); }
   if (!fromNav) window.scrollTo(0, y);
 }
 function wireJarvis() {
+  if (KARNA_MODE === 'study') { spcWire(); spcRedrawEdgesLive(); }
   const input = $('jv-input'); if (!input) return;
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); jarvisSend(); } });
   input.addEventListener('input', () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 126) + 'px'; });
@@ -3216,7 +3617,7 @@ async function connectGmail() {
  
 function wsKey(uid) { return 'opa_ws_' + uid; }
 function enterUser(u) {
-  BACKEND.userId = null; rlReset();
+  BACKEND.userId = null; rlReset(); semsReset();
   AUTH.user = { uid: u.uid, email: u.email || '', name: u.displayName || '', photo: u.photoURL || '' }; AUTH.guest = false;
   try { localStorage.setItem(LS_SESSION, 'google'); } catch (e) {}
   LS_KEY = wsKey(u.uid);
@@ -3235,7 +3636,7 @@ function enterUser(u) {
   syncBackend().then(() => { updateConnBadge(); render(true); });
 }
 function appEnterGuest() {
-  BACKEND.userId = null; rlReset();
+  BACKEND.userId = null; rlReset(); semsReset();
   AUTH.user = null; AUTH.guest = true;
   LS_KEY = GUEST_KEY; S = load(); renderUser(); render(true);
   syncBackend().then(() => { updateConnBadge(); render(true); });
@@ -3249,7 +3650,7 @@ function renderUser() {
   c.innerHTML = '<div class="av">' + av + '</div><div><b>' + esc(nm) + '</b><span>' + (u ? esc(u.email) : 'Demo workspace') + '</span></div><button class="icon-btn" onclick="signOutNow()" aria-label="Sign out" title="Sign out">' + icon('x', 15) + '</button>';
 }
 function signOutNow() {
-  BACKEND.userId = null; rlReset();
+  BACKEND.userId = null; rlReset(); semsReset();
   const a = FB;
   AUTH.user = null; AUTH.guest = false; GMAIL.token = null; GMAIL.exp = 0;
   try { localStorage.removeItem(LS_SESSION); } catch (e) {}
@@ -3481,7 +3882,7 @@ function showTip(t) {
 }
 function addTips() {
   document.querySelectorAll('#view .panel-h:not(.tipd) > h3, #view .panel > h3, #view .panel h3').forEach(h => {
-    if (h.parentNode.querySelector('.tip-btn') || h.closest('.workflow-app-container')) return;
+    if (h.parentNode.querySelector('.tip-btn')) return;
     const b = document.createElement('button'); b.className = 'tip-btn'; b.textContent = '?'; b.setAttribute('aria-label', 'About this section');
     b.onclick = () => showTip(h.textContent); h.insertAdjacentElement('afterend', b);
   });
